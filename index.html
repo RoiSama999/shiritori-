@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>しりとり Online — N5 語彙</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;600&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink:        #1a120b;
+  --ink2:       #4a3728;
+  --ink3:       #8a7060;
+  --sakura:     #e8a0b0;
+  --sakura-bg:  #fdf2f5;
+  --sakura-mid: #f0c0cc;
+  --wood:       #c4964a;
+  --wood-bg:    #fdf5e8;
+  --wood-mid:   #e8d0a0;
+  --moss:       #5a8a5a;
+  --moss-bg:    #eef5ee;
+  --mist:       #f8f5f2;
+  --border:     #e0d8d0;
+  --shadow:     rgba(26,18,11,0.08);
+  --blue:       #4a7ab5;
+  --blue-bg:    #eef3fa;
+  --danger:     #c0392b;
+  --danger-bg:  #fdf0ee;
+  --gold:       #b8860b;
+  --gold-bg:    #fefae8;
+  --purple:     #7a5ab5;
+  --purple-bg:  #f5f0fc;
+}
+
+html, body { height: 100%; }
+
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background: var(--mist);
+  color: var(--ink);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── SCREENS ────────────────────────────────────── */
+.screen { display: none; flex-direction: column; flex: 1; }
+.screen.active { display: flex; }
+
+/* ── LOBBY ────────────────────────────────────────*/
+#lobbyScreen {
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  gap: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+#lobbyScreen::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 70% 50% at 15% 0%, rgba(232,160,176,0.3) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 50% at 85% 100%, rgba(196,150,74,0.2) 0%, transparent 55%);
+  pointer-events: none;
+}
+
+.lobby-inner {
+  position: relative; z-index: 1;
+  width: 100%; max-width: 480px;
+  display: flex; flex-direction: column; align-items: center; gap: 2rem;
+}
+
+.logo {
+  text-align: center;
+}
+.logo-jp {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 3.5rem; font-weight: 300;
+  color: var(--ink); letter-spacing: .3em; line-height: 1;
+}
+.logo-en {
+  font-size: .78rem; letter-spacing: .25em; color: var(--ink3); margin-top: .4rem;
+}
+.logo-divider {
+  width: 48px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--sakura), transparent);
+  margin: .8rem auto 0;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  box-shadow: 0 4px 24px var(--shadow);
+  padding: 1.75rem;
+  width: 100%;
+}
+
+.card-title {
+  font-size: .72rem; letter-spacing: .18em; color: var(--ink3);
+  text-transform: uppercase; margin-bottom: 1.1rem; text-align: center;
+}
+
+.name-input, .code-input {
+  width: 100%;
+  background: var(--mist);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: .7rem 1rem;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 1rem; color: var(--ink);
+  outline: none;
+  transition: border-color .2s, box-shadow .2s;
+  margin-bottom: .75rem;
+}
+.name-input:focus, .code-input:focus {
+  border-color: var(--sakura);
+  box-shadow: 0 0 0 3px rgba(232,160,176,.18);
+}
+
+.btn-row { display: flex; gap: .75rem; flex-direction: column; }
+.btn {
+  width: 100%;
+  padding: .75rem 1rem;
+  border: none; border-radius: 12px;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: .92rem; font-weight: 500;
+  cursor: pointer; transition: all .18s;
+  display: flex; align-items: center; justify-content: center; gap: .5rem;
+}
+.btn-primary { background: var(--sakura); color: var(--ink); }
+.btn-primary:hover { background: #d888a0; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(232,160,176,.4); }
+.btn-secondary { background: var(--wood-bg); border: 1.5px solid var(--wood-mid); color: var(--ink2); }
+.btn-secondary:hover { background: var(--wood-mid); transform: translateY(-1px); }
+.btn-sm {
+  padding: .45rem .9rem; font-size: .82rem; border-radius: 8px;
+  width: auto; white-space: nowrap;
+}
+.btn:active { transform: scale(.97) !important; }
+.btn:disabled { opacity: .5; cursor: not-allowed; transform: none !important; }
+
+.sep { display: flex; align-items: center; gap: .75rem; color: var(--ink3); font-size: .78rem; }
+.sep::before, .sep::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+.room-code-box {
+  background: var(--sakura-bg);
+  border: 1.5px dashed var(--sakura);
+  border-radius: 12px;
+  padding: .9rem 1rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all .2s;
+  margin-bottom: .75rem;
+}
+.room-code-box:hover { background: var(--sakura-mid); }
+.room-code-label { font-size: .7rem; color: var(--ink3); letter-spacing: .1em; margin-bottom: .25rem; }
+.room-code-value {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 1.8rem; letter-spacing: .25em; color: var(--ink);
+  font-weight: 600;
+}
+.room-code-hint { font-size: .68rem; color: var(--ink3); margin-top: .2rem; }
+
+.status-line {
+  text-align: center; font-size: .8rem; color: var(--ink3);
+  display: flex; align-items: center; justify-content: center; gap: .4rem;
+}
+.dot { width: 7px; height: 7px; border-radius: 50%; background: var(--moss); animation: blink 1.8s ease-in-out infinite; }
+.dot.warn { background: var(--wood); }
+.dot.err  { background: var(--danger); }
+@keyframes blink { 0%,100%{opacity:1;} 50%{opacity:.25;} }
+
+/* ── GAME SCREEN ─────────────────────────────────*/
+#gameScreen {
+  flex-direction: column;
+  max-width: 760px; width: 100%;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.game-header {
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+  padding: .75rem 1.25rem;
+  display: flex; align-items: center; gap: .75rem;
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 2px 8px var(--shadow);
+}
+.game-header-left { display: flex; align-items: center; gap: .75rem; flex: 1; }
+.game-title-sm { font-family: 'Noto Serif JP', serif; font-size: 1.2rem; color: var(--ink); letter-spacing: .15em; }
+
+.players-bar {
+  display: flex; gap: .5rem;
+}
+.player-chip {
+  display: flex; align-items: center; gap: .35rem;
+  padding: .3rem .7rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--border);
+  font-size: .78rem; font-weight: 500;
+  transition: all .3s;
+}
+.player-chip.active {
+  border-color: var(--sakura);
+  background: var(--sakura-bg);
+  box-shadow: 0 0 0 3px rgba(232,160,176,.18);
+}
+.player-chip .avatar {
+  width: 22px; height: 22px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .7rem; font-weight: 700; color: #fff;
+}
+.avatar.p0 { background: var(--sakura); }
+.avatar.p1 { background: var(--blue); }
+.player-chip .score-sm { font-size: .7rem; color: var(--ink3); }
+
+.turn-badge {
+  padding: .3rem .8rem; border-radius: 999px;
+  font-size: .75rem; font-weight: 500;
+  border: 1px solid var(--border);
+  white-space: nowrap;
+}
+.turn-badge.my-turn    { background: var(--moss-bg); border-color: var(--moss); color: var(--moss); }
+.turn-badge.their-turn { background: var(--mist); color: var(--ink3); }
+
+/* Word type indicator */
+.type-banner {
+  padding: .7rem 1.25rem;
+  display: flex; align-items: center; gap: .75rem;
+  background: var(--mist);
+  border-bottom: 1px solid var(--border);
+  transition: all .4s;
+}
+.type-icon { font-size: 1.4rem; }
+.type-info { flex: 1; }
+.type-label { font-size: .68rem; letter-spacing: .12em; color: var(--ink3); text-transform: uppercase; }
+.type-name  { font-family: 'Noto Serif JP', serif; font-size: 1.1rem; color: var(--ink); }
+.type-desc  { font-size: .72rem; color: var(--ink3); }
+.type-count { font-family: 'Noto Serif JP', serif; font-size: 1.5rem; color: var(--sakura); font-weight: 600; }
+
+/* Chat / word history */
+.word-log {
+  flex: 1; overflow-y: auto;
+  padding: 1rem 1.25rem;
+  display: flex; flex-direction: column; gap: .7rem;
+  scroll-behavior: smooth;
+}
+.word-log::-webkit-scrollbar { width: 4px; }
+.word-log::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+.word-entry {
+  display: flex; gap: .6rem; align-items: flex-end;
+  animation: entryIn .35s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes entryIn { from{opacity:0;transform:translateY(10px) scale(.96);} to{opacity:1;transform:none;} }
+.word-entry.mine   { flex-direction: row-reverse; }
+
+.entry-avatar {
+  width: 30px; height: 30px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .78rem; font-weight: 700; color: #fff;
+  flex-shrink: 0;
+}
+
+.entry-bubble {
+  max-width: 70%;
+  padding: .6rem .9rem;
+  border-radius: 16px;
+  position: relative;
+}
+.word-entry:not(.mine) .entry-bubble {
+  background: #fff; border: 1px solid var(--border);
+  border-bottom-left-radius: 4px;
+}
+.word-entry.mine .entry-bubble {
+  background: var(--sakura-bg); border: 1px solid var(--sakura-mid);
+  border-bottom-right-radius: 4px;
+  text-align: right;
+}
+
+.entry-word {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 1.35rem; color: var(--ink); line-height: 1.2;
+}
+.entry-type-pill {
+  display: inline-block;
+  padding: .1rem .5rem; border-radius: 999px;
+  font-size: .65rem; font-weight: 500; margin-top: .2rem;
+}
+.pill-noun   { background: var(--blue-bg); color: var(--blue); }
+.pill-verb   { background: var(--moss-bg); color: var(--moss); }
+.pill-adj    { background: var(--purple-bg); color: var(--purple); }
+.entry-verdict {
+  font-size: .68rem; margin-top: .2rem; display: flex; align-items: center; gap: .25rem;
+}
+.verdict-ok   { color: var(--moss); }
+.verdict-fail { color: var(--danger); }
+.verdict-checking { color: var(--wood); }
+.entry-meta { font-size: .62rem; color: var(--ink3); margin-top: .25rem; }
+
+/* System message */
+.sys-msg {
+  text-align: center; font-size: .75rem; color: var(--ink3);
+  padding: .3rem 0; font-style: italic;
+}
+.sys-msg.highlight {
+  background: var(--gold-bg); border: 1px solid var(--wood-mid);
+  border-radius: 999px; padding: .35rem 1rem;
+  color: var(--gold); font-style: normal; font-weight: 500;
+  align-self: center; font-size: .78rem;
+}
+
+/* Input */
+.input-bar {
+  background: #fff;
+  border-top: 1px solid var(--border);
+  padding: .9rem 1.25rem;
+  box-shadow: 0 -2px 8px var(--shadow);
+}
+.input-row { display: flex; gap: .6rem; align-items: center; }
+.word-input {
+  flex: 1;
+  background: var(--mist); border: 1.5px solid var(--border);
+  border-radius: 12px; padding: .7rem 1rem;
+  font-family: 'Noto Serif JP', serif; font-size: 1.1rem; color: var(--ink);
+  outline: none; transition: border-color .2s, box-shadow .2s;
+}
+.word-input:focus { border-color: var(--sakura); box-shadow: 0 0 0 3px rgba(232,160,176,.15); }
+.word-input:disabled { opacity: .5; background: #f0ede8; }
+.word-input::placeholder { font-family: 'Noto Sans JP', sans-serif; font-size: .85rem; color: #c8c0b8; }
+
+.send-btn {
+  width: 46px; height: 46px; border-radius: 12px;
+  background: var(--sakura); border: none; color: var(--ink);
+  font-size: 1.1rem; cursor: pointer; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .18s;
+}
+.send-btn:hover:not(:disabled) { background: #d888a0; transform: scale(1.05); }
+.send-btn:active:not(:disabled){ transform: scale(.95); }
+.send-btn:disabled { background: var(--border); cursor: not-allowed; }
+
+.input-hint { font-size: .7rem; color: var(--ink3); margin-top: .5rem; }
+
+/* Thinking overlay on input */
+.thinking-bar {
+  display: flex; align-items: center; gap: .5rem;
+  padding: .5rem 0; font-size: .78rem; color: var(--wood);
+}
+.thinking-dot {
+  width: 5px; height: 5px; border-radius: 50%; background: var(--wood);
+  animation: tdot 1.2s ease-in-out infinite;
+}
+.thinking-dot:nth-child(2){animation-delay:.2s}
+.thinking-dot:nth-child(3){animation-delay:.4s}
+@keyframes tdot { 0%,100%{transform:translateY(0);opacity:.4} 50%{transform:translateY(-4px);opacity:1} }
+
+/* Penalty / result overlay */
+.overlay {
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(26,18,11,.45); backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none; transition: opacity .3s;
+}
+.overlay.show { opacity: 1; pointer-events: auto; }
+.modal {
+  background: #fff; border-radius: 24px;
+  padding: 2.25rem 2.5rem; text-align: center;
+  max-width: 340px; width: 90%;
+  box-shadow: 0 24px 60px rgba(0,0,0,.15);
+  transform: scale(.85) translateY(20px);
+  transition: all .35s cubic-bezier(.34,1.56,.64,1);
+}
+.overlay.show .modal { transform: scale(1) translateY(0); }
+.modal-icon { font-size: 3rem; margin-bottom: .75rem; }
+.modal-title {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 1.5rem; color: var(--ink); margin-bottom: .5rem;
+}
+.modal-msg { font-size: .85rem; color: var(--ink3); line-height: 1.7; }
+.modal-score {
+  margin-top: 1rem; padding: .6rem 1rem;
+  background: var(--gold-bg); border: 1px solid var(--wood-mid);
+  border-radius: 12px; font-size: .85rem; color: var(--gold);
+}
+.modal-btn {
+  margin-top: 1.25rem;
+  padding: .65rem 2rem; border-radius: 999px;
+  background: var(--ink); color: #fff; border: none;
+  font-family: 'Noto Sans JP', sans-serif; font-size: .88rem;
+  cursor: pointer; transition: all .18s;
+}
+.modal-btn:hover { background: var(--ink2); }
+
+/* penalty shake */
+@keyframes shake {
+  0%,100%{transform:translateX(0)}
+  20%{transform:translateX(-8px)}
+  40%{transform:translateX(8px)}
+  60%{transform:translateX(-5px)}
+  80%{transform:translateX(5px)}
+}
+.shake { animation: shake .4s ease; }
+
+/* Petals */
+.petal {
+  position: fixed; top: -30px; font-size: 14px;
+  opacity: 0; pointer-events: none; z-index: 0;
+  animation: fallPetal linear infinite;
+}
+@keyframes fallPetal {
+  from { transform: translateY(0) rotate(0deg); opacity: .7; }
+  to   { transform: translateY(105vh) rotate(360deg) translateX(50px); opacity: 0; }
+}
+
+/* Responsive */
+@media (max-width: 520px) {
+  .logo-jp { font-size: 2.6rem; }
+  .entry-word { font-size: 1.15rem; }
+  .modal { padding: 1.75rem 1.5rem; }
+  .game-header { padding: .6rem .9rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- Falling petals -->
+<div id="petalsContainer"></div>
+
+<!-- ══════════ LOBBY ══════════ -->
+<div id="lobbyScreen" class="screen active">
+  <div class="lobby-inner">
+
+    <div class="logo">
+      <div class="logo-jp">しりとり</div>
+      <div class="logo-en">Shiritori · Online Multiplayer · N5</div>
+      <div class="logo-divider"></div>
+    </div>
+
+    <!-- Name input -->
+    <div class="card" style="padding: 1.25rem 1.5rem;">
+      <div class="card-title">🌸 Tên của bạn</div>
+      <input class="name-input" id="playerNameInput" placeholder="VD: Hana, Kenji..." maxlength="16">
+    </div>
+
+    <!-- Create room -->
+    <div class="card" id="createSection">
+      <div class="card-title">✦ Tạo phòng mới</div>
+      <div id="myRoomCode" style="display:none;">
+        <div class="room-code-box" onclick="copyCode()">
+          <div class="room-code-label">Mã phòng — nhấn để sao chép</div>
+          <div class="room-code-value" id="roomCodeDisplay">——</div>
+          <div class="room-code-hint">📋 Chia sẻ mã này cho bạn bè</div>
+        </div>
+        <div class="status-line" id="waitStatus">
+          <div class="dot warn"></div>
+          Đang chờ bạn bè tham gia...
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" id="createBtn" onclick="createRoom()">🌸 Tạo phòng</button>
+      </div>
+    </div>
+
+    <div class="sep">hoặc</div>
+
+    <!-- Join room -->
+    <div class="card">
+      <div class="card-title">✦ Tham gia phòng</div>
+      <input class="code-input" id="joinCodeInput" placeholder="Nhập mã phòng (6 ký tự)..." maxlength="8">
+      <div class="btn-row">
+        <button class="btn btn-secondary" onclick="joinRoom()">🔗 Vào phòng</button>
+      </div>
+      <div class="status-line" id="joinStatus" style="margin-top:.6rem; display:none;">
+        <div class="dot warn"></div>
+        <span id="joinStatusText">Đang kết nối...</span>
+      </div>
+    </div>
+
+    <!-- Rules -->
+    <div class="card" style="background:var(--wood-bg); border-color:var(--wood-mid);">
+      <div class="card-title">📜 Luật chơi</div>
+      <div style="display:flex; flex-direction:column; gap:.5rem; font-size:.78rem; color:var(--ink2); line-height:1.6;">
+        <div>🔵 Vòng xoay: <strong>Danh từ → Động từ → Tính từ → lặp lại</strong></div>
+        <div>🟢 Nhập từ đúng loại → được <strong>+10 điểm</strong></div>
+        <div>🔴 Nhập sai loại / từ không hợp lệ → mất lượt + <strong>phạt −5 điểm</strong></div>
+        <div>🤖 <strong>AI Claude</strong> tự động kiểm tra từ và loại từ</div>
+        <div>♾️ Không giới hạn từ, không cần bắt đầu theo đuôi</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════ GAME ══════════ -->
+<div id="gameScreen" class="screen">
+
+  <!-- Header -->
+  <div class="game-header">
+    <div class="game-header-left">
+      <div class="game-title-sm">しりとり</div>
+      <div class="players-bar">
+        <div class="player-chip" id="chip0">
+          <div class="avatar p0" id="av0">?</div>
+          <div>
+            <div id="name0">—</div>
+            <div class="score-sm">⭐ <span id="score0">0</span></div>
+          </div>
+        </div>
+        <div style="font-size:.8rem; color:var(--ink3); align-self:center;">VS</div>
+        <div class="player-chip" id="chip1">
+          <div class="avatar p1" id="av1">?</div>
+          <div>
+            <div id="name1">—</div>
+            <div class="score-sm">⭐ <span id="score1">0</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="turn-badge" id="turnBadge">—</div>
+  </div>
+
+  <!-- Type banner -->
+  <div class="type-banner" id="typeBanner">
+    <div class="type-icon" id="typeIcon">🔵</div>
+    <div class="type-info">
+      <div class="type-label">Loại từ cần nhập</div>
+      <div class="type-name" id="typeName">Danh từ (名詞)</div>
+      <div class="type-desc" id="typeDesc">VD: ねこ、まち、さくら</div>
+    </div>
+    <div class="type-count" id="typeCount">1</div>
+  </div>
+
+  <!-- Word log -->
+  <div class="word-log" id="wordLog">
+    <div class="sys-msg highlight">🌸 Trò chơi bắt đầu! Nhập từ đầu tiên nào!</div>
+  </div>
+
+  <!-- Input bar -->
+  <div class="input-bar">
+    <div id="thinkingBar" style="display:none;" class="thinking-bar">
+      <div class="thinking-dot"></div>
+      <div class="thinking-dot"></div>
+      <div class="thinking-dot"></div>
+      <span>AI đang kiểm tra từ...</span>
+    </div>
+    <div class="input-row">
+      <input class="word-input" id="wordInput"
+        placeholder="Nhập từ tiếng Nhật..."
+        autocomplete="off" autocorrect="off" spellcheck="false"
+        onkeydown="handleKey(event)" disabled>
+      <button class="send-btn" id="sendBtn" onclick="submitWord()" disabled>➤</button>
+    </div>
+    <div class="input-hint" id="inputHint">Đang chờ bạn bè tham gia...</div>
+  </div>
+</div>
+
+<!-- Modal overlay -->
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <div class="modal-icon" id="modalIcon">🎉</div>
+    <div class="modal-title" id="modalTitle">—</div>
+    <div class="modal-msg" id="modalMsg"></div>
+    <div class="modal-score" id="modalScore" style="display:none;"></div>
+    <button class="modal-btn" id="modalBtn" onclick="closeModal()">わかった</button>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════
+//  WORD TYPE CONFIG
+// ══════════════════════════════════════════════
+const WORD_TYPES = [
+  {
+    id: 'noun', name: 'Danh từ (名詞)',
+    nameJP: '名詞', icon: '🔵',
+    desc: 'VD: ねこ、まち、さくら、がっこう',
+    pilotClass: 'pill-noun',
+    color: '#4a7ab5'
+  },
+  {
+    id: 'verb', name: 'Động từ (動詞)',
+    nameJP: '動詞', icon: '🟢',
+    desc: 'VD: たべる、のむ、あるく、みる',
+    pilotClass: 'pill-verb',
+    color: '#5a8a5a'
+  },
+  {
+    id: 'adj', name: 'Tính từ (形容詞)',
+    nameJP: '形容詞', icon: '🟣',
+    desc: 'VD: たかい、おおきい、きれいな、すきな',
+    pilotClass: 'pill-adj',
+    color: '#7a5ab5'
+  }
+];
+
+// ══════════════════════════════════════════════
+//  GAME STATE
+// ══════════════════════════════════════════════
+let peer, conn;
+let myId = null;
+let isHost = false;
+let myName = '';
+let opponentName = '';
+let gameStarted = false;
+
+// Game vars (host is source of truth)
+let typeIndex = 0;     // 0=noun,1=verb,2=adj
+let myTurn = false;
+let scores = [0, 0];   // [host, guest]
+let turnCount = 0;
+let roundCount = 0;
+let checking = false;
+
+// ══════════════════════════════════════════════
+//  PETALS
+// ══════════════════════════════════════════════
+function spawnPetals() {
+  const c = document.getElementById('petalsContainer');
+  ['🌸','✿','❀'].forEach((s, i) => {
+    const p = document.createElement('div');
+    p.className = 'petal';
+    p.textContent = s;
+    p.style.left = (10 + i * 30 + Math.random() * 20) + '%';
+    p.style.animationDuration = (9 + Math.random() * 8) + 's';
+    p.style.animationDelay = (Math.random() * 10) + 's';
+    c.appendChild(p);
+  });
+}
+spawnPetals();
+
+// ══════════════════════════════════════════════
+//  PEER.JS SETUP
+// ══════════════════════════════════════════════
+function genRoomCode() {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  return Array.from({length:6}, () => chars[Math.floor(Math.random()*chars.length)]).join('');
+}
+
+function createRoom() {
+  const name = document.getElementById('playerNameInput').value.trim() || 'Player 1';
+  myName = name;
+  const code = genRoomCode();
+  document.getElementById('createBtn').disabled = true;
+  document.getElementById('createBtn').textContent = '⏳ Đang khởi tạo...';
+
+  peer = new Peer('SHIRI-' + code, {
+    host: '0.peerjs.com', port: 443, path: '/',
+    secure: true, debug: 0
+  });
+
+  peer.on('open', () => {
+    isHost = true;
+    myId = 'SHIRI-' + code;
+    document.getElementById('roomCodeDisplay').textContent = code;
+    document.getElementById('myRoomCode').style.display = 'block';
+    document.getElementById('createBtn').style.display = 'none';
+  });
+
+  peer.on('connection', c => {
+    conn = c;
+    setupConn();
+    setTimeout(() => {
+      sendMsg({ type: 'welcome', hostName: myName });
+      document.getElementById('waitStatus').innerHTML = `<div class="dot"></div> Bạn bè đã vào! Đang bắt đầu...`;
+    }, 400);
+  });
+
+  peer.on('error', e => {
+    document.getElementById('createBtn').disabled = false;
+    document.getElementById('createBtn').textContent = '🌸 Tạo phòng';
+    showModal('error','⚠️','Lỗi kết nối', e.message);
+  });
+}
+
+function joinRoom() {
+  const name = document.getElementById('playerNameInput').value.trim() || 'Player 2';
+  myName = name;
+  const code = document.getElementById('joinCodeInput').value.trim().toUpperCase().replace(/[^A-Z0-9]/g,'');
+  if (code.length < 4) { showModal('error','⚠️','Mã phòng sai', 'Nhập đúng mã phòng 6 ký tự nhé!'); return; }
+
+  document.getElementById('joinStatus').style.display = 'flex';
+  document.getElementById('joinStatusText').textContent = 'Đang kết nối...';
+
+  peer = new Peer(undefined, {
+    host: '0.peerjs.com', port: 443, path: '/',
+    secure: true, debug: 0
+  });
+
+  peer.on('open', () => {
+    conn = peer.connect('SHIRI-' + code, { reliable: true });
+    setupConn();
+    setTimeout(() => {
+      if (conn && conn.open) {
+        sendMsg({ type: 'guestName', name: myName });
+      }
+    }, 1200);
+  });
+
+  peer.on('error', e => {
+    document.getElementById('joinStatusText').textContent = 'Lỗi: ' + e.message;
+    showModal('error','⚠️','Không vào được phòng', 'Kiểm tra lại mã phòng hoặc kết nối mạng nhé.');
+  });
+}
+
+function setupConn() {
+  conn.on('open', () => {
+    document.getElementById('joinStatusText') && (document.getElementById('joinStatusText').textContent = 'Đã kết nối!');
+  });
+  conn.on('data', handleMsg);
+  conn.on('close', () => {
+    if (gameStarted) showModal('disc','📡','Mất kết nối', 'Bạn bè đã ngắt kết nối.');
+  });
+  conn.on('error', e => console.warn('conn error', e));
+}
+
+function sendMsg(obj) {
+  if (conn && conn.open) conn.send(JSON.stringify(obj));
+}
+
+// ══════════════════════════════════════════════
+//  MESSAGE HANDLER
+// ══════════════════════════════════════════════
+function handleMsg(raw) {
+  const msg = typeof raw === 'string' ? JSON.parse(raw) : raw;
+
+  if (msg.type === 'welcome') {
+    opponentName = msg.hostName;
+    sendMsg({ type: 'guestName', name: myName });
+    setTimeout(() => startGame(false, opponentName, myName), 600);
+  }
+  if (msg.type === 'guestName') {
+    opponentName = msg.name;
+    setTimeout(() => startGame(true, myName, opponentName), 600);
+  }
+  if (msg.type === 'wordPlayed') {
+    // Guest receives host's verdict about their (guest's) word
+    renderWordEntry(msg.word, msg.typeId, msg.valid, msg.reason, false);
+    updateAfterWord(msg.valid, msg.typeIndex, msg.scores, true /* myTurn next */);
+  }
+  if (msg.type === 'verdictForGuest') {
+    // Guest submitted word; host sends back verdict
+    renderWordEntry(msg.word, msg.typeId, msg.valid, msg.reason, true);
+    updateAfterWord(msg.valid, msg.typeIndex, msg.scores, false /* host's turn next */);
+  }
+  if (msg.type === 'hostWord') {
+    // Host played a word; guest receives it
+    renderWordEntry(msg.word, msg.typeId, msg.valid, msg.reason, false);
+    updateAfterWord(msg.valid, msg.typeIndex, msg.scores, true);
+  }
+  if (msg.type === 'guestWord') {
+    // Guest played; host receives raw word and must judge
+    judgeWord(msg.word, msg.typeId, msg.typeIndex, msg.scores, false);
+  }
+}
+
+// ══════════════════════════════════════════════
+//  GAME START
+// ══════════════════════════════════════════════
+function startGame(amHost, p0Name, p1Name) {
+  isHost = amHost;
+  gameStarted = true;
+  typeIndex = 0;
+  scores = [0, 0];
+  turnCount = 0;
+  myTurn = amHost; // host goes first
+
+  document.getElementById('lobbyScreen').className = 'screen';
+  document.getElementById('gameScreen').className = 'screen active';
+
+  document.getElementById('name0').textContent = p0Name;
+  document.getElementById('name1').textContent = p1Name;
+  document.getElementById('av0').textContent = p0Name[0].toUpperCase();
+  document.getElementById('av1').textContent = p1Name[0].toUpperCase();
+
+  updateUI();
+}
+
+// ══════════════════════════════════════════════
+//  UI HELPERS
+// ══════════════════════════════════════════════
+function updateUI() {
+  const t = WORD_TYPES[typeIndex];
+  document.getElementById('typeIcon').textContent = t.icon;
+  document.getElementById('typeName').textContent = t.name;
+  document.getElementById('typeDesc').textContent = t.desc;
+  document.getElementById('typeCount').textContent = `${typeIndex + 1}/3`;
+
+  const myIdx = isHost ? 0 : 1;
+  const opIdx = isHost ? 1 : 0;
+  document.getElementById('score0').textContent = scores[0];
+  document.getElementById('score1').textContent = scores[1];
+
+  document.getElementById('chip0').className = 'player-chip' + (myTurn && isHost || !myTurn && !isHost ? '' : isHost && myTurn ? ' active' : '');
+  // simplify: active chip = whoever's turn
+  if (myTurn) {
+    document.getElementById(isHost ? 'chip0' : 'chip1').classList.add('active');
+    document.getElementById(isHost ? 'chip1' : 'chip0').classList.remove('active');
+  } else {
+    document.getElementById(isHost ? 'chip1' : 'chip0').classList.add('active');
+    document.getElementById(isHost ? 'chip0' : 'chip1').classList.remove('active');
+  }
+
+  const badge = document.getElementById('turnBadge');
+  if (myTurn) {
+    badge.textContent = '✦ Lượt của bạn';
+    badge.className = 'turn-badge my-turn';
+    document.getElementById('wordInput').disabled = false;
+    document.getElementById('sendBtn').disabled = false;
+    document.getElementById('wordInput').focus();
+    document.getElementById('inputHint').textContent = `Nhập ${t.name} tiếng Nhật`;
+  } else {
+    badge.textContent = '⏳ Chờ đối thủ...';
+    badge.className = 'turn-badge their-turn';
+    document.getElementById('wordInput').disabled = true;
+    document.getElementById('sendBtn').disabled = true;
+    document.getElementById('inputHint').textContent = 'Đang chờ đối thủ nhập từ...';
+  }
+}
+
+function addSysMsg(text, highlight = false) {
+  const log = document.getElementById('wordLog');
+  const div = document.createElement('div');
+  div.className = 'sys-msg' + (highlight ? ' highlight' : '');
+  div.textContent = text;
+  log.appendChild(div);
+  scrollLog();
+}
+
+function scrollLog() {
+  const log = document.getElementById('wordLog');
+  setTimeout(() => log.scrollTop = log.scrollHeight, 60);
+}
+
+function renderWordEntry(word, typeId, valid, reason, isMine) {
+  const t = WORD_TYPES.find(x => x.id === typeId) || WORD_TYPES[0];
+  const log = document.getElementById('wordLog');
+  const div = document.createElement('div');
+  div.className = 'word-entry' + (isMine ? ' mine' : '');
+
+  const avatarClass = isMine ? (isHost ? 'p0' : 'p1') : (isHost ? 'p1' : 'p0');
+  const displayName = isMine ? myName : opponentName;
+
+  div.innerHTML = `
+    <div class="entry-avatar ${avatarClass}">${displayName[0].toUpperCase()}</div>
+    <div class="entry-bubble">
+      <div class="entry-word">${word}</div>
+      <div>
+        <span class="entry-type-pill ${t.pilotClass}">${t.icon} ${t.nameJP}</span>
+      </div>
+      <div class="entry-verdict ${valid ? 'verdict-ok' : 'verdict-fail'}">
+        ${valid ? '✓ Hợp lệ' : '✗ ' + (reason || 'Không hợp lệ')}
+      </div>
+      <div class="entry-meta">${displayName} · ${new Date().toLocaleTimeString('vi',{hour:'2-digit',minute:'2-digit'})}</div>
+    </div>
+  `;
+  log.appendChild(div);
+  scrollLog();
+}
+
+function updateAfterWord(valid, newTypeIndex, newScores, nowMyTurn) {
+  typeIndex = newTypeIndex;
+  scores = newScores;
+  myTurn = nowMyTurn;
+  turnCount++;
+  if (!valid) {
+    document.getElementById('wordInput').classList.remove('shake');
+    void document.getElementById('wordInput').offsetWidth;
+    document.getElementById('wordInput').classList.add('shake');
+  }
+  checking = false;
+  document.getElementById('thinkingBar').style.display = 'none';
+  updateUI();
+}
+
+// ══════════════════════════════════════════════
+//  SUBMIT WORD (player's own)
+// ══════════════════════════════════════════════
+async function submitWord() {
+  if (!myTurn || checking) return;
+  const inp = document.getElementById('wordInput');
+  const word = inp.value.trim();
+  inp.value = '';
+  if (!word) return;
+
+  checking = true;
+  document.getElementById('sendBtn').disabled = true;
+  document.getElementById('wordInput').disabled = true;
+  document.getElementById('thinkingBar').style.display = 'flex';
+
+  const currentTypeId = WORD_TYPES[typeIndex].id;
+
+  if (isHost) {
+    // Host judges their own word via AI, then broadcasts
+    await judgeWord(word, currentTypeId, typeIndex, scores, true);
+  } else {
+    // Guest sends word to host for judgement
+    sendMsg({ type: 'guestWord', word, typeId: currentTypeId, typeIndex, scores });
+    // Show pending entry
+    const log = document.getElementById('wordLog');
+    const pend = document.createElement('div');
+    pend.id = 'pendingEntry';
+    pend.className = 'word-entry mine';
+    const t = WORD_TYPES[typeIndex];
+    pend.innerHTML = `
+      <div class="entry-avatar ${isHost?'p0':'p1'}">${myName[0].toUpperCase()}</div>
+      <div class="entry-bubble">
+        <div class="entry-word">${word}</div>
+        <div><span class="entry-type-pill ${t.pilotClass}">${t.icon} ${t.nameJP}</span></div>
+        <div class="entry-verdict verdict-checking">⏳ Đang kiểm tra...</div>
+        <div class="entry-meta">${myName} · ${new Date().toLocaleTimeString('vi',{hour:'2-digit',minute:'2-digit'})}</div>
+      </div>
+    `;
+    log.appendChild(pend);
+    scrollLog();
+  }
+}
+
+// ══════════════════════════════════════════════
+//  AI JUDGE (only host calls this)
+// ══════════════════════════════════════════════
+async function judgeWord(word, typeId, curTypeIndex, curScores, isMyWord) {
+  const t = WORD_TYPES.find(x => x.id === typeId);
+  let valid = false;
+  let reason = '';
+
+  try {
+    const prompt = `Bạn là trọng tài trò chơi từ vựng tiếng Nhật N5.
+Từ được nhập: "${word}"
+Loại từ yêu cầu: ${t.name} (${t.nameJP})
+
+Hãy kiểm tra:
+1. Đây có phải tiếng Nhật (hiragana, katakana, hoặc kanji thông dụng N5) không?
+2. Đây có phải là "${t.name}" đúng không? (ví dụ: nếu yêu cầu 動詞 thì phải là dạng từ điển như たべる, のむ...)
+3. Nếu là tính từ, chấp nhận cả i-adj (たかい) và na-adj (きれい/きれいな)
+
+Trả lời JSON duy nhất không có markdown:
+{"valid": true/false, "reason": "lý do ngắn gọn bằng tiếng Việt nếu sai, rỗng nếu đúng", "type": "tên loại từ thực tế"}`;
+
+    const res = await fetch('https://shiritori-proxy.shiori.baova10ht.workers.dev', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt })
+    });
+    const data = await res.json();
+    const raw = data.result || '{}';
+    const cleaned = raw.replace(/```json|```/g, '').trim();
+    const parsed = JSON.parse(cleaned);
+    valid = !!parsed.valid;
+    reason = parsed.reason || '';
+  } catch(e) {
+    // Fallback: accept if looks Japanese
+    valid = /[\u3040-\u30ff\u4e00-\u9fff]/.test(word);
+    reason = valid ? '' : 'Từ không hợp lệ';
+  }
+
+  // Update scores
+  const newScores = [...curScores];
+  if (isMyWord) {
+    const myIdx = isHost ? 0 : 1;
+    if (valid) newScores[myIdx] += 10;
+    else { newScores[myIdx] = Math.max(0, newScores[myIdx] - 5); }
+  } else {
+    const guestIdx = 1;
+    if (valid) newScores[guestIdx] += 10;
+    else { newScores[guestIdx] = Math.max(0, newScores[guestIdx] - 5); }
+  }
+
+  // Advance type if valid
+  const newTypeIndex = valid ? (curTypeIndex + 1) % 3 : curTypeIndex;
+
+  if (isMyWord) {
+    // Host played; render for self and send to guest
+    renderWordEntry(word, typeId, valid, reason, true);
+    sendMsg({ type: 'hostWord', word, typeId, valid, reason, typeIndex: newTypeIndex, scores: newScores });
+    // Remove pending if any
+    document.getElementById('pendingEntry')?.remove();
+    updateAfterWord(valid, newTypeIndex, newScores, false);
+  } else {
+    // Guest played; remove their pending if visible on host side, send verdict back
+    document.getElementById('pendingEntry')?.remove();
+    renderWordEntry(word, typeId, valid, reason, false);
+    sendMsg({ type: 'verdictForGuest', word, typeId, valid, reason, typeIndex: newTypeIndex, scores: newScores });
+    updateAfterWord(valid, newTypeIndex, newScores, true);
+  }
+}
+
+// ══════════════════════════════════════════════
+//  MODAL
+// ══════════════════════════════════════════════
+function showModal(type, icon, title, msg, scoreText = null) {
+  document.getElementById('modalIcon').textContent = icon;
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('modalMsg').textContent = msg;
+  if (scoreText) {
+    document.getElementById('modalScore').textContent = scoreText;
+    document.getElementById('modalScore').style.display = 'block';
+  } else {
+    document.getElementById('modalScore').style.display = 'none';
+  }
+  document.getElementById('overlay').classList.add('show');
+}
+function closeModal() {
+  document.getElementById('overlay').classList.remove('show');
+}
+
+// ══════════════════════════════════════════════
+//  COPY CODE
+// ══════════════════════════════════════════════
+function copyCode() {
+  const code = document.getElementById('roomCodeDisplay').textContent;
+  navigator.clipboard?.writeText(code).then(() => {
+    const box = document.querySelector('.room-code-box');
+    box.querySelector('.room-code-hint').textContent = '✓ Đã sao chép!';
+    setTimeout(() => box.querySelector('.room-code-hint').textContent = '📋 Chia sẻ mã này cho bạn bè', 1800);
+  });
+}
+
+// ══════════════════════════════════════════════
+//  KEY HANDLER
+// ══════════════════════════════════════════════
+function handleKey(e) { if (e.key === 'Enter') submitWord(); }
+</script>
+</body>
+</html>
