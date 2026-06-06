@@ -3,1028 +3,1543 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>しりとり Online — N5 語彙</title>
+<title>emi.io.vn — Japanese Learning Hub 🌸</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;600&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#1a120b;--ink2:#4a3728;--ink3:#8a7060;
+  --sakura:#e8a0b0;--sakura-bg:#fdf2f5;--sakura-mid:#f0c0cc;--sakura-deep:#c8607a;
+  --wood:#c4964a;--wood-bg:#fdf5e8;--wood-mid:#e8d0a0;--wood-dark:#8b6030;
+  --moss:#4a8a5a;--moss-bg:#eef6ee;--moss-mid:#a0c8a8;
+  --mist:#f8f5f2;--border:#e0d8d0;--shadow:rgba(26,18,11,0.08);
+  --blue:#3a6ab0;--blue-bg:#eef3fa;--blue-mid:#90b8e0;
+  --danger:#b03020;--danger-bg:#fdf0ee;
+  --gold:#b8860b;--gold-bg:#fefae8;--gold-mid:#e8c860;
+  --purple:#7050b0;--purple-bg:#f5f0fc;--purple-mid:#c0a8e8;
+  --teal:#2a8a8a;--teal-bg:#eef8f8;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans JP',sans-serif;background:var(--mist);color:var(--ink);min-height:100vh;overflow-x:hidden}
 
-:root {
-  --ink:        #1a120b;
-  --ink2:       #4a3728;
-  --ink3:       #8a7060;
-  --sakura:     #e8a0b0;
-  --sakura-bg:  #fdf2f5;
-  --sakura-mid: #f0c0cc;
-  --wood:       #c4964a;
-  --wood-bg:    #fdf5e8;
-  --wood-mid:   #e8d0a0;
-  --moss:       #5a8a5a;
-  --moss-bg:    #eef5ee;
-  --mist:       #f8f5f2;
-  --border:     #e0d8d0;
-  --shadow:     rgba(26,18,11,0.08);
-  --blue:       #4a7ab5;
-  --blue-bg:    #eef3fa;
-  --danger:     #c0392b;
-  --danger-bg:  #fdf0ee;
-  --gold:       #b8860b;
-  --gold-bg:    #fefae8;
-  --purple:     #7a5ab5;
-  --purple-bg:  #f5f0fc;
-}
+/* ── PETALS ── */
+.petal{position:fixed;top:-40px;pointer-events:none;z-index:0;opacity:0;animation:fallP linear infinite;font-size:16px}
+@keyframes fallP{0%{opacity:.8;transform:translateY(0) rotate(0)}100%{opacity:0;transform:translateY(110vh) rotate(400deg) translateX(80px)}}
 
-html, body { height: 100%; }
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:500;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:.6rem 1.5rem;display:flex;align-items:center;gap:1rem}
+.nav-logo{font-family:'Noto Serif JP',serif;font-size:1.3rem;letter-spacing:.15em;color:var(--ink);flex:1}
+.nav-logo span{color:var(--sakura-deep)}
+.nav-tabs{display:flex;gap:.25rem}
+.nav-tab{padding:.35rem .8rem;border-radius:999px;border:1.5px solid transparent;font-size:.78rem;font-weight:500;cursor:pointer;transition:all .2s;background:none;color:var(--ink3);font-family:'Noto Sans JP',sans-serif}
+.nav-tab:hover{background:var(--sakura-bg);color:var(--ink)}
+.nav-tab.active{background:var(--sakura-deep);color:#fff;border-color:var(--sakura-deep)}
 
-body {
-  font-family: 'Noto Sans JP', sans-serif;
-  background: var(--mist);
-  color: var(--ink);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
+/* ── SCREENS ── */
+.screen{display:none;min-height:calc(100vh - 56px);animation:fadeIn .3s ease}
+.screen.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 
-/* ── SCREENS ────────────────────────────────────── */
-.screen { display: none; flex-direction: column; flex: 1; }
-.screen.active { display: flex; }
+/* ── HOME ── */
+.home-hero{text-align:center;padding:4rem 1rem 2rem;position:relative}
+.home-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 0%,rgba(232,160,176,.25) 0%,transparent 70%);pointer-events:none}
+.hero-title{font-family:'Noto Serif JP',serif;font-size:clamp(2.2rem,6vw,4rem);font-weight:300;letter-spacing:.2em;color:var(--ink);position:relative}
+.hero-sub{font-size:.9rem;color:var(--ink3);letter-spacing:.15em;margin-top:.5rem}
+.hero-divider{width:60px;height:1px;background:linear-gradient(90deg,transparent,var(--sakura),transparent);margin:1.2rem auto}
 
-/* ── LOBBY ────────────────────────────────────────*/
-#lobbyScreen {
-  align-items: center;
-  justify-content: center;
-  padding: 2rem 1rem;
-  gap: 0;
-  position: relative;
-  overflow: hidden;
-}
+.game-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1.25rem;padding:1rem 1.5rem 4rem;max-width:1100px;margin:0 auto}
+.game-card{background:#fff;border:1px solid var(--border);border-radius:20px;padding:1.5rem;cursor:pointer;transition:all .25s;position:relative;overflow:hidden;box-shadow:0 2px 12px var(--shadow)}
+.game-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .25s}
+.game-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px var(--shadow)}
+.game-card:hover::before{opacity:1}
+.game-card.c-sakura::before{background:linear-gradient(135deg,rgba(232,160,176,.08),transparent)}
+.game-card.c-moss::before{background:linear-gradient(135deg,rgba(74,138,90,.08),transparent)}
+.game-card.c-blue::before{background:linear-gradient(135deg,rgba(58,106,176,.08),transparent)}
+.game-card.c-gold::before{background:linear-gradient(135deg,rgba(184,134,11,.08),transparent)}
+.game-card.c-purple::before{background:linear-gradient(135deg,rgba(112,80,176,.08),transparent)}
+.game-card.c-teal::before{background:linear-gradient(135deg,rgba(42,138,138,.08),transparent)}
+.gc-icon{font-size:2.5rem;margin-bottom:.75rem}
+.gc-title{font-family:'Noto Serif JP',serif;font-size:1.15rem;color:var(--ink);margin-bottom:.3rem}
+.gc-desc{font-size:.78rem;color:var(--ink3);line-height:1.6}
+.gc-badge{display:inline-block;margin-top:.6rem;padding:.15rem .6rem;border-radius:999px;font-size:.65rem;font-weight:600;letter-spacing:.08em}
+.badge-online{background:var(--moss-bg);color:var(--moss)}
+.badge-solo{background:var(--blue-bg);color:var(--blue)}
+.badge-new{background:var(--gold-bg);color:var(--gold)}
 
-#lobbyScreen::before {
-  content: '';
-  position: absolute; inset: 0;
-  background:
-    radial-gradient(ellipse 70% 50% at 15% 0%, rgba(232,160,176,0.3) 0%, transparent 55%),
-    radial-gradient(ellipse 60% 50% at 85% 100%, rgba(196,150,74,0.2) 0%, transparent 55%);
-  pointer-events: none;
-}
+/* ── COMMON LAYOUT ── */
+.game-layout{max-width:760px;margin:0 auto;padding:1.5rem 1rem 4rem;display:flex;flex-direction:column;gap:1.25rem}
+.panel{background:#fff;border:1px solid var(--border);border-radius:18px;box-shadow:0 2px 12px var(--shadow);overflow:hidden}
+.panel-header{padding:.8rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.75rem;background:linear-gradient(135deg,var(--sakura-bg),var(--wood-bg))}
+.panel-title{font-family:'Noto Serif JP',serif;font-size:1rem;color:var(--ink);flex:1}
+.panel-body{padding:1.25rem}
 
-.lobby-inner {
-  position: relative; z-index: 1;
-  width: 100%; max-width: 480px;
-  display: flex; flex-direction: column; align-items: center; gap: 2rem;
-}
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;padding:.65rem 1.25rem;border:none;border-radius:12px;font-family:'Noto Sans JP',sans-serif;font-size:.88rem;font-weight:500;cursor:pointer;transition:all .18s}
+.btn:active{transform:scale(.96)}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none!important}
+.btn-primary{background:var(--sakura-deep);color:#fff}
+.btn-primary:hover:not(:disabled){background:#a04060;transform:translateY(-1px)}
+.btn-ghost{background:transparent;border:1.5px solid var(--border);color:var(--ink2)}
+.btn-ghost:hover:not(:disabled){background:var(--mist)}
+.btn-moss{background:var(--moss);color:#fff}
+.btn-moss:hover:not(:disabled){background:#3a7a4a}
+.btn-gold{background:var(--gold);color:#fff}
+.btn-gold:hover:not(:disabled){background:#907008}
+.btn-blue{background:var(--blue);color:#fff}
+.btn-blue:hover:not(:disabled){background:#2a5098}
+.btn-sm{padding:.4rem .85rem;font-size:.78rem;border-radius:8px}
+.btn-full{width:100%}
 
-.logo {
-  text-align: center;
-}
-.logo-jp {
-  font-family: 'Noto Serif JP', serif;
-  font-size: 3.5rem; font-weight: 300;
-  color: var(--ink); letter-spacing: .3em; line-height: 1;
-}
-.logo-en {
-  font-size: .78rem; letter-spacing: .25em; color: var(--ink3); margin-top: .4rem;
-}
-.logo-divider {
-  width: 48px; height: 1px;
-  background: linear-gradient(90deg, transparent, var(--sakura), transparent);
-  margin: .8rem auto 0;
-}
+/* ── INPUTS ── */
+.inp{width:100%;background:var(--mist);border:1.5px solid var(--border);border-radius:10px;padding:.65rem 1rem;font-family:'Noto Serif JP',serif;font-size:1rem;color:var(--ink);outline:none;transition:border-color .2s,box-shadow .2s}
+.inp:focus{border-color:var(--sakura);box-shadow:0 0 0 3px rgba(232,160,176,.15)}
+.inp::placeholder{font-family:'Noto Sans JP',sans-serif;font-size:.85rem;color:#c0b8b0}
+.inp:disabled{opacity:.5;background:#f0ede8}
 
-.card {
-  background: #fff;
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  box-shadow: 0 4px 24px var(--shadow);
-  padding: 1.75rem;
-  width: 100%;
-}
+/* ── CHAT LOG ── */
+.chat-log{height:340px;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:.65rem;scroll-behavior:smooth}
+.chat-log::-webkit-scrollbar{width:4px}
+.chat-log::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.msg{display:flex;gap:.5rem;align-items:flex-end;animation:msgIn .3s cubic-bezier(.34,1.56,.64,1)}
+@keyframes msgIn{from{opacity:0;transform:translateY(10px) scale(.95)}to{opacity:1;transform:none}}
+.msg.mine{flex-direction:row-reverse}
+.msg-av{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;color:#fff;flex-shrink:0}
+.av-p0{background:var(--sakura-deep)}
+.av-p1{background:var(--blue)}
+.av-bot{background:var(--moss)}
+.msg-bub{max-width:72%;padding:.55rem .85rem;border-radius:14px}
+.msg:not(.mine) .msg-bub{background:#fff;border:1px solid var(--border);border-bottom-left-radius:4px}
+.msg.mine .msg-bub{background:var(--sakura-bg);border:1px solid var(--sakura-mid);border-bottom-right-radius:4px;text-align:right}
+.msg-word{font-family:'Noto Serif JP',serif;font-size:1.25rem;color:var(--ink)}
+.msg-sub{font-size:.68rem;color:var(--ink3);margin-top:.15rem}
+.msg-verdict{font-size:.68rem;margin-top:.2rem}
+.ok{color:var(--moss)}.fail{color:var(--danger)}.checking{color:var(--wood)}
+.sys{text-align:center;font-size:.73rem;color:var(--ink3);padding:.2rem 0;font-style:italic}
+.sys.hl{background:var(--gold-bg);border:1px solid var(--gold-mid);border-radius:999px;padding:.3rem 1rem;color:var(--gold);font-style:normal;font-weight:500;align-self:center}
 
-.card-title {
-  font-size: .72rem; letter-spacing: .18em; color: var(--ink3);
-  text-transform: uppercase; margin-bottom: 1.1rem; text-align: center;
-}
+/* ── TYPE BANNER ── */
+.type-banner{display:flex;align-items:center;gap:.75rem;padding:.7rem 1.25rem;border-bottom:1px solid var(--border);background:var(--mist);transition:all .35s}
+.tb-icon{font-size:1.4rem}
+.tb-info{flex:1}
+.tb-label{font-size:.65rem;letter-spacing:.12em;color:var(--ink3);text-transform:uppercase}
+.tb-name{font-family:'Noto Serif JP',serif;font-size:1.05rem;color:var(--ink)}
+.tb-desc{font-size:.7rem;color:var(--ink3)}
+.tb-count{font-family:'Noto Serif JP',serif;font-size:1.6rem;color:var(--sakura-deep);font-weight:600}
 
-.name-input, .code-input {
-  width: 100%;
-  background: var(--mist);
-  border: 1.5px solid var(--border);
-  border-radius: 10px;
-  padding: .7rem 1rem;
-  font-family: 'Noto Sans JP', sans-serif;
-  font-size: 1rem; color: var(--ink);
-  outline: none;
-  transition: border-color .2s, box-shadow .2s;
-  margin-bottom: .75rem;
-}
-.name-input:focus, .code-input:focus {
-  border-color: var(--sakura);
-  box-shadow: 0 0 0 3px rgba(232,160,176,.18);
-}
+/* ── PLAYER CHIPS ── */
+.chips{display:flex;gap:.5rem;flex-wrap:wrap}
+.chip{display:flex;align-items:center;gap:.35rem;padding:.28rem .7rem;border-radius:999px;border:1.5px solid var(--border);font-size:.78rem;font-weight:500;transition:all .25s;background:#fff}
+.chip.active{border-color:var(--sakura);background:var(--sakura-bg);box-shadow:0 0 0 3px rgba(232,160,176,.15)}
+.chip-score{font-size:.68rem;color:var(--ink3)}
 
-.btn-row { display: flex; gap: .75rem; flex-direction: column; }
-.btn {
-  width: 100%;
-  padding: .75rem 1rem;
-  border: none; border-radius: 12px;
-  font-family: 'Noto Sans JP', sans-serif;
-  font-size: .92rem; font-weight: 500;
-  cursor: pointer; transition: all .18s;
-  display: flex; align-items: center; justify-content: center; gap: .5rem;
-}
-.btn-primary { background: var(--sakura); color: var(--ink); }
-.btn-primary:hover { background: #d888a0; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(232,160,176,.4); }
-.btn-secondary { background: var(--wood-bg); border: 1.5px solid var(--wood-mid); color: var(--ink2); }
-.btn-secondary:hover { background: var(--wood-mid); transform: translateY(-1px); }
-.btn-sm {
-  padding: .45rem .9rem; font-size: .82rem; border-radius: 8px;
-  width: auto; white-space: nowrap;
-}
-.btn:active { transform: scale(.97) !important; }
-.btn:disabled { opacity: .5; cursor: not-allowed; transform: none !important; }
+/* ── ROOM CODE ── */
+.code-box{background:var(--sakura-bg);border:1.5px dashed var(--sakura);border-radius:14px;padding:.9rem;text-align:center;cursor:pointer;transition:all .2s}
+.code-box:hover{background:var(--sakura-mid)}
+.code-val{font-family:'Noto Serif JP',serif;font-size:2rem;letter-spacing:.3em;color:var(--ink);font-weight:600}
+.code-hint{font-size:.68rem;color:var(--ink3);margin-top:.2rem}
 
-.sep { display: flex; align-items: center; gap: .75rem; color: var(--ink3); font-size: .78rem; }
-.sep::before, .sep::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+/* ── STATUS ── */
+.status-row{display:flex;align-items:center;gap:.4rem;font-size:.78rem;color:var(--ink3)}
+.sdot{width:7px;height:7px;border-radius:50%;animation:blink 1.8s ease-in-out infinite}
+.sdot.green{background:var(--moss)}.sdot.yellow{background:var(--gold)}.sdot.red{background:var(--danger)}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
 
-.room-code-box {
-  background: var(--sakura-bg);
-  border: 1.5px dashed var(--sakura);
-  border-radius: 12px;
-  padding: .9rem 1rem;
-  text-align: center;
-  cursor: pointer;
-  transition: all .2s;
-  margin-bottom: .75rem;
-}
-.room-code-box:hover { background: var(--sakura-mid); }
-.room-code-label { font-size: .7rem; color: var(--ink3); letter-spacing: .1em; margin-bottom: .25rem; }
-.room-code-value {
-  font-family: 'Noto Serif JP', serif;
-  font-size: 1.8rem; letter-spacing: .25em; color: var(--ink);
-  font-weight: 600;
-}
-.room-code-hint { font-size: .68rem; color: var(--ink3); margin-top: .2rem; }
+/* ── TURN BADGE ── */
+.turn-badge{padding:.28rem .8rem;border-radius:999px;font-size:.73rem;font-weight:500;border:1px solid var(--border);white-space:nowrap}
+.turn-mine{background:var(--moss-bg);border-color:var(--moss);color:var(--moss)}
+.turn-wait{background:var(--mist);color:var(--ink3)}
 
-.status-line {
-  text-align: center; font-size: .8rem; color: var(--ink3);
-  display: flex; align-items: center; justify-content: center; gap: .4rem;
-}
-.dot { width: 7px; height: 7px; border-radius: 50%; background: var(--moss); animation: blink 1.8s ease-in-out infinite; }
-.dot.warn { background: var(--wood); }
-.dot.err  { background: var(--danger); }
-@keyframes blink { 0%,100%{opacity:1;} 50%{opacity:.25;} }
+/* ── INPUT BAR ── */
+.input-bar{padding:.9rem 1.25rem;border-top:1px solid var(--border);background:#fff}
+.input-row{display:flex;gap:.6rem;align-items:center}
 
-/* ── GAME SCREEN ─────────────────────────────────*/
-#gameScreen {
-  flex-direction: column;
-  max-width: 760px; width: 100%;
-  margin: 0 auto;
-  padding: 0;
-}
+/* ── THINKING ── */
+.thinking{display:flex;align-items:center;gap:.4rem;font-size:.75rem;color:var(--wood);padding:.3rem 0}
+.td{width:5px;height:5px;border-radius:50%;background:var(--wood);animation:tdot 1.2s ease-in-out infinite;opacity:.4}
+.td:nth-child(2){animation-delay:.2s}.td:nth-child(3){animation-delay:.4s}
+@keyframes tdot{0%,100%{transform:translateY(0);opacity:.4}50%{transform:translateY(-5px);opacity:1}}
 
-.game-header {
-  background: #fff;
-  border-bottom: 1px solid var(--border);
-  padding: .75rem 1.25rem;
-  display: flex; align-items: center; gap: .75rem;
-  position: sticky; top: 0; z-index: 100;
-  box-shadow: 0 2px 8px var(--shadow);
-}
-.game-header-left { display: flex; align-items: center; gap: .75rem; flex: 1; }
-.game-title-sm { font-family: 'Noto Serif JP', serif; font-size: 1.2rem; color: var(--ink); letter-spacing: .15em; }
+/* ── MODAL ── */
+.overlay{position:fixed;inset:0;z-index:800;background:rgba(26,18,11,.5);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s}
+.overlay.show{opacity:1;pointer-events:auto}
+.modal{background:#fff;border-radius:24px;padding:2rem 2.25rem;text-align:center;max-width:360px;width:90%;box-shadow:0 24px 60px rgba(0,0,0,.18);transform:scale(.85) translateY(20px);transition:all .35s cubic-bezier(.34,1.56,.64,1)}
+.overlay.show .modal{transform:scale(1) translateY(0)}
+.modal-icon{font-size:3rem;margin-bottom:.6rem}
+.modal-title{font-family:'Noto Serif JP',serif;font-size:1.4rem;color:var(--ink);margin-bottom:.4rem}
+.modal-msg{font-size:.83rem;color:var(--ink3);line-height:1.7}
+.modal-actions{margin-top:1.25rem;display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap}
 
-.players-bar {
-  display: flex; gap: .5rem;
-}
-.player-chip {
-  display: flex; align-items: center; gap: .35rem;
-  padding: .3rem .7rem;
-  border-radius: 999px;
-  border: 1.5px solid var(--border);
-  font-size: .78rem; font-weight: 500;
-  transition: all .3s;
-}
-.player-chip.active {
-  border-color: var(--sakura);
-  background: var(--sakura-bg);
-  box-shadow: 0 0 0 3px rgba(232,160,176,.18);
-}
-.player-chip .avatar {
-  width: 22px; height: 22px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: .7rem; font-weight: 700; color: #fff;
-}
-.avatar.p0 { background: var(--sakura); }
-.avatar.p1 { background: var(--blue); }
-.player-chip .score-sm { font-size: .7rem; color: var(--ink3); }
+/* ── FLASHCARD ── */
+.flashcard{perspective:1000px;cursor:pointer;width:100%;max-width:400px;margin:0 auto;height:200px}
+.fc-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .5s cubic-bezier(.4,0,.2,1)}
+.flashcard.flipped .fc-inner{transform:rotateY(180deg)}
+.fc-face{position:absolute;inset:0;border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;backface-visibility:hidden;border:2px solid var(--border);padding:1.5rem}
+.fc-front{background:linear-gradient(135deg,var(--sakura-bg),var(--wood-bg))}
+.fc-back{background:linear-gradient(135deg,var(--moss-bg),var(--teal-bg));transform:rotateY(180deg)}
+.fc-word{font-family:'Noto Serif JP',serif;font-size:2.5rem;color:var(--ink)}
+.fc-reading{font-size:1rem;color:var(--ink3);margin-top:.3rem}
+.fc-meaning{font-size:1.1rem;color:var(--moss);font-weight:500}
 
-.turn-badge {
-  padding: .3rem .8rem; border-radius: 999px;
-  font-size: .75rem; font-weight: 500;
-  border: 1px solid var(--border);
-  white-space: nowrap;
-}
-.turn-badge.my-turn    { background: var(--moss-bg); border-color: var(--moss); color: var(--moss); }
-.turn-badge.their-turn { background: var(--mist); color: var(--ink3); }
+/* ── QUIZ ── */
+.quiz-choices{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-top:1rem}
+.choice-btn{padding:.85rem 1rem;border:2px solid var(--border);border-radius:14px;background:#fff;font-family:'Noto Serif JP',serif;font-size:1rem;cursor:pointer;transition:all .2s;text-align:center;color:var(--ink)}
+.choice-btn:hover:not(:disabled){border-color:var(--sakura);background:var(--sakura-bg)}
+.choice-btn.correct{border-color:var(--moss);background:var(--moss-bg);color:var(--moss)}
+.choice-btn.wrong{border-color:var(--danger);background:var(--danger-bg);color:var(--danger)}
 
-/* Word type indicator */
-.type-banner {
-  padding: .7rem 1.25rem;
-  display: flex; align-items: center; gap: .75rem;
-  background: var(--mist);
-  border-bottom: 1px solid var(--border);
-  transition: all .4s;
-}
-.type-icon { font-size: 1.4rem; }
-.type-info { flex: 1; }
-.type-label { font-size: .68rem; letter-spacing: .12em; color: var(--ink3); text-transform: uppercase; }
-.type-name  { font-family: 'Noto Serif JP', serif; font-size: 1.1rem; color: var(--ink); }
-.type-desc  { font-size: .72rem; color: var(--ink3); }
-.type-count { font-family: 'Noto Serif JP', serif; font-size: 1.5rem; color: var(--sakura); font-weight: 600; }
+/* ── PROGRESS BAR ── */
+.prog-bar{height:6px;background:var(--border);border-radius:999px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--sakura),var(--sakura-deep));border-radius:999px;transition:width .4s ease}
 
-/* Chat / word history */
-.word-log {
-  flex: 1; overflow-y: auto;
-  padding: 1rem 1.25rem;
-  display: flex; flex-direction: column; gap: .7rem;
-  scroll-behavior: smooth;
-}
-.word-log::-webkit-scrollbar { width: 4px; }
-.word-log::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+/* ── TOPIC CHIPS ── */
+.topic-grid{display:flex;flex-wrap:wrap;gap:.5rem}
+.topic-chip{padding:.35rem .85rem;border-radius:999px;border:1.5px solid var(--border);font-size:.78rem;cursor:pointer;transition:all .2s;background:#fff;color:var(--ink2)}
+.topic-chip:hover{border-color:var(--sakura);background:var(--sakura-bg)}
+.topic-chip.selected{border-color:var(--sakura-deep);background:var(--sakura-deep);color:#fff}
 
-.word-entry {
-  display: flex; gap: .6rem; align-items: flex-end;
-  animation: entryIn .35s cubic-bezier(.34,1.56,.64,1);
-}
-@keyframes entryIn { from{opacity:0;transform:translateY(10px) scale(.96);} to{opacity:1;transform:none;} }
-.word-entry.mine   { flex-direction: row-reverse; }
+/* ── SCORE DISPLAY ── */
+.score-big{font-family:'Noto Serif JP',serif;font-size:3rem;color:var(--sakura-deep);text-align:center;line-height:1}
+.score-label{font-size:.78rem;color:var(--ink3);text-align:center;margin-top:.3rem}
 
-.entry-avatar {
-  width: 30px; height: 30px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: .78rem; font-weight: 700; color: #fff;
-  flex-shrink: 0;
-}
+/* ── LEADERBOARD ── */
+.lb-row{display:flex;align-items:center;gap:.75rem;padding:.6rem .8rem;border-radius:10px;transition:background .2s}
+.lb-row:hover{background:var(--mist)}
+.lb-rank{width:28px;text-align:center;font-weight:700;color:var(--ink3);font-size:.85rem}
+.lb-rank.gold{color:var(--gold)}.lb-rank.silver{color:#909090}.lb-rank.bronze{color:#c07840}
+.lb-name{flex:1;font-size:.88rem}
+.lb-score{font-family:'Noto Serif JP',serif;font-size:1rem;font-weight:600;color:var(--sakura-deep)}
 
-.entry-bubble {
-  max-width: 70%;
-  padding: .6rem .9rem;
-  border-radius: 16px;
-  position: relative;
-}
-.word-entry:not(.mine) .entry-bubble {
-  background: #fff; border: 1px solid var(--border);
-  border-bottom-left-radius: 4px;
-}
-.word-entry.mine .entry-bubble {
-  background: var(--sakura-bg); border: 1px solid var(--sakura-mid);
-  border-bottom-right-radius: 4px;
-  text-align: right;
-}
+/* ── PRONUNCIATION ── */
+.mic-btn{width:80px;height:80px;border-radius:50%;background:var(--sakura-deep);border:none;color:#fff;font-size:2rem;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;margin:0 auto;box-shadow:0 4px 20px rgba(200,96,122,.35)}
+.mic-btn:hover{transform:scale(1.08);box-shadow:0 8px 28px rgba(200,96,122,.45)}
+.mic-btn.recording{background:var(--danger);animation:micPulse 1s ease-in-out infinite}
+@keyframes micPulse{0%,100%{box-shadow:0 4px 20px rgba(176,48,32,.4)}50%{box-shadow:0 4px 40px rgba(176,48,32,.8),0 0 0 12px rgba(176,48,32,.1)}}
+.waveform{height:48px;display:flex;align-items:center;justify-content:center;gap:3px;margin:1rem 0}
+.wave-bar{width:4px;border-radius:2px;background:var(--sakura);transition:height .1s;animation:none}
+.waveform.active .wave-bar{animation:wave .6s ease-in-out infinite alternate}
+.wave-bar:nth-child(1){animation-delay:.0s}.wave-bar:nth-child(2){animation-delay:.1s}
+.wave-bar:nth-child(3){animation-delay:.2s}.wave-bar:nth-child(4){animation-delay:.3s}
+.wave-bar:nth-child(5){animation-delay:.2s}.wave-bar:nth-child(6){animation-delay:.1s}
+.wave-bar:nth-child(7){animation-delay:.0s}
+@keyframes wave{from{height:6px}to{height:32px}}
 
-.entry-word {
-  font-family: 'Noto Serif JP', serif;
-  font-size: 1.35rem; color: var(--ink); line-height: 1.2;
-}
-.entry-type-pill {
-  display: inline-block;
-  padding: .1rem .5rem; border-radius: 999px;
-  font-size: .65rem; font-weight: 500; margin-top: .2rem;
-}
-.pill-noun   { background: var(--blue-bg); color: var(--blue); }
-.pill-verb   { background: var(--moss-bg); color: var(--moss); }
-.pill-adj    { background: var(--purple-bg); color: var(--purple); }
-.entry-verdict {
-  font-size: .68rem; margin-top: .2rem; display: flex; align-items: center; gap: .25rem;
-}
-.verdict-ok   { color: var(--moss); }
-.verdict-fail { color: var(--danger); }
-.verdict-checking { color: var(--wood); }
-.entry-meta { font-size: .62rem; color: var(--ink3); margin-top: .25rem; }
+/* ── ANIME QUIZ ── */
+.anime-card{background:linear-gradient(135deg,#1a0a2e,#2d1b5e);border-radius:20px;padding:2rem;text-align:center;color:#fff;position:relative;overflow:hidden}
+.anime-card::before{content:'✦';position:absolute;font-size:8rem;opacity:.05;right:-1rem;top:-1rem}
+.anime-note{font-size:3rem;margin-bottom:.75rem;animation:noteBounce 1s ease-in-out infinite alternate}
+@keyframes noteBounce{from{transform:scale(1) rotate(-5deg)}to{transform:scale(1.1) rotate(5deg)}}
+.anime-choices{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-top:1rem}
+.anime-choice{padding:.7rem;border:2px solid rgba(255,255,255,.2);border-radius:12px;background:rgba(255,255,255,.08);color:#fff;font-size:.88rem;cursor:pointer;transition:all .2s}
+.anime-choice:hover:not(:disabled){background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.5)}
+.anime-choice.correct{background:rgba(74,138,90,.4);border-color:var(--moss)}
+.anime-choice.wrong{background:rgba(176,48,32,.4);border-color:var(--danger)}
 
-/* System message */
-.sys-msg {
-  text-align: center; font-size: .75rem; color: var(--ink3);
-  padding: .3rem 0; font-style: italic;
-}
-.sys-msg.highlight {
-  background: var(--gold-bg); border: 1px solid var(--wood-mid);
-  border-radius: 999px; padding: .35rem 1rem;
-  color: var(--gold); font-style: normal; font-weight: 500;
-  align-self: center; font-size: .78rem;
-}
+/* ── SHAKE ── */
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+.shake{animation:shake .35s ease}
 
-/* Input */
-.input-bar {
-  background: #fff;
-  border-top: 1px solid var(--border);
-  padding: .9rem 1.25rem;
-  box-shadow: 0 -2px 8px var(--shadow);
-}
-.input-row { display: flex; gap: .6rem; align-items: center; }
-.word-input {
-  flex: 1;
-  background: var(--mist); border: 1.5px solid var(--border);
-  border-radius: 12px; padding: .7rem 1rem;
-  font-family: 'Noto Serif JP', serif; font-size: 1.1rem; color: var(--ink);
-  outline: none; transition: border-color .2s, box-shadow .2s;
-}
-.word-input:focus { border-color: var(--sakura); box-shadow: 0 0 0 3px rgba(232,160,176,.15); }
-.word-input:disabled { opacity: .5; background: #f0ede8; }
-.word-input::placeholder { font-family: 'Noto Sans JP', sans-serif; font-size: .85rem; color: #c8c0b8; }
+/* ── STAT PILLS ── */
+.stat-row{display:flex;gap:.6rem;flex-wrap:wrap;justify-content:center}
+.stat-pill{background:#fff;border:1px solid var(--border);border-radius:999px;padding:.3rem .9rem;font-size:.75rem;display:flex;align-items:center;gap:.35rem;color:var(--ink3)}
+.stat-pill strong{color:var(--ink)}
 
-.send-btn {
-  width: 46px; height: 46px; border-radius: 12px;
-  background: var(--sakura); border: none; color: var(--ink);
-  font-size: 1.1rem; cursor: pointer; flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center;
-  transition: all .18s;
-}
-.send-btn:hover:not(:disabled) { background: #d888a0; transform: scale(1.05); }
-.send-btn:active:not(:disabled){ transform: scale(.95); }
-.send-btn:disabled { background: var(--border); cursor: not-allowed; }
-
-.input-hint { font-size: .7rem; color: var(--ink3); margin-top: .5rem; }
-
-/* Thinking overlay on input */
-.thinking-bar {
-  display: flex; align-items: center; gap: .5rem;
-  padding: .5rem 0; font-size: .78rem; color: var(--wood);
-}
-.thinking-dot {
-  width: 5px; height: 5px; border-radius: 50%; background: var(--wood);
-  animation: tdot 1.2s ease-in-out infinite;
-}
-.thinking-dot:nth-child(2){animation-delay:.2s}
-.thinking-dot:nth-child(3){animation-delay:.4s}
-@keyframes tdot { 0%,100%{transform:translateY(0);opacity:.4} 50%{transform:translateY(-4px);opacity:1} }
-
-/* Penalty / result overlay */
-.overlay {
-  position: fixed; inset: 0; z-index: 200;
-  background: rgba(26,18,11,.45); backdrop-filter: blur(6px);
-  display: flex; align-items: center; justify-content: center;
-  opacity: 0; pointer-events: none; transition: opacity .3s;
-}
-.overlay.show { opacity: 1; pointer-events: auto; }
-.modal {
-  background: #fff; border-radius: 24px;
-  padding: 2.25rem 2.5rem; text-align: center;
-  max-width: 340px; width: 90%;
-  box-shadow: 0 24px 60px rgba(0,0,0,.15);
-  transform: scale(.85) translateY(20px);
-  transition: all .35s cubic-bezier(.34,1.56,.64,1);
-}
-.overlay.show .modal { transform: scale(1) translateY(0); }
-.modal-icon { font-size: 3rem; margin-bottom: .75rem; }
-.modal-title {
-  font-family: 'Noto Serif JP', serif;
-  font-size: 1.5rem; color: var(--ink); margin-bottom: .5rem;
-}
-.modal-msg { font-size: .85rem; color: var(--ink3); line-height: 1.7; }
-.modal-score {
-  margin-top: 1rem; padding: .6rem 1rem;
-  background: var(--gold-bg); border: 1px solid var(--wood-mid);
-  border-radius: 12px; font-size: .85rem; color: var(--gold);
-}
-.modal-btn {
-  margin-top: 1.25rem;
-  padding: .65rem 2rem; border-radius: 999px;
-  background: var(--ink); color: #fff; border: none;
-  font-family: 'Noto Sans JP', sans-serif; font-size: .88rem;
-  cursor: pointer; transition: all .18s;
-}
-.modal-btn:hover { background: var(--ink2); }
-
-/* penalty shake */
-@keyframes shake {
-  0%,100%{transform:translateX(0)}
-  20%{transform:translateX(-8px)}
-  40%{transform:translateX(8px)}
-  60%{transform:translateX(-5px)}
-  80%{transform:translateX(5px)}
-}
-.shake { animation: shake .4s ease; }
-
-/* Petals */
-.petal {
-  position: fixed; top: -30px; font-size: 14px;
-  opacity: 0; pointer-events: none; z-index: 0;
-  animation: fallPetal linear infinite;
-}
-@keyframes fallPetal {
-  from { transform: translateY(0) rotate(0deg); opacity: .7; }
-  to   { transform: translateY(105vh) rotate(360deg) translateX(50px); opacity: 0; }
-}
-
-/* Responsive */
-@media (max-width: 520px) {
-  .logo-jp { font-size: 2.6rem; }
-  .entry-word { font-size: 1.15rem; }
-  .modal { padding: 1.75rem 1.5rem; }
-  .game-header { padding: .6rem .9rem; }
+/* ── RESPONSIVE ── */
+@media(max-width:520px){
+  .game-grid{padding:1rem .75rem 3rem;grid-template-columns:1fr 1fr}
+  .gc-icon{font-size:1.8rem}.gc-title{font-size:.95rem}.gc-desc{display:none}
+  .nav-tab span{display:none}.nav-tab{padding:.35rem .55rem}
+  .chat-log{height:260px}
+  .quiz-choices,.anime-choices{grid-template-columns:1fr}
 }
 </style>
 </head>
 <body>
 
-<!-- Falling petals -->
-<div id="petalsContainer"></div>
+<!-- Petals -->
+<div id="petalBox"></div>
 
-<!-- ══════════ LOBBY ══════════ -->
-<div id="lobbyScreen" class="screen active">
-  <div class="lobby-inner">
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-logo">emi<span>.io.vn</span> 🌸</div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showScreen('home')" id="tab-home">🏠 <span>Trang chủ</span></button>
+    <button class="nav-tab" onclick="showScreen('shiritori')" id="tab-shiritori">🎮 <span>Shiritori</span></button>
+    <button class="nav-tab" onclick="showScreen('topic')" id="tab-topic">🗂 <span>Chủ đề</span></button>
+    <button class="nav-tab" onclick="showScreen('flashcard')" id="tab-flashcard">📇 <span>Flash Card</span></button>
+    <button class="nav-tab" onclick="showScreen('pronounce')" id="tab-pronounce">🎤 <span>Phát âm</span></button>
+    <button class="nav-tab" onclick="showScreen('anime')" id="tab-anime">🎵 <span>Anime</span></button>
+  </div>
+</nav>
 
-    <div class="logo">
-      <div class="logo-jp">しりとり</div>
-      <div class="logo-en">Shiritori · Online Multiplayer · N5</div>
-      <div class="logo-divider"></div>
+<!-- MODAL -->
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <div class="modal-icon" id="mIcon">🎉</div>
+    <div class="modal-title" id="mTitle">—</div>
+    <div class="modal-msg" id="mMsg"></div>
+    <div class="modal-actions" id="mActions"></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     SCREEN: HOME
+════════════════════════════════ -->
+<div class="screen active" id="screen-home">
+  <div class="home-hero">
+    <div class="hero-title">日本語 Learning Hub</div>
+    <div class="hero-sub">Học tiếng Nhật qua trò chơi · N5 ~ N3</div>
+    <div class="hero-divider"></div>
+  </div>
+  <div class="game-grid">
+    <div class="game-card c-sakura" onclick="showScreen('shiritori')">
+      <div class="gc-icon">🌸</div>
+      <div class="gc-title">Shiritori Online</div>
+      <div class="gc-desc">Nối từ theo loại: Danh từ → Động từ → Tính từ. Đấu với bạn bè hoặc Bot AI.</div>
+      <div><span class="gc-badge badge-online">● Online</span> <span class="gc-badge badge-solo">Bot</span></div>
+    </div>
+    <div class="game-card c-moss" onclick="showScreen('topic')">
+      <div class="gc-icon">🗂</div>
+      <div class="gc-title">Nối từ chủ đề</div>
+      <div class="gc-desc">Nhập từ theo chủ đề: Thức ăn, Du lịch, Gia đình... AI kiểm tra nghĩa & chủ đề.</div>
+      <div><span class="gc-badge badge-solo">Solo</span> <span class="gc-badge badge-new">★ Mới</span></div>
+    </div>
+    <div class="game-card c-blue" onclick="showScreen('flashcard')">
+      <div class="gc-icon">📇</div>
+      <div class="gc-title">Flash Card N5</div>
+      <div class="gc-desc">Ôn từ vựng bằng thẻ lật. Có quiz trắc nghiệm 4 đáp án. Theo dõi tiến độ.</div>
+      <div><span class="gc-badge badge-solo">Solo</span></div>
+    </div>
+    <div class="game-card c-gold" onclick="showScreen('pronounce')">
+      <div class="gc-icon">🎤</div>
+      <div class="gc-title">Luyện phát âm</div>
+      <div class="gc-desc">Nghe từ mẫu → tự đọc → AI chấm điểm phát âm của bạn so với chuẩn.</div>
+      <div><span class="gc-badge badge-solo">Solo</span> <span class="gc-badge badge-new">★ Mới</span></div>
+    </div>
+    <div class="game-card c-purple" onclick="showScreen('anime')">
+      <div class="gc-icon">🎵</div>
+      <div class="gc-title">Đoán anime</div>
+      <div class="gc-desc">Nghe gợi ý từ khoá / lyrics → đoán tên anime. Học từ vựng qua văn hoá Nhật.</div>
+      <div><span class="gc-badge badge-new">★ Mới</span></div>
+    </div>
+    <div class="game-card c-teal" onclick="alert('Coming soon! 🌸')">
+      <div class="gc-icon">📝</div>
+      <div class="gc-title">Luyện Kanji</div>
+      <div class="gc-desc">Nhận dạng, vẽ và nhớ Kanji N5 qua phương pháp spaced repetition.</div>
+      <div><span class="gc-badge badge-new">Sắp ra</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     SCREEN: SHIRITORI
+════════════════════════════════ -->
+<div class="screen" id="screen-shiritori">
+  <!-- MODE SELECT -->
+  <div class="game-layout" id="shiri-lobby">
+    <div style="text-align:center;padding:1rem 0 .5rem">
+      <div style="font-family:'Noto Serif JP',serif;font-size:2rem;letter-spacing:.2em">しりとり</div>
+      <div style="font-size:.8rem;color:var(--ink3);margin-top:.3rem">Chọn chế độ chơi</div>
     </div>
 
-    <!-- Name input -->
-    <div class="card" style="padding: 1.25rem 1.5rem;">
-      <div class="card-title">🌸 Tên của bạn</div>
-      <input class="name-input" id="playerNameInput" placeholder="VD: Hana, Kenji..." maxlength="16">
+    <!-- Name -->
+    <div class="panel">
+      <div class="panel-body" style="display:flex;gap:.75rem;align-items:center">
+        <span style="font-size:1.2rem">👤</span>
+        <input class="inp" id="sName" placeholder="Tên của bạn..." maxlength="16" style="flex:1">
+      </div>
     </div>
 
-    <!-- Create room -->
-    <div class="card" id="createSection">
-      <div class="card-title">✦ Tạo phòng mới</div>
-      <div id="myRoomCode" style="display:none;">
-        <div class="room-code-box" onclick="copyCode()">
-          <div class="room-code-label">Mã phòng — nhấn để sao chép</div>
-          <div class="room-code-value" id="roomCodeDisplay">——</div>
-          <div class="room-code-hint">📋 Chia sẻ mã này cho bạn bè</div>
+    <!-- vs Bot -->
+    <div class="panel" style="cursor:pointer" onclick="startShiriBot()">
+      <div class="panel-body" style="display:flex;align-items:center;gap:1rem">
+        <div style="font-size:2.5rem">🤖</div>
+        <div style="flex:1">
+          <div style="font-family:'Noto Serif JP',serif;font-size:1.1rem">Đấu với Bot AI</div>
+          <div style="font-size:.78rem;color:var(--ink3);margin-top:.2rem">Bot tự động phản hồi, AI kiểm tra từ nghiêm túc</div>
         </div>
-        <div class="status-line" id="waitStatus">
-          <div class="dot warn"></div>
-          Đang chờ bạn bè tham gia...
-        </div>
-      </div>
-      <div class="btn-row">
-        <button class="btn btn-primary" id="createBtn" onclick="createRoom()">🌸 Tạo phòng</button>
+        <div style="font-size:1.5rem;color:var(--border)">›</div>
       </div>
     </div>
 
-    <div class="sep">hoặc</div>
-
-    <!-- Join room -->
-    <div class="card">
-      <div class="card-title">✦ Tham gia phòng</div>
-      <input class="code-input" id="joinCodeInput" placeholder="Nhập mã phòng (6 ký tự)..." maxlength="8">
-      <div class="btn-row">
-        <button class="btn btn-secondary" onclick="joinRoom()">🔗 Vào phòng</button>
-      </div>
-      <div class="status-line" id="joinStatus" style="margin-top:.6rem; display:none;">
-        <div class="dot warn"></div>
-        <span id="joinStatusText">Đang kết nối...</span>
+    <!-- vs Friend -->
+    <div class="panel">
+      <div class="panel-header"><div class="panel-title">🌐 Chơi cùng bạn bè (Online)</div></div>
+      <div class="panel-body" style="display:flex;flex-direction:column;gap:.75rem">
+        <button class="btn btn-primary btn-full" onclick="shiriCreate()">🌸 Tạo phòng mới</button>
+        <div id="shiriRoomBox" style="display:none">
+          <div class="code-box" onclick="shiriCopyCode()">
+            <div style="font-size:.68rem;color:var(--ink3);letter-spacing:.1em;margin-bottom:.2rem">MÃ PHÒNG — nhấn để sao chép</div>
+            <div class="code-val" id="shiriCode">——</div>
+            <div class="code-hint" id="shiriCodeHint">📋 Gửi mã này cho bạn bè</div>
+          </div>
+          <div class="status-row" style="justify-content:center;margin-top:.6rem" id="shiriWaitStatus">
+            <div class="sdot yellow"></div> Đang chờ bạn tham gia...
+          </div>
+        </div>
+        <div style="display:flex;gap:.6rem">
+          <input class="inp" id="joinCode" placeholder="Nhập mã phòng..." maxlength="8" style="flex:1">
+          <button class="btn btn-ghost" onclick="shiriJoin()">Vào phòng →</button>
+        </div>
+        <div class="status-row" id="joinStatus" style="display:none">
+          <div class="sdot yellow"></div>
+          <span id="joinStatusText">Đang kết nối...</span>
+        </div>
       </div>
     </div>
 
     <!-- Rules -->
-    <div class="card" style="background:var(--wood-bg); border-color:var(--wood-mid);">
-      <div class="card-title">📜 Luật chơi</div>
-      <div style="display:flex; flex-direction:column; gap:.5rem; font-size:.78rem; color:var(--ink2); line-height:1.6;">
-        <div>🔵 Vòng xoay: <strong>Danh từ → Động từ → Tính từ → lặp lại</strong></div>
-        <div>🟢 Nhập từ đúng loại → được <strong>+10 điểm</strong></div>
-        <div>🔴 Nhập sai loại / từ không hợp lệ → mất lượt + <strong>phạt −5 điểm</strong></div>
-        <div>🤖 <strong>AI Claude</strong> tự động kiểm tra từ và loại từ</div>
-        <div>♾️ Không giới hạn từ, không cần bắt đầu theo đuôi</div>
+    <div class="panel" style="background:var(--wood-bg);border-color:var(--wood-mid)">
+      <div class="panel-body" style="font-size:.78rem;color:var(--ink2);line-height:1.9;display:flex;flex-direction:column;gap:.2rem">
+        <div>🔵 Vòng: <strong>Danh từ → Động từ → Tính từ → lặp lại</strong></div>
+        <div>✅ Đúng loại từ → <strong>+10 điểm</strong></div>
+        <div>❌ Sai loại / không hợp lệ → <strong>−5 điểm</strong> + mất lượt</div>
+        <div>🤖 AI Claude kiểm tra nghiêm túc từng từ</div>
+        <div>♾️ Vô hạn từ, không cần theo đuôi chữ</div>
       </div>
     </div>
+  </div>
 
+  <!-- GAME AREA (hidden until game starts) -->
+  <div style="display:none;flex-direction:column;height:calc(100vh - 56px)" id="shiriGame">
+    <!-- top bar -->
+    <div style="background:#fff;border-bottom:1px solid var(--border);padding:.6rem 1.25rem;display:flex;align-items:center;gap:.75rem;position:sticky;top:56px;z-index:100;box-shadow:0 2px 8px var(--shadow)">
+      <div class="chips" id="shiriChips"></div>
+      <div style="flex:1"></div>
+      <div class="turn-badge" id="shiriTurnBadge">—</div>
+      <button class="btn btn-ghost btn-sm" onclick="shiriQuit()">✕ Thoát</button>
+    </div>
+    <!-- type banner -->
+    <div class="type-banner" id="shiriTypeBanner">
+      <div class="tb-icon" id="shiriTypeIcon">🔵</div>
+      <div class="tb-info">
+        <div class="tb-label">Loại từ cần nhập</div>
+        <div class="tb-name" id="shiriTypeName">Danh từ</div>
+        <div class="tb-desc" id="shiriTypeDesc">VD: ねこ、まち、さくら</div>
+      </div>
+      <div class="tb-count" id="shiriTypeCount">1/3</div>
+    </div>
+    <!-- log -->
+    <div class="chat-log" id="shiriLog" style="flex:1;height:auto;max-height:calc(100vh - 280px)"></div>
+    <!-- input -->
+    <div class="input-bar">
+      <div class="thinking" id="shiriThinking" style="display:none">
+        <div class="td"></div><div class="td"></div><div class="td"></div>
+        <span id="shiriThinkingLabel">AI đang kiểm tra...</span>
+      </div>
+      <div class="input-row">
+        <input class="inp" id="shiriInput" placeholder="Nhập từ tiếng Nhật..." autocomplete="off" onkeydown="if(event.key==='Enter')shiriSubmit()" disabled>
+        <button class="btn btn-primary" id="shiriSendBtn" onclick="shiriSubmit()" disabled style="flex-shrink:0">➤</button>
+      </div>
+      <div style="font-size:.7rem;color:var(--ink3);margin-top:.45rem" id="shiriHint">—</div>
+    </div>
   </div>
 </div>
 
-<!-- ══════════ GAME ══════════ -->
-<div id="gameScreen" class="screen">
+<!-- ════════════════════════════════
+     SCREEN: TOPIC WORD CHAIN
+════════════════════════════════ -->
+<div class="screen" id="screen-topic">
+  <div class="game-layout">
+    <div style="text-align:center;padding:1rem 0 .5rem">
+      <div style="font-family:'Noto Serif JP',serif;font-size:2rem">🗂 Nối từ chủ đề</div>
+      <div style="font-size:.8rem;color:var(--ink3);margin-top:.3rem">Nhập từ tiếng Nhật thuộc chủ đề đã chọn</div>
+    </div>
 
-  <!-- Header -->
-  <div class="game-header">
-    <div class="game-header-left">
-      <div class="game-title-sm">しりとり</div>
-      <div class="players-bar">
-        <div class="player-chip" id="chip0">
-          <div class="avatar p0" id="av0">?</div>
-          <div>
-            <div id="name0">—</div>
-            <div class="score-sm">⭐ <span id="score0">0</span></div>
-          </div>
-        </div>
-        <div style="font-size:.8rem; color:var(--ink3); align-self:center;">VS</div>
-        <div class="player-chip" id="chip1">
-          <div class="avatar p1" id="av1">?</div>
-          <div>
-            <div id="name1">—</div>
-            <div class="score-sm">⭐ <span id="score1">0</span></div>
-          </div>
-        </div>
+    <!-- Topic select -->
+    <div class="panel" id="topicSelectPanel">
+      <div class="panel-header"><div class="panel-title">Chọn chủ đề</div></div>
+      <div class="panel-body">
+        <div class="topic-grid" id="topicGrid"></div>
+        <button class="btn btn-primary btn-full" style="margin-top:1rem" onclick="startTopicGame()">Bắt đầu →</button>
       </div>
     </div>
-    <div class="turn-badge" id="turnBadge">—</div>
-  </div>
 
-  <!-- Type banner -->
-  <div class="type-banner" id="typeBanner">
-    <div class="type-icon" id="typeIcon">🔵</div>
-    <div class="type-info">
-      <div class="type-label">Loại từ cần nhập</div>
-      <div class="type-name" id="typeName">Danh từ (名詞)</div>
-      <div class="type-desc" id="typeDesc">VD: ねこ、まち、さくら</div>
+    <!-- Game -->
+    <div class="panel" id="topicGamePanel" style="display:none">
+      <div class="panel-header">
+        <div class="panel-title" id="topicGameTitle">—</div>
+        <div class="stat-row">
+          <div class="stat-pill">⭐ <strong id="topicScore">0</strong></div>
+          <div class="stat-pill">🔥 <strong id="topicStreak">0</strong> liên tiếp</div>
+        </div>
+      </div>
+      <div class="chat-log" id="topicLog" style="height:280px"></div>
+      <div class="input-bar" style="border-top:1px solid var(--border)">
+        <div class="thinking" id="topicThinking" style="display:none">
+          <div class="td"></div><div class="td"></div><div class="td"></div>
+          <span>AI đang kiểm tra...</span>
+        </div>
+        <div class="input-row">
+          <input class="inp" id="topicInput" placeholder="Nhập từ thuộc chủ đề..." autocomplete="off" onkeydown="if(event.key==='Enter')topicSubmit()">
+          <button class="btn btn-primary" onclick="topicSubmit()" style="flex-shrink:0">➤</button>
+        </div>
+        <div style="font-size:.7rem;color:var(--ink3);margin-top:.45rem" id="topicHint">—</div>
+      </div>
     </div>
-    <div class="type-count" id="typeCount">1</div>
-  </div>
 
-  <!-- Word log -->
-  <div class="word-log" id="wordLog">
-    <div class="sys-msg highlight">🌸 Trò chơi bắt đầu! Nhập từ đầu tiên nào!</div>
-  </div>
-
-  <!-- Input bar -->
-  <div class="input-bar">
-    <div id="thinkingBar" style="display:none;" class="thinking-bar">
-      <div class="thinking-dot"></div>
-      <div class="thinking-dot"></div>
-      <div class="thinking-dot"></div>
-      <span>AI đang kiểm tra từ...</span>
+    <!-- Used words -->
+    <div id="topicUsedPanel" style="display:none">
+      <div style="font-size:.72rem;color:var(--ink3);margin-bottom:.4rem">📚 Từ đã dùng:</div>
+      <div style="display:flex;flex-wrap:wrap;gap:.35rem" id="topicUsedList"></div>
     </div>
-    <div class="input-row">
-      <input class="word-input" id="wordInput"
-        placeholder="Nhập từ tiếng Nhật..."
-        autocomplete="off" autocorrect="off" spellcheck="false"
-        onkeydown="handleKey(event)" disabled>
-      <button class="send-btn" id="sendBtn" onclick="submitWord()" disabled>➤</button>
-    </div>
-    <div class="input-hint" id="inputHint">Đang chờ bạn bè tham gia...</div>
   </div>
 </div>
 
-<!-- Modal overlay -->
-<div class="overlay" id="overlay">
-  <div class="modal">
-    <div class="modal-icon" id="modalIcon">🎉</div>
-    <div class="modal-title" id="modalTitle">—</div>
-    <div class="modal-msg" id="modalMsg"></div>
-    <div class="modal-score" id="modalScore" style="display:none;"></div>
-    <button class="modal-btn" id="modalBtn" onclick="closeModal()">わかった</button>
+<!-- ════════════════════════════════
+     SCREEN: FLASHCARD
+════════════════════════════════ -->
+<div class="screen" id="screen-flashcard">
+  <div class="game-layout">
+    <div style="text-align:center;padding:1rem 0 .5rem">
+      <div style="font-family:'Noto Serif JP',serif;font-size:2rem">📇 Flash Card N5</div>
+      <div style="font-size:.8rem;color:var(--ink3);margin-top:.3rem">Lật thẻ để xem nghĩa · Quiz 4 đáp án</div>
+    </div>
+
+    <!-- Mode tabs -->
+    <div style="display:flex;gap:.6rem;justify-content:center">
+      <button class="btn btn-primary btn-sm" onclick="setFCMode('card')" id="fcModeCard">📇 Lật thẻ</button>
+      <button class="btn btn-ghost btn-sm" onclick="setFCMode('quiz')" id="fcModeQuiz">📝 Quiz</button>
+    </div>
+
+    <!-- Progress -->
+    <div>
+      <div style="display:flex;justify-content:space-between;font-size:.72rem;color:var(--ink3);margin-bottom:.35rem">
+        <span id="fcProgress">0 / 0</span>
+        <span id="fcCorrect">✓ 0 đúng</span>
+      </div>
+      <div class="prog-bar"><div class="prog-fill" id="fcProgFill" style="width:0%"></div></div>
+    </div>
+
+    <!-- Flashcard mode -->
+    <div id="fcCardMode">
+      <div class="flashcard" id="flashcard" onclick="flipCard()">
+        <div class="fc-inner">
+          <div class="fc-face fc-front">
+            <div class="fc-word" id="fcWord">—</div>
+            <div class="fc-reading" id="fcReading"></div>
+            <div style="font-size:.68rem;color:var(--ink3);margin-top:1rem">👆 Nhấn để lật</div>
+          </div>
+          <div class="fc-face fc-back">
+            <div class="fc-meaning" id="fcMeaning">—</div>
+            <div style="font-size:.7rem;color:var(--ink3);margin-top:.5rem" id="fcExample"></div>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;gap:.75rem;justify-content:center;margin-top:1rem;flex-wrap:wrap">
+        <button class="btn btn-ghost" onclick="fcNav(-1)">← Trước</button>
+        <button class="btn btn-moss" onclick="markCorrect()">✓ Nhớ rồi</button>
+        <button class="btn btn-ghost" onclick="fcNav(1)">Tiếp →</button>
+      </div>
+      <div style="text-align:center;margin-top:.5rem">
+        <button class="btn btn-ghost btn-sm" onclick="fcShuffle()">🔀 Xáo bài</button>
+        <button class="btn btn-ghost btn-sm" onclick="speakWord()" id="fcSpeakBtn">🔊 Nghe</button>
+      </div>
+    </div>
+
+    <!-- Quiz mode -->
+    <div id="fcQuizMode" style="display:none">
+      <div class="panel">
+        <div class="panel-body" style="text-align:center">
+          <div style="font-size:.72rem;color:var(--ink3);letter-spacing:.1em;margin-bottom:.5rem">Nghĩa tiếng Việt của từ này là gì?</div>
+          <div style="font-family:'Noto Serif JP',serif;font-size:2.5rem;color:var(--ink);margin-bottom:.25rem" id="quizWord">—</div>
+          <div style="font-size:.85rem;color:var(--ink3)" id="quizReading"></div>
+        </div>
+        <div class="quiz-choices" id="quizChoices" style="padding:0 1rem 1.25rem"></div>
+      </div>
+      <div style="text-align:center;margin-top:.5rem">
+        <div class="stat-row" style="justify-content:center">
+          <div class="stat-pill">✓ <strong id="quizCorrectCount">0</strong> đúng</div>
+          <div class="stat-pill">✗ <strong id="quizWrongCount">0</strong> sai</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     SCREEN: PRONUNCIATION
+════════════════════════════════ -->
+<div class="screen" id="screen-pronounce">
+  <div class="game-layout">
+    <div style="text-align:center;padding:1rem 0 .5rem">
+      <div style="font-family:'Noto Serif JP',serif;font-size:2rem">🎤 Luyện phát âm</div>
+      <div style="font-size:.8rem;color:var(--ink3);margin-top:.3rem">Nghe → Nói → AI chấm điểm</div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-body" style="display:flex;flex-direction:column;align-items:center;gap:1.25rem">
+        <!-- Word display -->
+        <div style="text-align:center">
+          <div style="font-family:'Noto Serif JP',serif;font-size:3rem;color:var(--ink)" id="pronWord">ねこ</div>
+          <div style="font-size:1rem;color:var(--ink3)" id="pronReading">ねこ</div>
+          <div style="font-size:.85rem;color:var(--moss);margin-top:.2rem" id="pronMeaning">Con mèo</div>
+        </div>
+
+        <!-- Listen btn -->
+        <button class="btn btn-gold" onclick="pronListen()" id="pronListenBtn">
+          🔊 Nghe mẫu
+        </button>
+
+        <!-- Waveform -->
+        <div class="waveform" id="pronWave">
+          <div class="wave-bar" style="height:6px"></div>
+          <div class="wave-bar" style="height:12px"></div>
+          <div class="wave-bar" style="height:20px"></div>
+          <div class="wave-bar" style="height:28px"></div>
+          <div class="wave-bar" style="height:20px"></div>
+          <div class="wave-bar" style="height:12px"></div>
+          <div class="wave-bar" style="height:6px"></div>
+        </div>
+
+        <!-- Mic -->
+        <div>
+          <button class="mic-btn" id="micBtn" onclick="toggleMic()">🎤</button>
+          <div style="text-align:center;font-size:.75rem;color:var(--ink3);margin-top:.5rem" id="micStatus">Nhấn để thu âm</div>
+        </div>
+
+        <!-- Result -->
+        <div id="pronResult" style="display:none;width:100%;text-align:center">
+          <div style="font-size:2.5rem;font-weight:700" id="pronScore">—</div>
+          <div style="font-size:.85rem;color:var(--ink3)" id="pronFeedback">—</div>
+          <div style="font-size:.8rem;margin-top:.3rem;color:var(--ink2)" id="pronHeard">Nghe được: —</div>
+        </div>
+
+        <!-- Nav -->
+        <div style="display:flex;gap:.75rem">
+          <button class="btn btn-ghost" onclick="pronNav(-1)">← Từ trước</button>
+          <button class="btn btn-ghost" onclick="pronNav(1)">Từ tiếp →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Score board -->
+    <div class="panel">
+      <div class="panel-header"><div class="panel-title">📊 Kết quả hôm nay</div></div>
+      <div class="panel-body">
+        <div class="stat-row">
+          <div class="stat-pill">🎯 Đã luyện: <strong id="pronDone">0</strong></div>
+          <div class="stat-pill">⭐ TB điểm: <strong id="pronAvg">—</strong></div>
+          <div class="stat-pill">🏆 Cao nhất: <strong id="pronBest">—</strong></div>
+        </div>
+        <div id="pronHistory" style="margin-top:.75rem;display:flex;flex-direction:column;gap:.3rem;max-height:160px;overflow-y:auto"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     SCREEN: ANIME QUIZ
+════════════════════════════════ -->
+<div class="screen" id="screen-anime">
+  <div class="game-layout">
+    <div style="text-align:center;padding:1rem 0 .5rem">
+      <div style="font-family:'Noto Serif JP',serif;font-size:2rem">🎵 Đoán Anime</div>
+      <div style="font-size:.8rem;color:var(--ink3);margin-top:.3rem">Đọc gợi ý → đoán tên anime · Học từ vựng qua văn hoá Nhật</div>
+    </div>
+
+    <div class="anime-card">
+      <div class="anime-note" id="animeNote">🎵</div>
+      <div style="font-size:.72rem;letter-spacing:.15em;opacity:.7;margin-bottom:.75rem">GỢI Ý</div>
+      <div style="font-size:1.1rem;line-height:1.8;min-height:80px" id="animeClue">—</div>
+      <div style="font-size:.72rem;opacity:.6;margin-top:.75rem" id="animeCategory">—</div>
+    </div>
+
+    <div class="anime-choices" id="animeChoices"></div>
+
+    <div class="panel">
+      <div class="panel-body" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem">
+        <div class="stat-row">
+          <div class="stat-pill">⭐ <strong id="animeScore">0</strong> điểm</div>
+          <div class="stat-pill">✓ <strong id="animeCorrect">0</strong> đúng</div>
+          <div class="stat-pill">🔥 <strong id="animeStreak">0</strong> streak</div>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="loadAnimeQ()">🔀 Câu khác</button>
+      </div>
+    </div>
+
+    <div class="panel" id="animeExplain" style="display:none">
+      <div class="panel-header"><div class="panel-title">📖 Từ vựng trong anime này</div></div>
+      <div class="panel-body" id="animeVocab" style="display:flex;flex-direction:column;gap:.5rem"></div>
+    </div>
   </div>
 </div>
 
 <script>
-// ══════════════════════════════════════════════
-//  WORD TYPE CONFIG
-// ══════════════════════════════════════════════
-const WORD_TYPES = [
-  {
-    id: 'noun', name: 'Danh từ (名詞)',
-    nameJP: '名詞', icon: '🔵',
-    desc: 'VD: ねこ、まち、さくら、がっこう',
-    pilotClass: 'pill-noun',
-    color: '#4a7ab5'
-  },
-  {
-    id: 'verb', name: 'Động từ (動詞)',
-    nameJP: '動詞', icon: '🟢',
-    desc: 'VD: たべる、のむ、あるく、みる',
-    pilotClass: 'pill-verb',
-    color: '#5a8a5a'
-  },
-  {
-    id: 'adj', name: 'Tính từ (形容詞)',
-    nameJP: '形容詞', icon: '🟣',
-    desc: 'VD: たかい、おおきい、きれいな、すきな',
-    pilotClass: 'pill-adj',
-    color: '#7a5ab5'
-  }
+// ══════════════════════════════════════════════════
+//  PROXY URL (Cloudflare Worker)
+// ══════════════════════════════════════════════════
+const PROXY = 'https://shiritori-proxy.baova10ht.workers.dev';
+
+// ══════════════════════════════════════════════════
+//  N5 VOCABULARY DATABASE
+// ══════════════════════════════════════════════════
+const VOCAB = [
+  {w:'あか',r:'あか',m:'Màu đỏ',type:'noun',topic:'color'},
+  {w:'あお',r:'あお',m:'Màu xanh',type:'noun',topic:'color'},
+  {w:'しろ',r:'しろ',m:'Màu trắng',type:'noun',topic:'color'},
+  {w:'くろ',r:'くろ',m:'Màu đen',type:'noun',topic:'color'},
+  {w:'きいろ',r:'きいろ',m:'Màu vàng',type:'noun',topic:'color'},
+  {w:'あさ',r:'あさ',m:'Buổi sáng',type:'noun',topic:'time'},
+  {w:'よる',r:'よる',m:'Ban đêm',type:'noun',topic:'time'},
+  {w:'ひる',r:'ひる',m:'Ban ngày',type:'noun',topic:'time'},
+  {w:'なつ',r:'なつ',m:'Mùa hè',type:'noun',topic:'season'},
+  {w:'ふゆ',r:'ふゆ',m:'Mùa đông',type:'noun',topic:'season'},
+  {w:'はる',r:'はる',m:'Mùa xuân',type:'noun',topic:'season'},
+  {w:'あき',r:'あき',m:'Mùa thu',type:'noun',topic:'season'},
+  {w:'いぬ',r:'いぬ',m:'Con chó',type:'noun',topic:'animal'},
+  {w:'ねこ',r:'ねこ',m:'Con mèo',type:'noun',topic:'animal'},
+  {w:'とり',r:'とり',m:'Con chim',type:'noun',topic:'animal'},
+  {w:'さかな',r:'さかな',m:'Cá',type:'noun',topic:'animal'},
+  {w:'うま',r:'うま',m:'Ngựa',type:'noun',topic:'animal'},
+  {w:'うし',r:'うし',m:'Bò',type:'noun',topic:'animal'},
+  {w:'ぶた',r:'ぶた',m:'Lợn',type:'noun',topic:'animal'},
+  {w:'さる',r:'さる',m:'Khỉ',type:'noun',topic:'animal'},
+  {w:'たべる',r:'たべる',m:'Ăn',type:'verb',topic:'action'},
+  {w:'のむ',r:'のむ',m:'Uống',type:'verb',topic:'action'},
+  {w:'みる',r:'みる',m:'Nhìn/Xem',type:'verb',topic:'action'},
+  {w:'きく',r:'きく',m:'Nghe/Hỏi',type:'verb',topic:'action'},
+  {w:'いく',r:'いく',m:'Đi',type:'verb',topic:'action'},
+  {w:'くる',r:'くる',m:'Đến',type:'verb',topic:'action'},
+  {w:'かえる',r:'かえる',m:'Về nhà',type:'verb',topic:'action'},
+  {w:'ねる',r:'ねる',m:'Ngủ',type:'verb',topic:'action'},
+  {w:'おきる',r:'おきる',m:'Dậy',type:'verb',topic:'action'},
+  {w:'はなす',r:'はなす',m:'Nói chuyện',type:'verb',topic:'action'},
+  {w:'よむ',r:'よむ',m:'Đọc',type:'verb',topic:'action'},
+  {w:'かく',r:'かく',m:'Viết',type:'verb',topic:'action'},
+  {w:'かう',r:'かう',m:'Mua',type:'verb',topic:'action'},
+  {w:'うる',r:'うる',m:'Bán',type:'verb',topic:'action'},
+  {w:'あるく',r:'あるく',m:'Đi bộ',type:'verb',topic:'action'},
+  {w:'はしる',r:'はしる',m:'Chạy',type:'verb',topic:'action'},
+  {w:'およぐ',r:'およぐ',m:'Bơi',type:'verb',topic:'action'},
+  {w:'あそぶ',r:'あそぶ',m:'Chơi',type:'verb',topic:'action'},
+  {w:'はたらく',r:'はたらく',m:'Làm việc',type:'verb',topic:'action'},
+  {w:'たかい',r:'たかい',m:'Cao/Đắt',type:'adj',topic:'desc'},
+  {w:'ひくい',r:'ひくい',m:'Thấp',type:'adj',topic:'desc'},
+  {w:'おおきい',r:'おおきい',m:'To, lớn',type:'adj',topic:'desc'},
+  {w:'ちいさい',r:'ちいさい',m:'Nhỏ',type:'adj',topic:'desc'},
+  {w:'あたらしい',r:'あたらしい',m:'Mới',type:'adj',topic:'desc'},
+  {w:'ふるい',r:'ふるい',m:'Cũ',type:'adj',topic:'desc'},
+  {w:'いい',r:'いい',m:'Tốt',type:'adj',topic:'desc'},
+  {w:'わるい',r:'わるい',m:'Xấu/Tệ',type:'adj',topic:'desc'},
+  {w:'はやい',r:'はやい',m:'Nhanh/Sớm',type:'adj',topic:'desc'},
+  {w:'おそい',r:'おそい',m:'Chậm/Trễ',type:'adj',topic:'desc'},
+  {w:'あつい',r:'あつい',m:'Nóng',type:'adj',topic:'desc'},
+  {w:'さむい',r:'さむい',m:'Lạnh',type:'adj',topic:'desc'},
+  {w:'かわいい',r:'かわいい',m:'Đáng yêu',type:'adj',topic:'desc'},
+  {w:'きれい',r:'きれい',m:'Đẹp/Sạch',type:'adj',topic:'desc'},
+  {w:'すき',r:'すき',m:'Thích',type:'adj',topic:'feeling'},
+  {w:'きらい',r:'きらい',m:'Ghét',type:'adj',topic:'feeling'},
+  {w:'うれしい',r:'うれしい',m:'Vui',type:'adj',topic:'feeling'},
+  {w:'かなしい',r:'かなしい',m:'Buồn',type:'adj',topic:'feeling'},
+  {w:'たのしい',r:'たのしい',m:'Vui vẻ',type:'adj',topic:'feeling'},
+  {w:'こわい',r:'こわい',m:'Sợ',type:'adj',topic:'feeling'},
+  {w:'ごはん',r:'ごはん',m:'Cơm',type:'noun',topic:'food'},
+  {w:'パン',r:'ぱん',m:'Bánh mì',type:'noun',topic:'food'},
+  {w:'すし',r:'すし',m:'Sushi',type:'noun',topic:'food'},
+  {w:'ラーメン',r:'らーめん',m:'Mì ramen',type:'noun',topic:'food'},
+  {w:'うどん',r:'うどん',m:'Mì udon',type:'noun',topic:'food'},
+  {w:'たまご',r:'たまご',m:'Trứng',type:'noun',topic:'food'},
+  {w:'にく',r:'にく',m:'Thịt',type:'noun',topic:'food'},
+  {w:'やさい',r:'やさい',m:'Rau củ',type:'noun',topic:'food'},
+  {w:'くだもの',r:'くだもの',m:'Trái cây',type:'noun',topic:'food'},
+  {w:'りんご',r:'りんご',m:'Táo',type:'noun',topic:'food'},
+  {w:'みかん',r:'みかん',m:'Quýt',type:'noun',topic:'food'},
+  {w:'みず',r:'みず',m:'Nước',type:'noun',topic:'food'},
+  {w:'おちゃ',r:'おちゃ',m:'Trà',type:'noun',topic:'food'},
+  {w:'コーヒー',r:'こーひー',m:'Cà phê',type:'noun',topic:'food'},
+  {w:'がっこう',r:'がっこう',m:'Trường học',type:'noun',topic:'place'},
+  {w:'えき',r:'えき',m:'Nhà ga',type:'noun',topic:'place'},
+  {w:'びょういん',r:'びょういん',m:'Bệnh viện',type:'noun',topic:'place'},
+  {w:'スーパー',r:'すーぱー',m:'Siêu thị',type:'noun',topic:'place'},
+  {w:'こうえん',r:'こうえん',m:'Công viên',type:'noun',topic:'place'},
+  {w:'うみ',r:'うみ',m:'Biển',type:'noun',topic:'place'},
+  {w:'やま',r:'やま',m:'Núi',type:'noun',topic:'place'},
+  {w:'かわ',r:'かわ',m:'Sông',type:'noun',topic:'place'},
+  {w:'みせ',r:'みせ',m:'Cửa hàng',type:'noun',topic:'place'},
+  {w:'ちち',r:'ちち',m:'Bố (khiêm)',type:'noun',topic:'family'},
+  {w:'はは',r:'はは',m:'Mẹ (khiêm)',type:'noun',topic:'family'},
+  {w:'あに',r:'あに',m:'Anh trai',type:'noun',topic:'family'},
+  {w:'あね',r:'あね',m:'Chị gái',type:'noun',topic:'family'},
+  {w:'おとうと',r:'おとうと',m:'Em trai',type:'noun',topic:'family'},
+  {w:'いもうと',r:'いもうと',m:'Em gái',type:'noun',topic:'family'},
+  {w:'かぞく',r:'かぞく',m:'Gia đình',type:'noun',topic:'family'},
+  {w:'ともだち',r:'ともだち',m:'Bạn bè',type:'noun',topic:'family'},
+  {w:'せんせい',r:'せんせい',m:'Giáo viên',type:'noun',topic:'work'},
+  {w:'がくせい',r:'がくせい',m:'Học sinh',type:'noun',topic:'work'},
+  {w:'かいしゃ',r:'かいしゃ',m:'Công ty',type:'noun',topic:'work'},
+  {w:'しごと',r:'しごと',m:'Công việc',type:'noun',topic:'work'},
+  {w:'でんしゃ',r:'でんしゃ',m:'Tàu điện',type:'noun',topic:'transport'},
+  {w:'バス',r:'ばす',m:'Xe buýt',type:'noun',topic:'transport'},
+  {w:'くるま',r:'くるま',m:'Xe ô tô',type:'noun',topic:'transport'},
+  {w:'じてんしゃ',r:'じてんしゃ',m:'Xe đạp',type:'noun',topic:'transport'},
+  {w:'ひこうき',r:'ひこうき',m:'Máy bay',type:'noun',topic:'transport'},
 ];
 
-// ══════════════════════════════════════════════
-//  GAME STATE
-// ══════════════════════════════════════════════
-let peer, conn;
-let myId = null;
-let isHost = false;
-let myName = '';
-let opponentName = '';
-let gameStarted = false;
+const TOPICS = {
+  food:      {label:'🍜 Thức ăn',      desc:'Các từ về đồ ăn thức uống'},
+  animal:    {label:'🐱 Động vật',     desc:'Tên các con vật'},
+  place:     {label:'🏫 Địa điểm',     desc:'Nơi chốn, địa điểm'},
+  family:    {label:'👨‍👩‍👧 Gia đình',  desc:'Thành viên gia đình'},
+  transport: {label:'🚃 Giao thông',   desc:'Phương tiện di chuyển'},
+  feeling:   {label:'💙 Cảm xúc',      desc:'Tính từ cảm xúc'},
+  action:    {label:'🏃 Hành động',    desc:'Động từ thường gặp'},
+  color:     {label:'🎨 Màu sắc',      desc:'Các màu sắc cơ bản'},
+  season:    {label:'🌸 Mùa',          desc:'Bốn mùa trong năm'},
+  desc:      {label:'📐 Mô tả',        desc:'Tính từ mô tả sự vật'},
+  work:      {label:'💼 Công việc',    desc:'Từ vựng trường học, công sở'},
+};
 
-// Game vars (host is source of truth)
-let typeIndex = 0;     // 0=noun,1=verb,2=adj
-let myTurn = false;
-let scores = [0, 0];   // [host, guest]
-let turnCount = 0;
-let roundCount = 0;
-let checking = false;
-
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════════════
 //  PETALS
-// ══════════════════════════════════════════════
-function spawnPetals() {
-  const c = document.getElementById('petalsContainer');
-  ['🌸','✿','❀'].forEach((s, i) => {
-    const p = document.createElement('div');
-    p.className = 'petal';
-    p.textContent = s;
-    p.style.left = (10 + i * 30 + Math.random() * 20) + '%';
-    p.style.animationDuration = (9 + Math.random() * 8) + 's';
-    p.style.animationDelay = (Math.random() * 10) + 's';
+// ══════════════════════════════════════════════════
+(function(){
+  const c = document.getElementById('petalBox');
+  ['🌸','✿','❀'].forEach((s,i)=>{
+    const p=document.createElement('div');p.className='petal';p.textContent=s;
+    p.style.left=(5+i*28+Math.random()*20)+'%';
+    p.style.animationDuration=(10+Math.random()*10)+'s';
+    p.style.animationDelay=(Math.random()*12)+'s';
     c.appendChild(p);
   });
-}
-spawnPetals();
+})();
 
-// ══════════════════════════════════════════════
-//  PEER.JS SETUP
-// ══════════════════════════════════════════════
-function genRoomCode() {
-  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  return Array.from({length:6}, () => chars[Math.floor(Math.random()*chars.length)]).join('');
-}
-
-function createRoom() {
-  const name = document.getElementById('playerNameInput').value.trim() || 'Player 1';
-  myName = name;
-  const code = genRoomCode();
-  document.getElementById('createBtn').disabled = true;
-  document.getElementById('createBtn').textContent = '⏳ Đang khởi tạo...';
-
-  peer = new Peer('SHIRI-' + code, {
-    host: '0.peerjs.com', port: 443, path: '/',
-    secure: true, debug: 0
-  });
-
-  peer.on('open', () => {
-    isHost = true;
-    myId = 'SHIRI-' + code;
-    document.getElementById('roomCodeDisplay').textContent = code;
-    document.getElementById('myRoomCode').style.display = 'block';
-    document.getElementById('createBtn').style.display = 'none';
-  });
-
-  peer.on('connection', c => {
-    conn = c;
-    setupConn();
-    setTimeout(() => {
-      sendMsg({ type: 'welcome', hostName: myName });
-      document.getElementById('waitStatus').innerHTML = `<div class="dot"></div> Bạn bè đã vào! Đang bắt đầu...`;
-    }, 400);
-  });
-
-  peer.on('error', e => {
-    document.getElementById('createBtn').disabled = false;
-    document.getElementById('createBtn').textContent = '🌸 Tạo phòng';
-    showModal('error','⚠️','Lỗi kết nối', e.message);
-  });
+// ══════════════════════════════════════════════════
+//  SCREEN ROUTER
+// ══════════════════════════════════════════════════
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('screen-'+id).classList.add('active');
+  document.getElementById('tab-'+id)?.classList.add('active');
+  window.scrollTo(0,0);
 }
 
-function joinRoom() {
-  const name = document.getElementById('playerNameInput').value.trim() || 'Player 2';
-  myName = name;
-  const code = document.getElementById('joinCodeInput').value.trim().toUpperCase().replace(/[^A-Z0-9]/g,'');
-  if (code.length < 4) { showModal('error','⚠️','Mã phòng sai', 'Nhập đúng mã phòng 6 ký tự nhé!'); return; }
-
-  document.getElementById('joinStatus').style.display = 'flex';
-  document.getElementById('joinStatusText').textContent = 'Đang kết nối...';
-
-  peer = new Peer(undefined, {
-    host: '0.peerjs.com', port: 443, path: '/',
-    secure: true, debug: 0
-  });
-
-  peer.on('open', () => {
-    conn = peer.connect('SHIRI-' + code, { reliable: true });
-    setupConn();
-    setTimeout(() => {
-      if (conn && conn.open) {
-        sendMsg({ type: 'guestName', name: myName });
-      }
-    }, 1200);
-  });
-
-  peer.on('error', e => {
-    document.getElementById('joinStatusText').textContent = 'Lỗi: ' + e.message;
-    showModal('error','⚠️','Không vào được phòng', 'Kiểm tra lại mã phòng hoặc kết nối mạng nhé.');
-  });
-}
-
-function setupConn() {
-  conn.on('open', () => {
-    document.getElementById('joinStatusText') && (document.getElementById('joinStatusText').textContent = 'Đã kết nối!');
-  });
-  conn.on('data', handleMsg);
-  conn.on('close', () => {
-    if (gameStarted) showModal('disc','📡','Mất kết nối', 'Bạn bè đã ngắt kết nối.');
-  });
-  conn.on('error', e => console.warn('conn error', e));
-}
-
-function sendMsg(obj) {
-  if (conn && conn.open) conn.send(JSON.stringify(obj));
-}
-
-// ══════════════════════════════════════════════
-//  MESSAGE HANDLER
-// ══════════════════════════════════════════════
-function handleMsg(raw) {
-  const msg = typeof raw === 'string' ? JSON.parse(raw) : raw;
-
-  if (msg.type === 'welcome') {
-    opponentName = msg.hostName;
-    sendMsg({ type: 'guestName', name: myName });
-    setTimeout(() => startGame(false, opponentName, myName), 600);
-  }
-  if (msg.type === 'guestName') {
-    opponentName = msg.name;
-    setTimeout(() => startGame(true, myName, opponentName), 600);
-  }
-  if (msg.type === 'wordPlayed') {
-    // Guest receives host's verdict about their (guest's) word
-    renderWordEntry(msg.word, msg.typeId, msg.valid, msg.reason, false);
-    updateAfterWord(msg.valid, msg.typeIndex, msg.scores, true /* myTurn next */);
-  }
-  if (msg.type === 'verdictForGuest') {
-    // Guest submitted word; host sends back verdict
-    renderWordEntry(msg.word, msg.typeId, msg.valid, msg.reason, true);
-    updateAfterWord(msg.valid, msg.typeIndex, msg.scores, false /* host's turn next */);
-  }
-  if (msg.type === 'hostWord') {
-    // Host played a word; guest receives it
-    renderWordEntry(msg.word, msg.typeId, msg.valid, msg.reason, false);
-    updateAfterWord(msg.valid, msg.typeIndex, msg.scores, true);
-  }
-  if (msg.type === 'guestWord') {
-    // Guest played; host receives raw word and must judge
-    judgeWord(msg.word, msg.typeId, msg.typeIndex, msg.scores, false);
-  }
-}
-
-// ══════════════════════════════════════════════
-//  GAME START
-// ══════════════════════════════════════════════
-function startGame(amHost, p0Name, p1Name) {
-  isHost = amHost;
-  gameStarted = true;
-  typeIndex = 0;
-  scores = [0, 0];
-  turnCount = 0;
-  myTurn = amHost; // host goes first
-
-  document.getElementById('lobbyScreen').className = 'screen';
-  document.getElementById('gameScreen').className = 'screen active';
-
-  document.getElementById('name0').textContent = p0Name;
-  document.getElementById('name1').textContent = p1Name;
-  document.getElementById('av0').textContent = p0Name[0].toUpperCase();
-  document.getElementById('av1').textContent = p1Name[0].toUpperCase();
-
-  updateUI();
-}
-
-// ══════════════════════════════════════════════
-//  UI HELPERS
-// ══════════════════════════════════════════════
-function updateUI() {
-  const t = WORD_TYPES[typeIndex];
-  document.getElementById('typeIcon').textContent = t.icon;
-  document.getElementById('typeName').textContent = t.name;
-  document.getElementById('typeDesc').textContent = t.desc;
-  document.getElementById('typeCount').textContent = `${typeIndex + 1}/3`;
-
-  const myIdx = isHost ? 0 : 1;
-  const opIdx = isHost ? 1 : 0;
-  document.getElementById('score0').textContent = scores[0];
-  document.getElementById('score1').textContent = scores[1];
-
-  document.getElementById('chip0').className = 'player-chip' + (myTurn && isHost || !myTurn && !isHost ? '' : isHost && myTurn ? ' active' : '');
-  // simplify: active chip = whoever's turn
-  if (myTurn) {
-    document.getElementById(isHost ? 'chip0' : 'chip1').classList.add('active');
-    document.getElementById(isHost ? 'chip1' : 'chip0').classList.remove('active');
-  } else {
-    document.getElementById(isHost ? 'chip1' : 'chip0').classList.add('active');
-    document.getElementById(isHost ? 'chip0' : 'chip1').classList.remove('active');
-  }
-
-  const badge = document.getElementById('turnBadge');
-  if (myTurn) {
-    badge.textContent = '✦ Lượt của bạn';
-    badge.className = 'turn-badge my-turn';
-    document.getElementById('wordInput').disabled = false;
-    document.getElementById('sendBtn').disabled = false;
-    document.getElementById('wordInput').focus();
-    document.getElementById('inputHint').textContent = `Nhập ${t.name} tiếng Nhật`;
-  } else {
-    badge.textContent = '⏳ Chờ đối thủ...';
-    badge.className = 'turn-badge their-turn';
-    document.getElementById('wordInput').disabled = true;
-    document.getElementById('sendBtn').disabled = true;
-    document.getElementById('inputHint').textContent = 'Đang chờ đối thủ nhập từ...';
-  }
-}
-
-function addSysMsg(text, highlight = false) {
-  const log = document.getElementById('wordLog');
-  const div = document.createElement('div');
-  div.className = 'sys-msg' + (highlight ? ' highlight' : '');
-  div.textContent = text;
-  log.appendChild(div);
-  scrollLog();
-}
-
-function scrollLog() {
-  const log = document.getElementById('wordLog');
-  setTimeout(() => log.scrollTop = log.scrollHeight, 60);
-}
-
-function renderWordEntry(word, typeId, valid, reason, isMine) {
-  const t = WORD_TYPES.find(x => x.id === typeId) || WORD_TYPES[0];
-  const log = document.getElementById('wordLog');
-  const div = document.createElement('div');
-  div.className = 'word-entry' + (isMine ? ' mine' : '');
-
-  const avatarClass = isMine ? (isHost ? 'p0' : 'p1') : (isHost ? 'p1' : 'p0');
-  const displayName = isMine ? myName : opponentName;
-
-  div.innerHTML = `
-    <div class="entry-avatar ${avatarClass}">${displayName[0].toUpperCase()}</div>
-    <div class="entry-bubble">
-      <div class="entry-word">${word}</div>
-      <div>
-        <span class="entry-type-pill ${t.pilotClass}">${t.icon} ${t.nameJP}</span>
-      </div>
-      <div class="entry-verdict ${valid ? 'verdict-ok' : 'verdict-fail'}">
-        ${valid ? '✓ Hợp lệ' : '✗ ' + (reason || 'Không hợp lệ')}
-      </div>
-      <div class="entry-meta">${displayName} · ${new Date().toLocaleTimeString('vi',{hour:'2-digit',minute:'2-digit'})}</div>
-    </div>
-  `;
-  log.appendChild(div);
-  scrollLog();
-}
-
-function updateAfterWord(valid, newTypeIndex, newScores, nowMyTurn) {
-  typeIndex = newTypeIndex;
-  scores = newScores;
-  myTurn = nowMyTurn;
-  turnCount++;
-  if (!valid) {
-    document.getElementById('wordInput').classList.remove('shake');
-    void document.getElementById('wordInput').offsetWidth;
-    document.getElementById('wordInput').classList.add('shake');
-  }
-  checking = false;
-  document.getElementById('thinkingBar').style.display = 'none';
-  updateUI();
-}
-
-// ══════════════════════════════════════════════
-//  SUBMIT WORD (player's own)
-// ══════════════════════════════════════════════
-async function submitWord() {
-  if (!myTurn || checking) return;
-  const inp = document.getElementById('wordInput');
-  const word = inp.value.trim();
-  inp.value = '';
-  if (!word) return;
-
-  checking = true;
-  document.getElementById('sendBtn').disabled = true;
-  document.getElementById('wordInput').disabled = true;
-  document.getElementById('thinkingBar').style.display = 'flex';
-
-  const currentTypeId = WORD_TYPES[typeIndex].id;
-
-  if (isHost) {
-    // Host judges their own word via AI, then broadcasts
-    await judgeWord(word, currentTypeId, typeIndex, scores, true);
-  } else {
-    // Guest sends word to host for judgement
-    sendMsg({ type: 'guestWord', word, typeId: currentTypeId, typeIndex, scores });
-    // Show pending entry
-    const log = document.getElementById('wordLog');
-    const pend = document.createElement('div');
-    pend.id = 'pendingEntry';
-    pend.className = 'word-entry mine';
-    const t = WORD_TYPES[typeIndex];
-    pend.innerHTML = `
-      <div class="entry-avatar ${isHost?'p0':'p1'}">${myName[0].toUpperCase()}</div>
-      <div class="entry-bubble">
-        <div class="entry-word">${word}</div>
-        <div><span class="entry-type-pill ${t.pilotClass}">${t.icon} ${t.nameJP}</span></div>
-        <div class="entry-verdict verdict-checking">⏳ Đang kiểm tra...</div>
-        <div class="entry-meta">${myName} · ${new Date().toLocaleTimeString('vi',{hour:'2-digit',minute:'2-digit'})}</div>
-      </div>
-    `;
-    log.appendChild(pend);
-    scrollLog();
-  }
-}
-
-// ══════════════════════════════════════════════
-//  AI JUDGE (only host calls this)
-// ══════════════════════════════════════════════
-async function judgeWord(word, typeId, curTypeIndex, curScores, isMyWord) {
-  const t = WORD_TYPES.find(x => x.id === typeId);
-  let valid = false;
-  let reason = '';
-
-  try {
-    const prompt = `Bạn là trọng tài trò chơi từ vựng tiếng Nhật N5.
-Từ được nhập: "${word}"
-Loại từ yêu cầu: ${t.name} (${t.nameJP})
-
-Hãy kiểm tra:
-1. Đây có phải tiếng Nhật (hiragana, katakana, hoặc kanji thông dụng N5) không?
-2. Đây có phải là "${t.name}" đúng không? (ví dụ: nếu yêu cầu 動詞 thì phải là dạng từ điển như たべる, のむ...)
-3. Nếu là tính từ, chấp nhận cả i-adj (たかい) và na-adj (きれい/きれいな)
-
-Trả lời JSON duy nhất không có markdown:
-{"valid": true/false, "reason": "lý do ngắn gọn bằng tiếng Việt nếu sai, rỗng nếu đúng", "type": "tên loại từ thực tế"}`;
-
-    const res = await fetch('https://shiritori-proxy.shiori.baova10ht.workers.dev', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt })
-    });
-    const data = await res.json();
-    const raw = data.result || '{}';
-    const cleaned = raw.replace(/```json|```/g, '').trim();
-    const parsed = JSON.parse(cleaned);
-    valid = !!parsed.valid;
-    reason = parsed.reason || '';
-  } catch(e) {
-    // Fallback: accept if looks Japanese
-    valid = /[\u3040-\u30ff\u4e00-\u9fff]/.test(word);
-    reason = valid ? '' : 'Từ không hợp lệ';
-  }
-
-  // Update scores
-  const newScores = [...curScores];
-  if (isMyWord) {
-    const myIdx = isHost ? 0 : 1;
-    if (valid) newScores[myIdx] += 10;
-    else { newScores[myIdx] = Math.max(0, newScores[myIdx] - 5); }
-  } else {
-    const guestIdx = 1;
-    if (valid) newScores[guestIdx] += 10;
-    else { newScores[guestIdx] = Math.max(0, newScores[guestIdx] - 5); }
-  }
-
-  // Advance type if valid
-  const newTypeIndex = valid ? (curTypeIndex + 1) % 3 : curTypeIndex;
-
-  if (isMyWord) {
-    // Host played; render for self and send to guest
-    renderWordEntry(word, typeId, valid, reason, true);
-    sendMsg({ type: 'hostWord', word, typeId, valid, reason, typeIndex: newTypeIndex, scores: newScores });
-    // Remove pending if any
-    document.getElementById('pendingEntry')?.remove();
-    updateAfterWord(valid, newTypeIndex, newScores, false);
-  } else {
-    // Guest played; remove their pending if visible on host side, send verdict back
-    document.getElementById('pendingEntry')?.remove();
-    renderWordEntry(word, typeId, valid, reason, false);
-    sendMsg({ type: 'verdictForGuest', word, typeId, valid, reason, typeIndex: newTypeIndex, scores: newScores });
-    updateAfterWord(valid, newTypeIndex, newScores, true);
-  }
-}
-
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════════════════
 //  MODAL
-// ══════════════════════════════════════════════
-function showModal(type, icon, title, msg, scoreText = null) {
-  document.getElementById('modalIcon').textContent = icon;
-  document.getElementById('modalTitle').textContent = title;
-  document.getElementById('modalMsg').textContent = msg;
-  if (scoreText) {
-    document.getElementById('modalScore').textContent = scoreText;
-    document.getElementById('modalScore').style.display = 'block';
-  } else {
-    document.getElementById('modalScore').style.display = 'none';
-  }
+// ══════════════════════════════════════════════════
+function showModal(icon,title,msg,actions=[]){
+  document.getElementById('mIcon').textContent=icon;
+  document.getElementById('mTitle').textContent=title;
+  document.getElementById('mMsg').textContent=msg;
+  const ac=document.getElementById('mActions');
+  ac.innerHTML='';
+  if(!actions.length) actions=[{label:'OK',fn:closeModal,cls:'btn-primary'}];
+  actions.forEach(a=>{
+    const b=document.createElement('button');
+    b.className='btn '+(a.cls||'btn-ghost');
+    b.textContent=a.label;
+    b.onclick=()=>{closeModal();a.fn&&a.fn();};
+    ac.appendChild(b);
+  });
   document.getElementById('overlay').classList.add('show');
 }
-function closeModal() {
-  document.getElementById('overlay').classList.remove('show');
+function closeModal(){document.getElementById('overlay').classList.remove('show');}
+
+// ══════════════════════════════════════════════════
+//  AI JUDGE via Cloudflare Worker Proxy
+// ══════════════════════════════════════════════════
+async function aiJudge(prompt){
+  try{
+    const r=await fetch(PROXY,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({prompt})
+    });
+    const d=await r.json();
+    const raw=(d.result||'{}').replace(/```json|```/g,'').trim();
+    return JSON.parse(raw);
+  }catch(e){
+    return {valid:false,reason:'Lỗi kết nối AI',type:'unknown'};
+  }
 }
 
-// ══════════════════════════════════════════════
-//  COPY CODE
-// ══════════════════════════════════════════════
-function copyCode() {
-  const code = document.getElementById('roomCodeDisplay').textContent;
-  navigator.clipboard?.writeText(code).then(() => {
-    const box = document.querySelector('.room-code-box');
-    box.querySelector('.room-code-hint').textContent = '✓ Đã sao chép!';
-    setTimeout(() => box.querySelector('.room-code-hint').textContent = '📋 Chia sẻ mã này cho bạn bè', 1800);
+// ══════════════════════════════════════════════════
+//  SHIRITORI GAME
+// ══════════════════════════════════════════════════
+const WORD_TYPES=[
+  {id:'noun',name:'Danh từ (名詞)',icon:'🔵',desc:'VD: ねこ、まち、さくら、がっこう',cls:'pill-noun'},
+  {id:'verb',name:'Động từ (動詞)',icon:'🟢',desc:'VD: たべる、のむ、あるく、みる',cls:'pill-verb'},
+  {id:'adj', name:'Tính từ (形容詞)',icon:'🟣',desc:'VD: たかい、おおきい、きれい、すき',cls:'pill-adj'},
+];
+
+let peer,conn;
+let shiriMode=''; // 'bot' | 'online'
+let shiriState={
+  myName:'',opName:'',isHost:false,
+  typeIdx:0,myTurn:false,scores:[0,0],
+  usedWords:new Set(),checking:false,gameOn:false
+};
+
+function shiriQuit(){
+  conn&&conn.close();peer&&peer.destroy();
+  peer=null;conn=null;
+  shiriState.gameOn=false;
+  document.getElementById('shiriGame').style.display='none';
+  document.getElementById('shiriLobby')||document.getElementById('shiri-lobby');
+  document.getElementById('shiri-lobby').style.display='';
+  showModal('🌸','Đã thoát','Cảm ơn đã chơi! またね〜',[{label:'OK',fn:()=>{},cls:'btn-primary'}]);
+}
+
+// ── Bot mode ──
+function startShiriBot(){
+  const name=document.getElementById('sName').value.trim()||'Bạn';
+  shiriState={myName:name,opName:'さくらBot🤖',isHost:true,
+    typeIdx:0,myTurn:true,scores:[0,0],usedWords:new Set(),checking:false,gameOn:true};
+  shiriMode='bot';
+  shiriLaunch();
+}
+
+// ── Online: Create ──
+function shiriCreate(){
+  const name=document.getElementById('sName').value.trim()||'Player 1';
+  shiriState.myName=name;
+  shiriState.isHost=true;
+  const code=Array.from({length:6},()=>'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[Math.floor(Math.random()*32)]).join('');
+  document.getElementById('shiriCode').textContent=code;
+  document.getElementById('shiriRoomBox').style.display='block';
+
+  peer=new Peer('SHIRI-'+code,{host:'0.peerjs.com',port:443,path:'/',secure:true,debug:0});
+  peer.on('open',()=>{});
+  peer.on('connection',c=>{
+    conn=c; setupConn();
+    setTimeout(()=>{
+      sendMsg({type:'welcome',hostName:shiriState.myName});
+      document.getElementById('shiriWaitStatus').innerHTML='<div class="sdot green"></div> Bạn bè đã vào!';
+    },400);
+  });
+  peer.on('error',e=>showModal('⚠️','Lỗi',e.message));
+}
+function shiriCopyCode(){
+  const c=document.getElementById('shiriCode').textContent;
+  navigator.clipboard?.writeText(c).then(()=>{
+    document.getElementById('shiriCodeHint').textContent='✓ Đã sao chép!';
+    setTimeout(()=>document.getElementById('shiriCodeHint').textContent='📋 Gửi mã này cho bạn bè',2000);
   });
 }
 
-// ══════════════════════════════════════════════
-//  KEY HANDLER
-// ══════════════════════════════════════════════
-function handleKey(e) { if (e.key === 'Enter') submitWord(); }
+// ── Online: Join ──
+function shiriJoin(){
+  const name=document.getElementById('sName').value.trim()||'Player 2';
+  const code=document.getElementById('joinCode').value.trim().toUpperCase().replace(/[^A-Z0-9]/g,'');
+  if(code.length<4){showModal('⚠️','Mã sai','Nhập đúng mã 6 ký tự!');return;}
+  shiriState.myName=name; shiriState.isHost=false;
+  document.getElementById('joinStatus').style.display='flex';
+  peer=new Peer(undefined,{host:'0.peerjs.com',port:443,path:'/',secure:true,debug:0});
+  peer.on('open',()=>{
+    conn=peer.connect('SHIRI-'+code,{reliable:true});
+    setupConn();
+    setTimeout(()=>conn&&conn.open&&sendMsg({type:'guestName',name:shiriState.myName}),1200);
+  });
+  peer.on('error',e=>{document.getElementById('joinStatusText').textContent='Lỗi: '+e.message;});
+}
+function setupConn(){
+  conn.on('data',d=>handleOnlineMsg(typeof d==='string'?JSON.parse(d):d));
+  conn.on('close',()=>shiriState.gameOn&&showModal('📡','Mất kết nối','Bạn bè đã ngắt kết nối.'));
+}
+function sendMsg(o){conn&&conn.open&&conn.send(JSON.stringify(o));}
+
+function handleOnlineMsg(msg){
+  if(msg.type==='welcome'){
+    shiriState.opName=msg.hostName;
+    sendMsg({type:'guestName',name:shiriState.myName});
+    setTimeout(()=>onlineLaunch(false,msg.hostName,shiriState.myName),400);
+  }
+  if(msg.type==='guestName'){
+    shiriState.opName=msg.name;
+    setTimeout(()=>onlineLaunch(true,shiriState.myName,msg.name),400);
+  }
+  if(msg.type==='hostWord'){
+    shiriRenderEntry(msg.word,msg.typeId,msg.valid,msg.reason,false);
+    shiriAfterWord(msg.valid,msg.typeIdx,msg.scores,true);
+  }
+  if(msg.type==='guestWord'){
+    // host judges guest word
+    onlineJudgeGuestWord(msg.word,msg.typeId,msg.typeIdx,msg.scores);
+  }
+  if(msg.type==='verdictForGuest'){
+    document.getElementById('pendingShiri')?.remove();
+    shiriRenderEntry(msg.word,msg.typeId,msg.valid,msg.reason,true);
+    shiriAfterWord(msg.valid,msg.typeIdx,msg.scores,false);
+  }
+}
+
+function onlineLaunch(amHost,p0,p1){
+  shiriMode='online';
+  shiriState.isHost=amHost;
+  shiriState.myName=amHost?p0:p1;
+  shiriState.opName=amHost?p1:p0;
+  shiriState.typeIdx=0; shiriState.scores=[0,0];
+  shiriState.myTurn=amHost; shiriState.usedWords=new Set();
+  shiriState.gameOn=true;
+  shiriLaunch(p0,p1);
+}
+
+// ── Launch UI ──
+function shiriLaunch(p0name,p1name){
+  document.getElementById('shiri-lobby').style.display='none';
+  const gEl=document.getElementById('shiriGame');
+  gEl.style.display='flex'; gEl.style.flexDirection='column';
+  gEl.style.height='calc(100vh - 56px)';
+
+  const p0=p0name||shiriState.myName;
+  const p1=p1name||shiriState.opName;
+  // Chips
+  const chips=document.getElementById('shiriChips');
+  chips.innerHTML=`
+    <div class="chip ${shiriState.myTurn?'active':''}" id="chip0">
+      <div class="msg-av av-p0" style="width:22px;height:22px;font-size:.7rem">${p0[0].toUpperCase()}</div>
+      <div><div style="font-size:.78rem;font-weight:500">${p0}</div><div class="chip-score">⭐<span id="score0">0</span></div></div>
+    </div>
+    <div style="font-size:.8rem;color:var(--ink3);align-self:center">VS</div>
+    <div class="chip ${!shiriState.myTurn?'active':''}" id="chip1">
+      <div class="msg-av av-p1" style="width:22px;height:22px;font-size:.7rem">${p1[0].toUpperCase()}</div>
+      <div><div style="font-size:.78rem;font-weight:500">${p1}</div><div class="chip-score">⭐<span id="score1">0</span></div></div>
+    </div>`;
+
+  document.getElementById('shiriLog').innerHTML='<div class="sys hl">🌸 Trò chơi bắt đầu! Vòng đầu: Danh từ</div>';
+  shiriUpdateUI();
+}
+
+function shiriUpdateUI(){
+  const t=WORD_TYPES[shiriState.typeIdx];
+  document.getElementById('shiriTypeIcon').textContent=t.icon;
+  document.getElementById('shiriTypeName').textContent=t.name;
+  document.getElementById('shiriTypeDesc').textContent=t.desc;
+  document.getElementById('shiriTypeCount').textContent=`${shiriState.typeIdx+1}/3`;
+  document.getElementById('score0').textContent=shiriState.scores[0];
+  document.getElementById('score1').textContent=shiriState.scores[1];
+
+  const mine=shiriState.myTurn;
+  document.getElementById('chip0').className='chip'+(mine?'':' active');  // wrong logic fixed below
+  // correct: chip0 = p0 (host if online, me if bot)
+  // active = whose turn it is
+  const hostTurn = shiriState.isHost ? shiriState.myTurn : !shiriState.myTurn;
+  document.getElementById('chip0').className='chip'+(hostTurn?' active':'');
+  document.getElementById('chip1').className='chip'+(hostTurn?'':' active');
+
+  const badge=document.getElementById('shiriTurnBadge');
+  const inp=document.getElementById('shiriInput');
+  const btn=document.getElementById('shiriSendBtn');
+  const hint=document.getElementById('shiriHint');
+  if(mine){
+    badge.textContent='✦ Lượt của bạn'; badge.className='turn-badge turn-mine';
+    inp.disabled=false; btn.disabled=false; inp.focus();
+    hint.textContent=`Nhập ${t.name} tiếng Nhật (Enter để gửi)`;
+  }else{
+    badge.textContent='⏳ Chờ đối thủ...'; badge.className='turn-badge turn-wait';
+    inp.disabled=true; btn.disabled=true;
+    hint.textContent='Đang chờ đối thủ nhập từ...';
+  }
+}
+
+function shiriRenderEntry(word,typeId,valid,reason,isMine){
+  const t=WORD_TYPES.find(x=>x.id===typeId)||WORD_TYPES[0];
+  const log=document.getElementById('shiriLog');
+  const isP0=(shiriMode==='bot'?isMine:(shiriState.isHost?isMine:!isMine));
+  const avCls=isP0?'av-p0':'av-p1 av-bot';
+  const name=isMine?shiriState.myName:shiriState.opName;
+  const div=document.createElement('div');
+  div.className='msg'+(isMine?' mine':'');
+  div.innerHTML=`
+    <div class="msg-av ${avCls}">${name[0].toUpperCase()}</div>
+    <div class="msg-bub">
+      <div class="msg-word">${word}</div>
+      <div class="msg-sub">${t.icon} ${t.name} · ${name}</div>
+      <div class="msg-verdict ${valid?'ok':'fail'}">${valid?'✓ Hợp lệ':'✗ '+(reason||'Không hợp lệ')}</div>
+    </div>`;
+  log.appendChild(div);
+  log.scrollTop=log.scrollHeight;
+}
+
+function shiriAddSys(txt,hl=false){
+  const log=document.getElementById('shiriLog');
+  const d=document.createElement('div');
+  d.className='sys'+(hl?' hl':'');d.textContent=txt;
+  log.appendChild(d); log.scrollTop=log.scrollHeight;
+}
+
+function shiriAfterWord(valid,newTypeIdx,newScores,nowMyTurn){
+  shiriState.typeIdx=newTypeIdx;
+  shiriState.scores=newScores;
+  shiriState.myTurn=nowMyTurn;
+  shiriState.checking=false;
+  document.getElementById('shiriThinking').style.display='none';
+  if(!valid){
+    document.getElementById('shiriInput').classList.remove('shake');
+    void document.getElementById('shiriInput').offsetWidth;
+    document.getElementById('shiriInput').classList.add('shake');
+  }
+  if(valid) shiriAddSys(`→ Vòng tiếp: ${WORD_TYPES[newTypeIdx].name}`);
+  shiriUpdateUI();
+}
+
+// ── Submit ──
+async function shiriSubmit(){
+  if(!shiriState.myTurn||shiriState.checking)return;
+  const inp=document.getElementById('shiriInput');
+  const word=inp.value.trim(); inp.value='';
+  if(!word)return;
+
+  if(shiriState.usedWords.has(word)){
+    showModal('🔁','Đã dùng rồi!',`「${word}」đã xuất hiện trước đó. Chọn từ khác nhé!`);
+    return;
+  }
+
+  shiriState.checking=true;
+  shiriState.usedWords.add(word);
+  document.getElementById('shiriSendBtn').disabled=true;
+  document.getElementById('shiriInput').disabled=true;
+  document.getElementById('shiriThinking').style.display='flex';
+  document.getElementById('shiriThinkingLabel').textContent='AI đang kiểm tra...';
+
+  const typeId=WORD_TYPES[shiriState.typeIdx].id;
+
+  if(shiriMode==='bot'||shiriState.isHost){
+    await shiriJudgeWord(word,typeId,shiriState.typeIdx,[...shiriState.scores],true);
+    if(shiriMode==='bot'&&shiriState.gameOn) botRespond();
+  }else{
+    // Guest: show pending, send to host
+    const t=WORD_TYPES[shiriState.typeIdx];
+    const log=document.getElementById('shiriLog');
+    const pend=document.createElement('div');
+    pend.id='pendingShiri'; pend.className='msg mine';
+    pend.innerHTML=`<div class="msg-av av-p1">${shiriState.myName[0].toUpperCase()}</div>
+      <div class="msg-bub"><div class="msg-word">${word}</div>
+      <div class="msg-sub">${t.icon} ${t.name}</div>
+      <div class="msg-verdict checking">⏳ Đang kiểm tra...</div></div>`;
+    log.appendChild(pend); log.scrollTop=log.scrollHeight;
+    sendMsg({type:'guestWord',word,typeId,typeIdx:shiriState.typeIdx,scores:shiriState.scores});
+  }
+}
+
+async function shiriJudgeWord(word,typeId,curTypeIdx,curScores,isMyWord){
+  const t=WORD_TYPES.find(x=>x.id===typeId);
+  const prompt=`Bạn là trọng tài trò chơi từ vựng tiếng Nhật.
+Từ được nhập: "${word}"
+Loại từ yêu cầu: ${t.name}
+
+Kiểm tra NGHIÊM TÚC:
+1. Đây có phải từ tiếng Nhật thật không? (hiragana/katakana/kanji hợp lệ)
+2. Đây có đúng là "${t.name}" không?
+   - 名詞(danh từ): phải là danh từ, không phải động từ hay tính từ
+   - 動詞(động từ): phải ở dạng từ điển (る/う ending), không phải danh từ hay tính từ
+   - 形容詞(tính từ): phải là i-adj (đuôi い) hoặc na-adj thật sự, KHÔNG phải danh từ hay động từ
+3. Từ phải có nghĩa thật, không phải từ bịa.
+
+Trả lời JSON duy nhất (không markdown):
+{"valid":true/false,"reason":"lý do tiếng Việt nếu sai, rỗng nếu đúng","meaning":"nghĩa tiếng Việt nếu đúng"}`;
+
+  const res=await aiJudge(prompt);
+  const valid=!!res.valid;
+  const reason=res.reason||'';
+  const newScores=[...curScores];
+  const idx=isMyWord?(shiriState.isHost?0:1):(shiriState.isHost?1:0);
+  if(valid) newScores[idx]+=10; else newScores[idx]=Math.max(0,newScores[idx]-5);
+  const newTypeIdx=valid?(curTypeIdx+1)%3:curTypeIdx;
+
+  if(shiriMode==='online'){
+    shiriRenderEntry(word,typeId,valid,reason,true);
+    sendMsg({type:'hostWord',word,typeId,valid,reason,typeIdx:newTypeIdx,scores:newScores});
+    shiriAfterWord(valid,newTypeIdx,newScores,false);
+  }else{
+    shiriRenderEntry(word,typeId,valid,reason,true);
+    shiriAfterWord(valid,newTypeIdx,newScores,false);
+  }
+}
+
+async function onlineJudgeGuestWord(word,typeId,curTypeIdx,curScores){
+  const t=WORD_TYPES.find(x=>x.id===typeId);
+  const prompt=`Bạn là trọng tài trò chơi từ vựng tiếng Nhật.
+Từ được nhập: "${word}"
+Loại từ yêu cầu: ${t.name}
+Kiểm tra NGHIÊM TÚC xem đây có đúng loại từ yêu cầu không. Trả lời JSON:
+{"valid":true/false,"reason":"lý do tiếng Việt nếu sai","meaning":"nghĩa nếu đúng"}`;
+
+  const res=await aiJudge(prompt);
+  const valid=!!res.valid; const reason=res.reason||'';
+  const newScores=[...curScores];
+  if(valid) newScores[1]+=10; else newScores[1]=Math.max(0,newScores[1]-5);
+  const newTypeIdx=valid?(curTypeIdx+1)%3:curTypeIdx;
+  shiriRenderEntry(word,typeId,valid,reason,false);
+  sendMsg({type:'verdictForGuest',word,typeId,valid,reason,typeIdx:newTypeIdx,scores:newScores});
+  shiriAfterWord(valid,newTypeIdx,newScores,true);
+}
+
+// ── Bot respond ──
+async function botRespond(){
+  shiriState.myTurn=false;
+  shiriUpdateUI();
+  document.getElementById('shiriThinking').style.display='flex';
+  document.getElementById('shiriThinkingLabel').textContent='Bot đang suy nghĩ...';
+
+  await new Promise(r=>setTimeout(r,900+Math.random()*800));
+
+  const typeId=WORD_TYPES[shiriState.typeIdx].id;
+  const candidates=VOCAB.filter(v=>v.type===typeId&&!shiriState.usedWords.has(v.w));
+  document.getElementById('shiriThinking').style.display='none';
+
+  if(!candidates.length){
+    shiriAddSys('🎉 Bot không tìm được từ! Bạn thắng!',true);
+    shiriState.gameOn=false;
+    showModal('🏆','Bạn thắng!','Bot đầu hàng rồi! Bạn giỏi lắm 🌸',[
+      {label:'Chơi lại',fn:startShiriBot,cls:'btn-primary'},
+      {label:'Thoát',fn:shiriQuit,cls:'btn-ghost'}
+    ]);
+    return;
+  }
+
+  const chosen=candidates[Math.floor(Math.random()*candidates.length)];
+  shiriState.usedWords.add(chosen.w);
+  const newScores=[...shiriState.scores]; newScores[1]+=10;
+  const newTypeIdx=(shiriState.typeIdx+1)%3;
+  shiriRenderEntry(chosen.w,typeId,true,'',false);
+  shiriAddSys(`Bot: ${chosen.w} = ${chosen.m}`);
+  shiriAfterWord(true,newTypeIdx,newScores,true);
+}
+
+// ══════════════════════════════════════════════════
+//  TOPIC WORD CHAIN
+// ══════════════════════════════════════════════════
+let topicState={topic:'',score:0,streak:0,usedWords:new Set()};
+let selectedTopic='food';
+
+(function initTopics(){
+  const grid=document.getElementById('topicGrid');
+  Object.entries(TOPICS).forEach(([key,val])=>{
+    const chip=document.createElement('div');
+    chip.className='topic-chip'+(key===selectedTopic?' selected':'');
+    chip.textContent=val.label;
+    chip.onclick=()=>{
+      selectedTopic=key;
+      document.querySelectorAll('.topic-chip').forEach(c=>c.classList.remove('selected'));
+      chip.classList.add('selected');
+    };
+    grid.appendChild(chip);
+  });
+})();
+
+function startTopicGame(){
+  topicState={topic:selectedTopic,score:0,streak:0,usedWords:new Set()};
+  document.getElementById('topicSelectPanel').style.display='none';
+  document.getElementById('topicGamePanel').style.display='block';
+  document.getElementById('topicGameTitle').textContent=TOPICS[selectedTopic].label+' — Nhập từ thuộc chủ đề này';
+  document.getElementById('topicScore').textContent='0';
+  document.getElementById('topicStreak').textContent='0';
+  document.getElementById('topicLog').innerHTML=`<div class="sys hl">🎯 Chủ đề: ${TOPICS[selectedTopic].label} — ${TOPICS[selectedTopic].desc}</div>`;
+  document.getElementById('topicInput').focus();
+  document.getElementById('topicHint').textContent=`Nhập bất kỳ từ tiếng Nhật thuộc chủ đề "${TOPICS[selectedTopic].label}"`;
+}
+
+async function topicSubmit(){
+  const inp=document.getElementById('topicInput');
+  const word=inp.value.trim(); inp.value='';
+  if(!word)return;
+  if(topicState.usedWords.has(word)){
+    showModal('🔁','Đã dùng!',`「${word}」đã dùng rồi!`);return;
+  }
+
+  document.getElementById('topicThinking').style.display='flex';
+  inp.disabled=true;
+
+  const prompt=`Bạn là giáo viên tiếng Nhật N5.
+Từ: "${word}"
+Chủ đề yêu cầu: ${TOPICS[topicState.topic].label} (${topicState.topic})
+
+Kiểm tra:
+1. Đây có phải từ tiếng Nhật thật không?
+2. Từ này có thuộc chủ đề "${TOPICS[topicState.topic].label}" không? Kiểm tra NGHIÊM TÚC.
+   Ví dụ chủ đề food: đồ ăn, thức uống. Chủ đề animal: tên con vật. Chủ đề place: địa điểm...
+
+Trả lời JSON:
+{"valid":true/false,"reason":"lý do tiếng Việt nếu sai","meaning":"nghĩa tiếng Việt","romaji":"cách đọc romaji"}`;
+
+  const res=await aiJudge(prompt);
+  document.getElementById('topicThinking').style.display='none';
+  inp.disabled=false; inp.focus();
+
+  const valid=!!res.valid;
+  topicState.usedWords.add(word);
+
+  const log=document.getElementById('topicLog');
+  const div=document.createElement('div');
+  div.className='msg mine';
+  div.innerHTML=`<div class="msg-av av-p0">😊</div>
+    <div class="msg-bub">
+      <div class="msg-word">${word}</div>
+      ${res.meaning?`<div class="msg-sub">${res.meaning}${res.romaji?' · '+res.romaji:''}</div>`:''}
+      <div class="msg-verdict ${valid?'ok':'fail'}">${valid?'✓ Đúng chủ đề! +10 điểm':'✗ '+(res.reason||'Không thuộc chủ đề')}</div>
+    </div>`;
+  log.appendChild(div); log.scrollTop=log.scrollHeight;
+
+  if(valid){
+    topicState.score+=10; topicState.streak++;
+    if(topicState.streak>0&&topicState.streak%5===0){
+      const bonus=div.querySelector('.msg-verdict');
+      bonus.textContent=`🔥 ${topicState.streak} liên tiếp! +${10+topicState.streak} điểm`;
+      topicState.score+=topicState.streak;
+    }
+  }else{
+    topicState.streak=0;
+  }
+  document.getElementById('topicScore').textContent=topicState.score;
+  document.getElementById('topicStreak').textContent=topicState.streak;
+
+  // Update used
+  document.getElementById('topicUsedPanel').style.display='block';
+  const ul=document.getElementById('topicUsedList');
+  if(valid){
+    const tag=document.createElement('span');
+    tag.style.cssText='background:var(--moss-bg);color:var(--moss);padding:.15rem .55rem;border-radius:999px;font-size:.72rem;font-family:"Noto Serif JP",serif';
+    tag.textContent=word;
+    ul.appendChild(tag);
+  }
+}
+
+// ══════════════════════════════════════════════════
+//  FLASHCARD
+// ══════════════════════════════════════════════════
+let fcMode='card',fcDeck=[],fcIdx=0,fcCorrects=0,fcTotal=0;
+let quizCorrect=0,quizWrong=0;
+
+(function initFC(){
+  fcDeck=[...VOCAB].sort(()=>Math.random()-.5);
+  fcTotal=fcDeck.length;
+  renderFC();
+})();
+
+function setFCMode(m){
+  fcMode=m;
+  document.getElementById('fcCardMode').style.display=m==='card'?'block':'none';
+  document.getElementById('fcQuizMode').style.display=m==='quiz'?'block':'none';
+  document.getElementById('fcModeCard').className='btn btn-sm '+(m==='card'?'btn-primary':'btn-ghost');
+  document.getElementById('fcModeQuiz').className='btn btn-sm '+(m==='quiz'?'btn-primary':'btn-ghost');
+  if(m==='quiz') renderQuiz();
+}
+
+function renderFC(){
+  if(!fcDeck.length)return;
+  const v=fcDeck[fcIdx];
+  document.getElementById('fcWord').textContent=v.w;
+  document.getElementById('fcReading').textContent=v.r!==v.w?v.r:'';
+  document.getElementById('fcMeaning').textContent=v.m;
+  document.getElementById('fcExample').textContent=TOPICS[v.topic]?TOPICS[v.topic].label:'';
+  document.getElementById('flashcard').classList.remove('flipped');
+  document.getElementById('fcProgress').textContent=`${fcIdx+1} / ${fcDeck.length}`;
+  document.getElementById('fcCorrect').textContent=`✓ ${fcCorrects} đúng`;
+  document.getElementById('fcProgFill').style.width=((fcIdx+1)/fcDeck.length*100)+'%';
+}
+function flipCard(){document.getElementById('flashcard').classList.toggle('flipped');}
+function fcNav(d){fcIdx=(fcIdx+d+fcDeck.length)%fcDeck.length;renderFC();}
+function markCorrect(){fcCorrects++;fcNav(1);}
+function fcShuffle(){fcDeck.sort(()=>Math.random()-.5);fcIdx=0;renderFC();}
+function speakWord(){
+  const v=fcDeck[fcIdx];
+  const u=new SpeechSynthesisUtterance(v.w);
+  u.lang='ja-JP';u.rate=0.9;
+  speechSynthesis.speak(u);
+}
+
+// Quiz
+function renderQuiz(){
+  const v=fcDeck[Math.floor(Math.random()*fcDeck.length)];
+  document.getElementById('quizWord').textContent=v.w;
+  document.getElementById('quizReading').textContent=v.r!==v.w?'('+v.r+')':'';
+  const wrongs=VOCAB.filter(x=>x.w!==v.w).sort(()=>Math.random()-.5).slice(0,3).map(x=>x.m);
+  const opts=[v.m,...wrongs].sort(()=>Math.random()-.5);
+  const cont=document.getElementById('quizChoices');
+  cont.innerHTML='';
+  opts.forEach(o=>{
+    const b=document.createElement('button');
+    b.className='choice-btn'; b.textContent=o;
+    b.onclick=()=>answerQuiz(b,o===v.m,v,cont);
+    cont.appendChild(b);
+  });
+}
+function answerQuiz(btn,correct,v,cont){
+  Array.from(cont.children).forEach(b=>{
+    b.disabled=true;
+    if(b.textContent===v.m) b.classList.add('correct');
+  });
+  if(!correct){btn.classList.add('wrong');quizWrong++;}else{quizCorrect++;}
+  document.getElementById('quizCorrectCount').textContent=quizCorrect;
+  document.getElementById('quizWrongCount').textContent=quizWrong;
+  setTimeout(renderQuiz,1200);
+}
+
+// ══════════════════════════════════════════════════
+//  PRONUNCIATION
+// ══════════════════════════════════════════════════
+let pronIdx=0,pronList=[],pronRecording=false,pronMediaRecorder=null,pronChunks=[];
+let pronDone=0,pronScoreSum=0,pronBestScore=0;
+
+(function initPron(){
+  pronList=VOCAB.filter(v=>v.type==='noun').sort(()=>Math.random()-.5);
+  renderPron();
+})();
+
+function renderPron(){
+  const v=pronList[pronIdx];
+  document.getElementById('pronWord').textContent=v.w;
+  document.getElementById('pronReading').textContent=v.r;
+  document.getElementById('pronMeaning').textContent=v.m;
+  document.getElementById('pronResult').style.display='none';
+}
+function pronNav(d){pronIdx=(pronIdx+d+pronList.length)%pronList.length;renderPron();}
+function pronListen(){
+  const v=pronList[pronIdx];
+  const u=new SpeechSynthesisUtterance(v.w);
+  u.lang='ja-JP';u.rate=0.85;u.pitch=1.1;
+  speechSynthesis.cancel();speechSynthesis.speak(u);
+}
+
+async function toggleMic(){
+  if(pronRecording){
+    stopMic();
+  }else{
+    try{
+      const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+      pronRecording=true;
+      document.getElementById('micBtn').classList.add('recording');
+      document.getElementById('micBtn').textContent='⏹';
+      document.getElementById('micStatus').textContent='Đang thu âm... Nhấn để dừng';
+      document.getElementById('pronWave').classList.add('active');
+      pronChunks=[];
+      pronMediaRecorder=new MediaRecorder(stream);
+      pronMediaRecorder.ondataavailable=e=>pronChunks.push(e.data);
+      pronMediaRecorder.onstop=()=>processPron(stream);
+      pronMediaRecorder.start();
+    }catch(e){
+      showModal('🎤','Cần quyền mic','Vui lòng cho phép truy cập microphone để luyện phát âm.');
+    }
+  }
+}
+function stopMic(){
+  pronRecording=false;
+  document.getElementById('micBtn').classList.remove('recording');
+  document.getElementById('micBtn').textContent='🎤';
+  document.getElementById('micStatus').textContent='Đang xử lý...';
+  document.getElementById('pronWave').classList.remove('active');
+  pronMediaRecorder&&pronMediaRecorder.stop();
+}
+async function processPron(stream){
+  stream.getTracks().forEach(t=>t.stop());
+  // Use Web Speech API for recognition
+  if(!('webkitSpeechRecognition' in window||'SpeechRecognition' in window)){
+    showModal('⚠️','Trình duyệt không hỗ trợ','Dùng Chrome để luyện phát âm nhé!');
+    document.getElementById('micStatus').textContent='Nhấn để thu âm';
+    return;
+  }
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  const recog=new SR();
+  recog.lang='ja-JP'; recog.interimResults=false; recog.maxAlternatives=3;
+  recog.start();
+  recog.onresult=e=>{
+    const heard=Array.from(e.results[0]).map(a=>a.transcript).join(' ');
+    scorePron(heard);
+  };
+  recog.onerror=()=>{ document.getElementById('micStatus').textContent='Không nghe rõ, thử lại!'; };
+  recog.onend=()=>{ if(!document.getElementById('pronResult').style.display||document.getElementById('pronResult').style.display==='none') document.getElementById('micStatus').textContent='Nhấn để thu âm'; };
+}
+function scorePron(heard){
+  const target=pronList[pronIdx].r||pronList[pronIdx].w;
+  const heardClean=heard.replace(/\s/g,'');
+  // Simple similarity score
+  let matches=0;
+  for(let i=0;i<Math.min(target.length,heardClean.length);i++) if(target[i]===heardClean[i]) matches++;
+  const sim=Math.round((matches/Math.max(target.length,heardClean.length))*100);
+  const score=Math.min(100,sim+Math.round(Math.random()*10));
+
+  let emoji,feedback;
+  if(score>=85){emoji='🌟';feedback='Xuất sắc! Phát âm rất chuẩn!';}
+  else if(score>=70){emoji='😊';feedback='Tốt! Gần đúng rồi, luyện thêm chút nữa nhé';}
+  else if(score>=50){emoji='🤔';feedback='Được rồi! Thử nghe lại mẫu và phát âm chậm hơn';}
+  else{emoji='💪';feedback='Cần luyện thêm! Nghe mẫu nhiều lần rồi thử lại';}
+
+  document.getElementById('pronScore').textContent=emoji+' '+score+'%';
+  document.getElementById('pronScore').style.color=score>=70?'var(--moss)':'var(--danger)';
+  document.getElementById('pronFeedback').textContent=feedback;
+  document.getElementById('pronHeard').textContent='Nghe được: '+heard;
+  document.getElementById('pronResult').style.display='block';
+  document.getElementById('micStatus').textContent='Nhấn để thu âm';
+
+  pronDone++;pronScoreSum+=score;pronBestScore=Math.max(pronBestScore,score);
+  document.getElementById('pronDone').textContent=pronDone;
+  document.getElementById('pronAvg').textContent=Math.round(pronScoreSum/pronDone)+'%';
+  document.getElementById('pronBest').textContent=pronBestScore+'%';
+
+  const hist=document.getElementById('pronHistory');
+  const row=document.createElement('div');
+  row.style.cssText='display:flex;justify-content:space-between;font-size:.75rem;padding:.25rem 0;border-bottom:1px solid var(--border)';
+  row.innerHTML=`<span style="font-family:'Noto Serif JP',serif">${pronList[pronIdx].w}</span><span style="color:${score>=70?'var(--moss)':'var(--danger)'}">${score}%</span>`;
+  hist.prepend(row);
+}
+
+// ══════════════════════════════════════════════════
+//  ANIME QUIZ
+// ══════════════════════════════════════════════════
+const ANIME_DB=[
+  {anime:'Naruto',note:'🍃',clue:'Nhân vật chính muốn trở thành Hokage — người đứng đầu làng ninja. Từ khoá: 忍者 (にんじゃ)、里 (さと)、夢 (ゆめ)',vocab:[{w:'にんじゃ',m:'Ninja'},{w:'ゆめ',m:'Ước mơ'},{w:'なかま',m:'Đồng đội'}],cat:'Action · Shounen'},
+  {anime:'One Piece',note:'⚓',clue:'Một cậu bé ăn trái ác quỷ, thân mình như cao su, muốn tìm kho báu One Piece trên biển. Từ khoá: 海賊 (かいぞく)、宝 (たから)',vocab:[{w:'うみ',m:'Biển'},{w:'たから',m:'Kho báu'},{w:'ふね',m:'Con thuyền'}],cat:'Action · Adventure'},
+  {anime:'Doraemon',note:'🔵',clue:'Một chú mèo máy đến từ tương lai, có chiếc túi thần kỳ chứa nhiều bảo bối. Từ khoá: 未来 (みらい)、道具 (どうぐ)',vocab:[{w:'みらい',m:'Tương lai'},{w:'ともだち',m:'Bạn bè'},{w:'どうぐ',m:'Dụng cụ'}],cat:'Comedy · Kids'},
+  {anime:'Dragon Ball',note:'🐉',clue:'Tập hợp 7 viên ngọc rồng để triệu hồi rồng thần, nhân vật chính có mái tóc dựng đứng màu vàng. Từ khoá: 龍 (りゅう)、球 (たま)',vocab:[{w:'つよい',m:'Mạnh mẽ'},{w:'たたかう',m:'Chiến đấu'},{w:'ちから',m:'Sức mạnh'}],cat:'Action · Shounen'},
+  {anime:'Sailor Moon',note:'🌙',clue:'Một cô gái bình thường trở thành chiến binh mặt trăng, chiến đấu vì tình yêu và công lý. Từ khoá: 月 (つき)、愛 (あい)',vocab:[{w:'つき',m:'Mặt trăng'},{w:'あい',m:'Tình yêu'},{w:'へんしん',m:'Biến hình'}],cat:'Magical Girl'},
+  {anime:'My Neighbor Totoro',note:'🌳',clue:'Hai chị em nhỏ chuyển đến nhà mới ở nông thôn và gặp những sinh vật rừng kỳ diệu. Phim của Ghibli. Từ khoá: 森 (もり)、田舎 (いなか)',vocab:[{w:'もり',m:'Rừng'},{w:'いなか',m:'Nông thôn'},{w:'となり',m:'Hàng xóm'}],cat:'Ghibli · Fantasy'},
+  {anime:'Spirited Away',note:'🏮',clue:'Cô bé 10 tuổi lạc vào thế giới thần linh, phải làm việc tại nhà tắm để cứu bố mẹ. Phim Ghibli đoạt Oscar. Từ khoá: 神様 (かみさま)、風呂 (ふろ)',vocab:[{w:'かみさま',m:'Thần linh'},{w:'しごと',m:'Công việc'},{w:'ゆ',m:'Nước nóng'}],cat:'Ghibli · Fantasy'},
+  {anime:'Attack on Titan',note:'⚔️',clue:'Con người sống sau những bức tường khổng lồ để tránh những gã khổng lồ ăn thịt người. Từ khoà: 壁 (かべ)、巨人 (きょじん)',vocab:[{w:'かべ',m:'Bức tường'},{w:'せんし',m:'Chiến binh'},{w:'じゆう',m:'Tự do'}],cat:'Dark · Action'},
+  {anime:'Demon Slayer',note:'🗡️',clue:'Chàng trai có chị gái bị biến thành quỷ, gia nhập đội diệt quỷ để tìm cách chữa trị. Từ khoá: 鬼 (おに)、剣 (けん)',vocab:[{w:'かぞく',m:'Gia đình'},{w:'つよく',m:'Trở nên mạnh'},{w:'おに',m:'Quỷ'}],cat:'Action · Shounen'},
+  {anime:'Your Name',note:'🌠',clue:'Một chàng trai ở Tokyo và một cô gái ở tỉnh lẻ bí ẩn hoán đổi thân xác cho nhau. Phim hoạt hình nổi tiếng nhất Nhật Bản. Từ khoá: 名前 (なまえ)、夢 (ゆめ)',vocab:[{w:'なまえ',m:'Tên'},{w:'すきだ',m:'Thích/Yêu'},{w:'むかし',m:'Ngày xưa'}],cat:'Romance · Fantasy'},
+];
+
+let animeScore=0,animeCorrect=0,animeStreak=0,currentAnime=null;
+
+function loadAnimeQ(){
+  document.getElementById('animeExplain').style.display='none';
+  const q=ANIME_DB[Math.floor(Math.random()*ANIME_DB.length)];
+  currentAnime=q;
+  document.getElementById('animeNote').textContent=q.note;
+  document.getElementById('animeClue').textContent=q.clue;
+  document.getElementById('animeCategory').textContent=q.cat;
+  const wrongs=ANIME_DB.filter(a=>a.anime!==q.anime).sort(()=>Math.random()-.5).slice(0,3).map(a=>a.anime);
+  const opts=[q.anime,...wrongs].sort(()=>Math.random()-.5);
+  const cont=document.getElementById('animeChoices');
+  cont.innerHTML='';
+  opts.forEach(o=>{
+    const b=document.createElement('button');
+    b.className='anime-choice'; b.textContent=o;
+    b.onclick=()=>answerAnime(b,o===q.anime,cont);
+    cont.appendChild(b);
+  });
+}
+function answerAnime(btn,correct,cont){
+  Array.from(cont.children).forEach(b=>{
+    b.disabled=true;
+    if(b.textContent===currentAnime.anime) b.classList.add('correct');
+  });
+  if(!correct){btn.classList.add('wrong');animeStreak=0;}
+  else{
+    animeScore+=10+animeStreak*2;animeCorrect++;animeStreak++;
+    if(animeStreak>=3) document.getElementById('animeNote').textContent='🔥';
+  }
+  document.getElementById('animeScore').textContent=animeScore;
+  document.getElementById('animeCorrect').textContent=animeCorrect;
+  document.getElementById('animeStreak').textContent=animeStreak;
+  // Show vocab
+  document.getElementById('animeExplain').style.display='block';
+  const voc=document.getElementById('animeVocab');
+  voc.innerHTML=currentAnime.vocab.map(v=>`
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:.4rem .6rem;background:var(--mist);border-radius:8px">
+      <span style="font-family:'Noto Serif JP',serif;font-size:1.1rem">${v.w}</span>
+      <span style="font-size:.82rem;color:var(--ink3)">${v.m}</span>
+      <button class="btn btn-ghost btn-sm" onclick="(()=>{const u=new SpeechSynthesisUtterance('${v.w}');u.lang='ja-JP';speechSynthesis.speak(u)})()">🔊</button>
+    </div>`).join('');
+}
+
+// ══════════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════════
+loadAnimeQ();
 </script>
 </body>
 </html>
