@@ -231,10 +231,58 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--mist);color:var(--in
 .anime-note{font-size:3rem;margin-bottom:.75rem;animation:noteBounce 1s ease-in-out infinite alternate}
 @keyframes noteBounce{from{transform:scale(1) rotate(-5deg)}to{transform:scale(1.1) rotate(5deg)}}
 .anime-choices{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-top:1rem}
-.anime-choice{padding:.7rem;border:2px solid rgba(255,255,255,.2);border-radius:12px;background:rgba(255,255,255,.08);color:#fff;font-size:.88rem;cursor:pointer;transition:all .2s}
-.anime-choice:hover:not(:disabled){background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.5)}
-.anime-choice.correct{background:rgba(74,138,90,.4);border-color:var(--moss)}
-.anime-choice.wrong{background:rgba(176,48,32,.4);border-color:var(--danger)}
+/* FIX: explicit white text on dark card background */
+.anime-choice{padding:.7rem;border:2px solid rgba(255,255,255,.3);border-radius:12px;background:rgba(255,255,255,.15);color:#ffffff!important;font-size:.92rem;font-weight:600;cursor:pointer;transition:all .2s;text-shadow:0 1px 3px rgba(0,0,0,.7);-webkit-font-smoothing:antialiased}
+.anime-choice:hover:not(:disabled){background:rgba(255,255,255,.22);border-color:rgba(255,255,255,.6)}
+.anime-choice.correct{background:rgba(74,138,90,.55)!important;border-color:#6dbf7e;color:#fff!important}
+.anime-choice.wrong{background:rgba(176,48,32,.55)!important;border-color:#e07060;color:#fff!important}
+
+/* ── MUSIC QUIZ ── */
+.music-player{background:linear-gradient(135deg,#0d1b2a,#1a3a5c);border-radius:20px;padding:2rem;text-align:center;color:#fff;position:relative;overflow:hidden}
+.music-player::after{content:'♪';position:absolute;font-size:10rem;opacity:.04;right:-1.5rem;bottom:-2rem;pointer-events:none}
+.vinyl{width:100px;height:100px;border-radius:50%;background:conic-gradient(#111 0%,#222 25%,#111 50%,#333 75%,#111 100%);margin:0 auto .75rem;border:3px solid #444;position:relative;transition:animation .3s}
+.vinyl.spinning{animation:spin 3s linear infinite}
+.vinyl::after{content:'';position:absolute;width:20px;height:20px;background:var(--sakura-deep);border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.music-timer{font-family:'Noto Serif JP',serif;font-size:2rem;letter-spacing:.1em;margin:.5rem 0;color:#fff}
+.music-bar{height:6px;background:rgba(255,255,255,.15);border-radius:999px;overflow:hidden;margin:.5rem 0;cursor:pointer}
+.music-fill{height:100%;background:linear-gradient(90deg,var(--sakura),var(--sakura-deep));border-radius:999px;transition:width .5s linear}
+.music-choices{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-top:1rem}
+.music-choice{padding:.75rem 1rem;border:2px solid var(--border);border-radius:14px;background:#fff;color:var(--ink)!important;font-size:.88rem;font-weight:500;cursor:pointer;transition:all .2s;text-align:center}
+.music-choice:hover:not(:disabled){border-color:var(--sakura);background:var(--sakura-bg);transform:translateY(-1px)}
+.music-choice.correct{border-color:var(--moss);background:var(--moss-bg)!important;color:var(--moss)!important}
+.music-choice.wrong{border-color:var(--danger);background:var(--danger-bg)!important;color:var(--danger)!important}
+.music-tabs{display:flex;gap:.5rem;justify-content:center;margin-bottom:1rem}
+.music-tab{padding:.35rem .9rem;border-radius:999px;border:1.5px solid var(--border);font-size:.78rem;cursor:pointer;background:#fff;color:var(--ink2);transition:all .2s}
+.music-tab.active{background:var(--purple);border-color:var(--purple);color:#fff}
+
+/* ── DARK MODE ── */
+[data-theme="dark"]{
+  --ink:#f0e8e0;--ink2:#c8b8a8;--ink3:#907868;
+  --mist:#0f0a08;--border:#2a2018;--shadow:rgba(0,0,0,.3);
+  --sakura-bg:#1a0e12;--wood-bg:#120e08;--moss-bg:#0a120a;
+  --blue-bg:#080e18;--gold-bg:#120e04;--purple-bg:#100a18;
+  --danger-bg:#120608;
+}
+[data-theme="dark"] body{background:#0f0a08;color:var(--ink)}
+[data-theme="dark"] .nav{background:rgba(15,10,8,.95)}
+[data-theme="dark"] .panel,.game-card,[data-theme="dark"] .panel,[data-theme="dark"] .game-card{background:#1a1208;border-color:#2a2018}
+[data-theme="dark"] .panel{background:#1a1208}
+[data-theme="dark"] .game-card{background:#1a1208}
+[data-theme="dark"] .inp{background:#120e08;border-color:#2a2018;color:var(--ink)}
+[data-theme="dark"] .choice-btn,[data-theme="dark"] .music-choice{background:#1a1208;border-color:#2a2018;color:var(--ink)!important}
+[data-theme="dark"] .stat-pill{background:#1a1208;border-color:#2a2018}
+[data-theme="dark"] .chip{background:#1a1208}
+[data-theme="dark"] .msg:not(.mine) .msg-bub{background:#1a1208;border-color:#2a2018}
+[data-theme="dark"] .panel-header{background:linear-gradient(135deg,#1a0e12,#120e08)}
+[data-theme="dark"] .fc-front{background:linear-gradient(135deg,#1a0e12,#120e08)}
+[data-theme="dark"] .fc-back{background:linear-gradient(135deg,#0a120a,#081212)}
+[data-theme="dark"] .input-bar{background:#1a1208;border-color:#2a2018}
+[data-theme="dark"] .type-banner{background:#120e08}
+[data-theme="dark"] .modal{background:#1a1208;color:var(--ink)}
+[data-theme="dark"] .topic-chip{background:#1a1208;border-color:#2a2018}
+.dark-btn{width:32px;height:32px;border-radius:50%;border:1.5px solid var(--border);background:transparent;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+.dark-btn:hover{background:var(--sakura-bg)}
 
 /* ── SHAKE ── */
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
@@ -269,8 +317,10 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--mist);color:var(--in
     <button class="nav-tab" onclick="showScreen('topic')" id="tab-topic">🗂 <span>Chủ đề</span></button>
     <button class="nav-tab" onclick="showScreen('flashcard')" id="tab-flashcard">📇 <span>Flash Card</span></button>
     <button class="nav-tab" onclick="showScreen('pronounce')" id="tab-pronounce">🎤 <span>Phát âm</span></button>
-    <button class="nav-tab" onclick="showScreen('anime')" id="tab-anime">🎵 <span>Anime</span></button>
+    <button class="nav-tab" onclick="showScreen('anime')" id="tab-anime">🎭 <span>Đoán Anime</span></button>
+    <button class="nav-tab" onclick="showScreen('music')" id="tab-music">🎵 <span>Nhạc OP/ED</span></button>
   </div>
+  <button class="dark-btn" id="darkToggle" onclick="toggleDark()" title="Dark mode">🌙</button>
 </nav>
 
 <!-- MODAL -->
@@ -321,6 +371,12 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--mist);color:var(--in
       <div class="gc-icon">🎵</div>
       <div class="gc-title">Đoán anime</div>
       <div class="gc-desc">Nghe gợi ý từ khoá / lyrics → đoán tên anime. Học từ vựng qua văn hoá Nhật.</div>
+      <div><span class="gc-badge badge-new">★ Mới</span></div>
+    </div>
+    <div class="game-card c-purple" onclick="showScreen('music')">
+      <div class="gc-icon">🎵</div>
+      <div class="gc-title">Nhạc OP/ED Anime</div>
+      <div class="gc-desc">Nghe đoạn nhạc opening/ending → đoán tên anime. Học từ vựng qua bài hát.</div>
       <div><span class="gc-badge badge-new">★ Mới</span></div>
     </div>
     <div class="game-card c-teal" onclick="alert('Coming soon! 🌸')">
@@ -666,11 +722,126 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--mist);color:var(--in
   </div>
 </div>
 
+
+<!-- ════════════════════════════════
+     SCREEN: MUSIC QUIZ (OP/ED)
+════════════════════════════════ -->
+<div class="screen" id="screen-music">
+  <div class="game-layout">
+    <div style="text-align:center;padding:1rem 0 .5rem">
+      <div style="font-family:'Noto Serif JP',serif;font-size:2rem">🎵 Nhạc Anime OP/ED</div>
+      <div style="font-size:.8rem;color:var(--ink3);margin-top:.3rem">Nghe gợi ý lyrics → đoán anime · Luyện nghe tiếng Nhật</div>
+    </div>
+
+    <!-- Mode tabs -->
+    <div class="music-tabs">
+      <button class="music-tab active" id="mtab-clue" onclick="setMusicMode('clue')">🎭 Gợi ý lyrics</button>
+      <button class="music-tab" id="mtab-fill" onclick="setMusicMode('fill')">✍️ Điền từ</button>
+    </div>
+
+    <!-- Clue mode -->
+    <div id="music-clue-mode">
+      <div class="music-player">
+        <div class="vinyl" id="musicVinyl"></div>
+        <div style="font-size:.7rem;letter-spacing:.18em;opacity:.7;margin-bottom:.6rem">ĐOẠN LYRICS GỢI Ý</div>
+        <div style="font-size:1.05rem;line-height:2;min-height:72px;font-style:italic" id="musicLyric">—</div>
+        <div style="font-size:.78rem;opacity:.6;margin-top:.6rem" id="musicLyricRomaji" style="font-size:.75rem;opacity:.5">—</div>
+        <div style="font-size:.72rem;opacity:.5;margin-top:.4rem" id="musicMeta">—</div>
+      </div>
+      <div class="music-choices" id="musicChoices"></div>
+    </div>
+
+    <!-- Fill-in mode -->
+    <div id="music-fill-mode" style="display:none">
+      <div class="music-player">
+        <div class="vinyl" id="musicVinyl2"></div>
+        <div style="font-size:.7rem;letter-spacing:.18em;opacity:.7;margin-bottom:.6rem">ĐIỀN TỪ CÒN THIẾU</div>
+        <div style="font-size:1.1rem;line-height:2.2" id="fillLyric">—</div>
+        <div style="font-size:.75rem;opacity:.6;margin-top:.4rem" id="fillHint">—</div>
+      </div>
+      <div style="display:flex;gap:.6rem;margin-top:.75rem">
+        <input class="inp" id="fillInput" placeholder="Nhập từ còn thiếu (hiragana/kanji)..." autocomplete="off" onkeydown="if(event.key==='Enter')checkFill()">
+        <button class="btn btn-primary" onclick="checkFill()" style="flex-shrink:0">確認</button>
+      </div>
+      <div style="font-size:.78rem;color:var(--ink3);margin-top:.4rem" id="fillResult"></div>
+    </div>
+
+    <!-- Stats -->
+    <div class="panel">
+      <div class="panel-body" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem">
+        <div class="stat-row">
+          <div class="stat-pill">⭐ <strong id="musicScore">0</strong> điểm</div>
+          <div class="stat-pill">✓ <strong id="musicCorrect">0</strong> đúng</div>
+          <div class="stat-pill">🔥 <strong id="musicStreak">0</strong> streak</div>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="loadMusicQ()">🔀 Bài khác</button>
+      </div>
+    </div>
+
+    <!-- Vocab reveal -->
+    <div class="panel" id="musicVocabPanel" style="display:none">
+      <div class="panel-header">
+        <div class="panel-title" id="musicVocabTitle">📖 Từ vựng trong bài này</div>
+      </div>
+      <div class="panel-body">
+        <div id="musicVocabList" style="display:flex;flex-direction:column;gap:.5rem"></div>
+        <div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--border);font-size:.78rem;color:var(--ink3)" id="musicAnimeInfo"></div>
+      </div>
+    </div>
+  </div>
+</div>
 <script>
 // ══════════════════════════════════════════════════
 //  PROXY URL (Cloudflare Worker)
 // ══════════════════════════════════════════════════
 const PROXY = 'https://shiritori-proxy.baova10ht.workers.dev';
+
+// ── AI Debug helper (bỏ comment để test) ──
+// Chạy trong Console: testAI()
+window.testAI = async () => {
+  console.log('Testing Worker:', PROXY);
+  try {
+    const r = await fetch(PROXY, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt: 'Từ: ねこ. Loại: 名詞. Trả lời JSON: {"valid":true/false,"reason":"","meaning":""}' })
+    });
+    console.log('Status:', r.status, r.statusText);
+    const d = await r.json();
+    console.log('Response:', d);
+    alert('Worker OK! Kết quả: ' + JSON.stringify(d));
+  } catch(e) {
+    console.error('Worker FAIL:', e);
+    alert('Lỗi: ' + e.message);
+  }
+};
+
+// Improved aiJudge with timeout + retry
+async function aiJudgeWithTimeout(prompt, timeoutMs = 15000) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const r = await fetch(PROXY, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt }),
+      signal: controller.signal
+    });
+    clearTimeout(timer);
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const d = await r.json();
+    const raw = (d.result || '{}').replace(/```json|```/g, '').trim();
+    const parsed = JSON.parse(raw);
+    // Ensure valid field exists
+    if (typeof parsed.valid === 'undefined') parsed.valid = false;
+    return parsed;
+  } catch(e) {
+    clearTimeout(timer);
+    if (e.name === 'AbortError') return { valid: false, reason: 'AI timeout (>15s), thử lại' };
+    console.warn('AI error:', e.message);
+    return { valid: false, reason: 'Không kết nối được AI: ' + e.message };
+  }
+}
 
 // ══════════════════════════════════════════════════
 //  N5 VOCABULARY DATABASE
@@ -1131,7 +1302,7 @@ Kiểm tra NGHIÊM TÚC:
 Trả lời JSON duy nhất (không markdown):
 {"valid":true/false,"reason":"lý do tiếng Việt nếu sai, rỗng nếu đúng","meaning":"nghĩa tiếng Việt nếu đúng"}`;
 
-  const res=await aiJudge(prompt);
+  const res=await aiJudgeWithTimeout(prompt);
   const valid=!!res.valid;
   const reason=res.reason||'';
   const newScores=[...curScores];
@@ -1157,7 +1328,7 @@ Loại từ yêu cầu: ${t.name}
 Kiểm tra NGHIÊM TÚC xem đây có đúng loại từ yêu cầu không. Trả lời JSON:
 {"valid":true/false,"reason":"lý do tiếng Việt nếu sai","meaning":"nghĩa nếu đúng"}`;
 
-  const res=await aiJudge(prompt);
+  const res=await aiJudgeWithTimeout(prompt);
   const valid=!!res.valid; const reason=res.reason||'';
   const newScores=[...curScores];
   if(valid) newScores[1]+=10; else newScores[1]=Math.max(0,newScores[1]-5);
@@ -1255,7 +1426,7 @@ Kiểm tra:
 Trả lời JSON:
 {"valid":true/false,"reason":"lý do tiếng Việt nếu sai","meaning":"nghĩa tiếng Việt","romaji":"cách đọc romaji"}`;
 
-  const res=await aiJudge(prompt);
+  const res=await aiJudgeWithTimeout(prompt);
   document.getElementById('topicThinking').style.display='none';
   inp.disabled=false; inp.focus();
 
@@ -1537,9 +1708,208 @@ function answerAnime(btn,correct,cont){
 }
 
 // ══════════════════════════════════════════════════
+//  DARK MODE
+// ══════════════════════════════════════════════════
+function toggleDark(){
+  const isDark=document.documentElement.getAttribute('data-theme')==='dark';
+  document.documentElement.setAttribute('data-theme',isDark?'light':'dark');
+  document.getElementById('darkToggle').textContent=isDark?'🌙':'☀️';
+  localStorage.setItem('emi-theme',isDark?'light':'dark');
+}
+(function(){
+  const saved=localStorage.getItem('emi-theme');
+  if(saved==='dark'||(!saved&&window.matchMedia('(prefers-color-scheme:dark)').matches)){
+    document.documentElement.setAttribute('data-theme','dark');
+    const btn=document.getElementById('darkToggle');
+    if(btn)btn.textContent='☀️';
+  }
+})();
+
+// ══════════════════════════════════════════════════
+//  MUSIC QUIZ DB
+// ══════════════════════════════════════════════════
+const MUSIC_DB=[
+  {anime:'Naruto',type:'OP1',song:'ROCKS',
+   lyric:'空に向かって 叫ぶよ\nそら に むかって さけぶ よ',
+   romaji:'Sora ni mukatte sakebu yo',
+   blank:{lyric:'空に向かって _____ よ',answer:'叫ぶ',hint:'さけぶ = hét lên'},
+   vocab:[{w:'そら',r:'そら',m:'Bầu trời'},{w:'さけぶ',r:'さけぶ',m:'Hét lên'},{w:'むかう',r:'むかう',m:'Hướng về'}],
+   info:'Naruto OP1 "ROCKS" by Hound Dog — 2002',
+   choices:['Naruto','Bleach','One Piece','Dragon Ball Z']},
+  {anime:'One Piece',type:'OP1',song:'We Are!',
+   lyric:'今こそ 仲間と 旅に 出よう\nいま こそ なかま と たび に でよう',
+   romaji:'Ima koso nakama to tabi ni deyou',
+   blank:{lyric:'今こそ _____ と 旅に 出よう',answer:'仲間',hint:'なかま = đồng đội'},
+   vocab:[{w:'なかま',r:'なかま',m:'Đồng đội'},{w:'たび',r:'たび',m:'Chuyến đi'},{w:'いま',r:'いま',m:'Bây giờ'}],
+   info:'One Piece OP1 "We Are!" by Hiroshi Kitadani — 1999',
+   choices:['One Piece','Fairy Tail','Naruto','Hunter x Hunter']},
+  {anime:'Attack on Titan',type:'OP1',song:'Guren no Yumiya',
+   lyric:'紅蓮の弓矢\nぐれん の ゆみや',
+   romaji:'Guren no yumiya — Tên lửa đỏ rực',
+   blank:{lyric:'紅蓮の _____',answer:'弓矢',hint:'ゆみや = cung tên'},
+   vocab:[{w:'ぐれん',r:'ぐれん',m:'Đỏ rực'},{w:'ゆみや',r:'ゆみや',m:'Cung tên'},{w:'たたかう',r:'たたかう',m:'Chiến đấu'}],
+   info:'AoT OP1 "Guren no Yumiya" by Linked Horizon — 2013',
+   choices:['Attack on Titan','Fullmetal Alchemist','Tokyo Ghoul','Sword Art Online']},
+  {anime:'Demon Slayer',type:'OP1',song:'Gurenge',
+   lyric:'強くなれる理由を知った\nつよく なれる りゆう を しった',
+   romaji:'Tsuyoku nareru riyuu wo shitta',
+   blank:{lyric:'強くなれる _____ を 知った',answer:'理由',hint:'りゆう = lý do'},
+   vocab:[{w:'つよい',r:'つよい',m:'Mạnh mẽ'},{w:'りゆう',r:'りゆう',m:'Lý do'},{w:'しる',r:'しる',m:'Biết'}],
+   info:'Demon Slayer OP "Gurenge" by LiSA — 2019',
+   choices:['Demon Slayer','My Hero Academia','Jujutsu Kaisen','Bleach']},
+  {anime:'My Hero Academia',type:'OP1',song:'The Day',
+   lyric:'僕のヒーローアカデミア\nぼく の ひーろー あかでみあ',
+   romaji:'Boku no Hero Academia',
+   blank:{lyric:'僕の _____ アカデミア',answer:'ヒーロー',hint:'ひーろー = anh hùng'},
+   vocab:[{w:'ゆめ',r:'ゆめ',m:'Ước mơ'},{w:'ちから',r:'ちから',m:'Sức mạnh'},{w:'すごい',r:'すごい',m:'Tuyệt vời'}],
+   info:'MHA OP1 "The Day" by Porno Graffitti — 2016',
+   choices:['My Hero Academia','Naruto','One Punch Man','Hunter x Hunter']},
+  {anime:'Your Name',type:'Theme',song:'Nandemonaiya',
+   lyric:'なんでもないや、問題ないよ\nなんでも ない や、もんだい ない よ',
+   romaji:'Nandemonai ya, mondai nai yo',
+   blank:{lyric:'なんでもないや、_____ ないよ',answer:'問題',hint:'もんだい = vấn đề'},
+   vocab:[{w:'もんだい',r:'もんだい',m:'Vấn đề'},{w:'なまえ',r:'なまえ',m:'Tên'},{w:'おもいで',r:'おもいで',m:'Kỷ niệm'}],
+   info:'"Nandemonaiya" by RADWIMPS — OST Your Name 2016',
+   choices:['Your Name','A Silent Voice','Weathering With You','Princess Mononoke']},
+  {anime:'Tokyo Ghoul',type:'OP1',song:'unravel',
+   lyric:'私が歪んでいくほど\nわたし が ゆがんで いく ほど',
+   romaji:'Watashi ga yugande iku hodo',
+   blank:{lyric:'私が _____ いくほど',answer:'歪んで',hint:'ゆがんで = bị bóp méo'},
+   vocab:[{w:'わたし',r:'わたし',m:'Tôi'},{w:'くらい',r:'くらい',m:'Tối tăm'},{w:'こわい',r:'こわい',m:'Sợ hãi'}],
+   info:'Tokyo Ghoul OP "unravel" by TK — 2014',
+   choices:['Tokyo Ghoul','Parasyte','Death Note','Elfen Lied']},
+  {anime:'Jujutsu Kaisen',type:'OP1',song:'Kaikai Kitan',
+   lyric:'廻廻奇譚\nかいかい きたん',
+   romaji:'Kaikai Kitan — Câu chuyện kỳ lạ xoay vần',
+   blank:{lyric:'_____ 奇譚',answer:'廻廻',hint:'かいかい = xoay vần'},
+   vocab:[{w:'まじゅつ',r:'まじゅつ',m:'Chú thuật'},{w:'たたかう',r:'たたかう',m:'Chiến đấu'},{w:'つよい',r:'つよい',m:'Mạnh'}],
+   info:'JJK OP1 "Kaikai Kitan" by Eve — 2020',
+   choices:['Jujutsu Kaisen','Chainsaw Man','Bleach','Black Clover']},
+  {anime:'Spirited Away',type:'Theme',song:'Itsumo Nando Demo',
+   lyric:'いつでも何度でも 夢の中へ\nいつでも なんどでも ゆめ の なかへ',
+   romaji:'Itsudemo nandodemo yume no naka e',
+   blank:{lyric:'いつでも何度でも _____ の中へ',answer:'夢',hint:'ゆめ = giấc mơ'},
+   vocab:[{w:'ゆめ',r:'ゆめ',m:'Giấc mơ'},{w:'いつでも',r:'いつでも',m:'Bất cứ lúc nào'},{w:'なかま',r:'なかま',m:'Bạn đồng hành'}],
+   info:'"Itsumo Nando Demo" by Youmi Kimura — Ghibli OST 2001',
+   choices:['Spirited Away','My Neighbor Totoro','Princess Mononoke','Howl's Moving Castle']},
+  {anime:'Fullmetal Alchemist: Brotherhood',type:'OP1',song:'Again',
+   lyric:'傷つくたびに 強くなれる気がして\nきずつく たびに つよく なれる きが して',
+   romaji:'Kizutsuku tabi ni tsuyoku nareru ki ga shite',
+   blank:{lyric:'傷つくたびに _____ なれる気がして',answer:'強く',hint:'つよく = mạnh mẽ'},
+   vocab:[{w:'きずつく',r:'きずつく',m:'Bị thương'},{w:'つよい',r:'つよい',m:'Mạnh mẽ'},{w:'きもち',r:'きもち',m:'Cảm giác'}],
+   info:'FMA Brotherhood OP1 "Again" by YUI — 2009',
+   choices:['Fullmetal Alchemist: Brotherhood','Steins;Gate','Death Note','SAO']},
+  {anime:'Death Note',type:'OP2',song:"What's Up People?",
+   lyric:'ねえ、何を信じればいいの？\nねえ、なに を しんじれば いい の？',
+   romaji:'Nee, nani wo shinjireba ii no?',
+   blank:{lyric:'ねえ、何を _____ ばいいの？',answer:'信じれ',hint:'しんじる = tin tưởng'},
+   vocab:[{w:'しんじる',r:'しんじる',m:'Tin tưởng'},{w:'なに',r:'なに',m:'Cái gì'},{w:'せかい',r:'せかい',m:'Thế giới'}],
+   info:'Death Note OP2 "What's Up People?!" by Maximum the Hormone — 2007',
+   choices:['Death Note','Code Geass','Psycho-Pass','Monster']},
+  {anime:'Sword Art Online',type:'OP1',song:'crossing field',
+   lyric:'心の扉 開いて\nこころ の とびら ひらいて',
+   romaji:'Kokoro no tobira hiraite — Mở cánh cửa trái tim',
+   blank:{lyric:'心の _____ 開いて',answer:'扉',hint:'とびら = cánh cửa'},
+   vocab:[{w:'こころ',r:'こころ',m:'Trái tim'},{w:'とびら',r:'とびら',m:'Cánh cửa'},{w:'ひらく',r:'ひらく',m:'Mở ra'}],
+   info:'SAO OP1 "crossing field" by LiSA — 2012',
+   choices:['Sword Art Online','Log Horizon','Overlord','No Game No Life']},
+];
+
+let musicScore=0,musicCorrect=0,musicStreak=0,currentMusic=null,musicMode='clue';
+
+function setMusicMode(m){
+  musicMode=m;
+  document.getElementById('music-clue-mode').style.display=m==='clue'?'block':'none';
+  document.getElementById('music-fill-mode').style.display=m==='fill'?'block':'none';
+  document.getElementById('mtab-clue').className='music-tab'+(m==='clue'?' active':'');
+  document.getElementById('mtab-fill').className='music-tab'+(m==='fill'?' active':'');
+  loadMusicQ();
+}
+
+function loadMusicQ(){
+  document.getElementById('musicVocabPanel').style.display='none';
+  const fr=document.getElementById('fillResult');
+  if(fr)fr.textContent='';
+  const q=MUSIC_DB[Math.floor(Math.random()*MUSIC_DB.length)];
+  currentMusic=q;
+  if(musicMode==='clue'){
+    document.getElementById('musicVinyl').className='vinyl spinning';
+    document.getElementById('musicLyric').textContent=q.lyric;
+    document.getElementById('musicLyricRomaji').textContent=q.romaji;
+    document.getElementById('musicMeta').textContent=q.type+' · '+q.song;
+    const cont=document.getElementById('musicChoices');
+    cont.innerHTML='';
+    [...q.choices].sort(()=>Math.random()-.5).forEach(o=>{
+      const b=document.createElement('button');
+      b.className='music-choice';
+      b.textContent=o;
+      b.onclick=()=>answerMusic(b,o===q.anime,cont);
+      cont.appendChild(b);
+    });
+  }else{
+    document.getElementById('musicVinyl2').className='vinyl spinning';
+    document.getElementById('fillLyric').innerHTML=
+      q.blank.lyric.replace('_____','<span style="background:var(--sakura-mid);padding:0 .5rem;border-radius:4px;font-weight:700;color:var(--ink)">_____</span>');
+    document.getElementById('fillHint').textContent='💡 Gợi ý: '+q.blank.hint;
+    const fi=document.getElementById('fillInput');
+    fi.value='';fi.disabled=false;fi.focus();
+  }
+}
+
+function answerMusic(btn,correct,cont){
+  Array.from(cont.children).forEach(b=>{
+    b.disabled=true;
+    if(b.textContent===currentMusic.anime)b.classList.add('correct');
+  });
+  if(!correct){btn.classList.add('wrong');musicStreak=0;}
+  else{musicScore+=10+musicStreak*2;musicCorrect++;musicStreak++;}
+  document.getElementById('musicScore').textContent=musicScore;
+  document.getElementById('musicCorrect').textContent=musicCorrect;
+  document.getElementById('musicStreak').textContent=musicStreak;
+  document.getElementById('musicVinyl').className='vinyl';
+  showMusicVocab();
+}
+
+function checkFill(){
+  const fi=document.getElementById('fillInput');
+  const ans=fi.value.trim();
+  if(!ans)return;
+  const correct=ans===currentMusic.blank.answer;
+  const res=document.getElementById('fillResult');
+  if(correct){
+    res.innerHTML='<span style="color:var(--moss);font-weight:600">✓ Chính xác! +10 điểm</span>';
+    musicScore+=10;musicCorrect++;musicStreak++;
+  }else{
+    res.innerHTML='<span style="color:var(--danger)">✗ Đáp án đúng: <strong>'+currentMusic.blank.answer+'</strong> ('+currentMusic.blank.hint+')</span>';
+    musicStreak=0;
+  }
+  document.getElementById('musicScore').textContent=musicScore;
+  document.getElementById('musicCorrect').textContent=musicCorrect;
+  document.getElementById('musicStreak').textContent=musicStreak;
+  document.getElementById('musicVinyl2').className='vinyl';
+  fi.disabled=true;
+  showMusicVocab();
+}
+
+function showMusicVocab(){
+  const panel=document.getElementById('musicVocabPanel');
+  panel.style.display='block';
+  document.getElementById('musicVocabTitle').textContent='📖 '+currentMusic.anime+' — '+currentMusic.song;
+  document.getElementById('musicVocabList').innerHTML=currentMusic.vocab.map(v=>`
+    <div style="display:flex;align-items:center;gap:.5rem;padding:.4rem .6rem;background:var(--mist);border-radius:8px">
+      <span style="font-family:'Noto Serif JP',serif;font-size:1.1rem;min-width:5rem">${v.w}</span>
+      <span style="font-size:.75rem;color:var(--ink3);min-width:4rem">${v.r}</span>
+      <span style="font-size:.82rem;color:var(--ink2);flex:1">${v.m}</span>
+      <button class="btn btn-ghost btn-sm" style="padding:.2rem .5rem;flex-shrink:0" onclick="(()=>{const u=new SpeechSynthesisUtterance('${v.w}');u.lang='ja-JP';u.rate=0.9;speechSynthesis.speak(u)})()">🔊</button>
+    </div>`).join('');
+  document.getElementById('musicAnimeInfo').textContent='ℹ️ '+currentMusic.info;
+}
+
+// ══════════════════════════════════════════════════
 //  INIT
 // ══════════════════════════════════════════════════
 loadAnimeQ();
+loadMusicQ();
 </script>
 </body>
 </html>
