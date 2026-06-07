@@ -266,7 +266,7 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--mist);color:var(--in
 }
 [data-theme="dark"] body{background:#0f0a08;color:var(--ink)}
 [data-theme="dark"] .nav{background:rgba(15,10,8,.95)}
-[data-theme="dark"] .panel,.game-card,[data-theme="dark"] .panel,[data-theme="dark"] .game-card{background:#1a1208;border-color:#2a2018}
+[data-theme="dark"] .panel,[data-theme="dark"] .game-card{background:#1a1208;border-color:#2a2018}
 [data-theme="dark"] .panel{background:#1a1208}
 [data-theme="dark"] .game-card{background:#1a1208}
 [data-theme="dark"] .inp{background:#120e08;border-color:#2a2018;color:var(--ink)}
@@ -281,6 +281,33 @@ body{font-family:'Noto Sans JP',sans-serif;background:var(--mist);color:var(--in
 [data-theme="dark"] .type-banner{background:#120e08}
 [data-theme="dark"] .modal{background:#1a1208;color:var(--ink)}
 [data-theme="dark"] .topic-chip{background:#1a1208;border-color:#2a2018}
+/* Dark mode: fix card titles and text that go invisible */
+[data-theme="dark"] .gc-title{color:var(--ink)}
+[data-theme="dark"] .gc-desc{color:var(--ink3)}
+[data-theme="dark"] .gc-icon{filter:none}
+[data-theme="dark"] .hero-title{color:var(--ink)}
+[data-theme="dark"] .panel-title{color:var(--ink)}
+[data-theme="dark"] .fc-word{color:var(--ink)}
+[data-theme="dark"] .fc-meaning{color:#6dbf7e}
+[data-theme="dark"] .msg-word{color:var(--ink)}
+[data-theme="dark"] .choice-btn{color:var(--ink)!important}
+[data-theme="dark"] .music-choice{color:var(--ink)!important;background:#1a1208!important}
+[data-theme="dark"] .music-tab{background:#1a1208;border-color:#2a2018;color:var(--ink2)}
+[data-theme="dark"] .music-tab.active{background:var(--purple);color:#fff}
+[data-theme="dark"] .turn-badge{background:#1a1208;color:var(--ink2)}
+[data-theme="dark"] .turn-mine{background:#0a120a!important;color:var(--moss)!important}
+[data-theme="dark"] .code-box{background:#1a0e12;border-color:var(--sakura)}
+[data-theme="dark"] .code-val{color:var(--ink)}
+[data-theme="dark"] .lb-name{color:var(--ink)}
+[data-theme="dark"] .fc-reading{color:var(--ink3)}
+[data-theme="dark"] .topic-chip{color:var(--ink2)}
+[data-theme="dark"] .topic-chip.selected{color:#fff}
+[data-theme="dark"] .nav-tab{color:var(--ink3)}
+[data-theme="dark"] .nav-tab:hover{background:#1a0e12;color:var(--ink)}
+[data-theme="dark"] .btn-ghost{background:#1a1208;border-color:#2a2018;color:var(--ink2)}
+[data-theme="dark"] .btn-ghost:hover{background:#251a10}
+[data-theme="dark"] .prog-bar{background:#2a2018}
+[data-theme="dark"] .waveform .wave-bar{background:var(--sakura-deep)}
 .dark-btn{width:32px;height:32px;border-radius:50%;border:1.5px solid var(--border);background:transparent;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
 .dark-btn:hover{background:var(--sakura-bg)}
 
@@ -1769,7 +1796,7 @@ const MUSIC_DB=[
    romaji:'Nandemonai ya, mondai nai yo',
    blank:{lyric:'なんでもないや、_____ ないよ',answer:'問題',hint:'もんだい = vấn đề'},
    vocab:[{w:'もんだい',r:'もんだい',m:'Vấn đề'},{w:'なまえ',r:'なまえ',m:'Tên'},{w:'おもいで',r:'おもいで',m:'Kỷ niệm'}],
-   info:'"Nandemonaiya" by RADWIMPS — OST Your Name 2016',
+   info:'Your Name — RADWIMPS 2016',
    choices:['Your Name','A Silent Voice','Weathering With You','Princess Mononoke']},
   {anime:'Tokyo Ghoul',type:'OP1',song:'unravel',
    lyric:'私が歪んでいくほど\nわたし が ゆがんで いく ほど',
@@ -1780,7 +1807,7 @@ const MUSIC_DB=[
    choices:['Tokyo Ghoul','Parasyte','Death Note','Elfen Lied']},
   {anime:'Jujutsu Kaisen',type:'OP1',song:'Kaikai Kitan',
    lyric:'廻廻奇譚\nかいかい きたん',
-   romaji:'Kaikai Kitan — Câu chuyện kỳ lạ xoay vần',
+   romaji:'Kaikai Kitan — Câu chuyện kỳ lạ',
    blank:{lyric:'_____ 奇譚',answer:'廻廻',hint:'かいかい = xoay vần'},
    vocab:[{w:'まじゅつ',r:'まじゅつ',m:'Chú thuật'},{w:'たたかう',r:'たたかう',m:'Chiến đấu'},{w:'つよい',r:'つよい',m:'Mạnh'}],
    info:'JJK OP1 "Kaikai Kitan" by Eve — 2020',
@@ -1790,8 +1817,8 @@ const MUSIC_DB=[
    romaji:'Itsudemo nandodemo yume no naka e',
    blank:{lyric:'いつでも何度でも _____ の中へ',answer:'夢',hint:'ゆめ = giấc mơ'},
    vocab:[{w:'ゆめ',r:'ゆめ',m:'Giấc mơ'},{w:'いつでも',r:'いつでも',m:'Bất cứ lúc nào'},{w:'なかま',r:'なかま',m:'Bạn đồng hành'}],
-   info:'"Itsumo Nando Demo" by Youmi Kimura — Ghibli OST 2001',
-   choices:['Spirited Away','My Neighbor Totoro','Princess Mononoke','Howl's Moving Castle']},
+   info:'Spirited Away — Youmi Kimura 2001',
+   choices:['Spirited Away','My Neighbor Totoro','Princess Mononoke','Castle in the Sky']},
   {anime:'Fullmetal Alchemist: Brotherhood',type:'OP1',song:'Again',
    lyric:'傷つくたびに 強くなれる気がして\nきずつく たびに つよく なれる きが して',
    romaji:'Kizutsuku tabi ni tsuyoku nareru ki ga shite',
@@ -1799,16 +1826,16 @@ const MUSIC_DB=[
    vocab:[{w:'きずつく',r:'きずつく',m:'Bị thương'},{w:'つよい',r:'つよい',m:'Mạnh mẽ'},{w:'きもち',r:'きもち',m:'Cảm giác'}],
    info:'FMA Brotherhood OP1 "Again" by YUI — 2009',
    choices:['Fullmetal Alchemist: Brotherhood','Steins;Gate','Death Note','SAO']},
-  {anime:'Death Note',type:'OP2',song:"What's Up People?",
+  {anime:'Death Note',type:'OP2',song:'Whats Up People',
    lyric:'ねえ、何を信じればいいの？\nねえ、なに を しんじれば いい の？',
    romaji:'Nee, nani wo shinjireba ii no?',
    blank:{lyric:'ねえ、何を _____ ばいいの？',answer:'信じれ',hint:'しんじる = tin tưởng'},
    vocab:[{w:'しんじる',r:'しんじる',m:'Tin tưởng'},{w:'なに',r:'なに',m:'Cái gì'},{w:'せかい',r:'せかい',m:'Thế giới'}],
-   info:'Death Note OP2 "What's Up People?!" by Maximum the Hormone — 2007',
+   info:'Death Note OP2 by Maximum the Hormone — 2007',
    choices:['Death Note','Code Geass','Psycho-Pass','Monster']},
   {anime:'Sword Art Online',type:'OP1',song:'crossing field',
    lyric:'心の扉 開いて\nこころ の とびら ひらいて',
-   romaji:'Kokoro no tobira hiraite — Mở cánh cửa trái tim',
+   romaji:'Kokoro no tobira hiraite',
    blank:{lyric:'心の _____ 開いて',answer:'扉',hint:'とびら = cánh cửa'},
    vocab:[{w:'こころ',r:'こころ',m:'Trái tim'},{w:'とびら',r:'とびら',m:'Cánh cửa'},{w:'ひらく',r:'ひらく',m:'Mở ra'}],
    info:'SAO OP1 "crossing field" by LiSA — 2012',
