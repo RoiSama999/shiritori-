@@ -124,6 +124,9 @@ body::before {
   .hub-review-box   { order: 4; }
   .hub-stats-area   { order: 5; }
   .hub-info-deck    { order: 6; }
+  .party-lobby-grid, .party-room-grid, .party-modes-grid {
+    grid-template-columns: 1fr !important;
+  }
 }
 
 /* Browser Surfaces Craft */
@@ -1168,6 +1171,92 @@ button, .btn, .nav-item, .quest-level-btn, .sfx-btn, [role="button"] {
     padding-top: 1rem;
     border-top: 1px solid var(--border);
   }
+  .party-modes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: clamp(0.75rem, 1.2vw, 1rem);
+  }
+  .party-mode-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 0.85rem;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+    user-select: none;
+  }
+  .party-mode-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(5, 217, 232, 0.6);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  }
+  .party-mode-card.selected {
+    border-color: var(--neon-cyan) !important;
+    background: rgba(5, 217, 232, 0.08) !important;
+    box-shadow: 0 0 16px rgba(5, 217, 232, 0.25) !important;
+  }
+  .party-mode-card .pm-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.45rem;
+  }
+  .party-mode-card .pm-icon {
+    font-size: 1.6rem;
+    line-height: 1;
+  }
+  .party-mode-card .pm-badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.15rem 0.45rem;
+    border-radius: var(--radius-sm);
+    background: var(--bg-surface);
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+  }
+  .party-mode-card.selected .pm-badge {
+    background: var(--neon-cyan);
+    color: #051016;
+    border-color: var(--neon-cyan);
+  }
+  .party-mode-card .pm-title {
+    font-weight: 800;
+    font-size: 0.95rem;
+    color: #fff;
+    margin-bottom: 0.3rem;
+  }
+  .party-mode-card .pm-desc {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+    margin-bottom: 0.65rem;
+    flex: 1;
+  }
+  .party-mode-card .pm-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.75rem;
+    padding-top: 0.45rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+  .party-mode-card .pm-diff {
+    color: var(--text-muted);
+  }
+  .party-mode-card .pm-select-tag {
+    display: none;
+    font-weight: 800;
+    color: var(--neon-cyan);
+    font-size: 0.72rem;
+    letter-spacing: 0.05em;
+  }
+  .party-mode-card.selected .pm-select-tag {
+    display: inline;
+  }
   .party-room-grid {
     display: grid;
     grid-template-columns: clamp(320px, 24vw, 400px) 1fr;
@@ -2018,7 +2107,7 @@ small, .text-xs, .nav-item .label, [style*="font-size:.7"], [style*="font-size: 
               <span style="font-size:.82rem;cursor:pointer;color:var(--neon-cyan)" onclick="openProfileModal()" title="Chỉnh sửa hồ sơ">✏️</span>
               <span class="sync-badge guest" id="hubSyncBadge" onclick="handleAuthButtonClick()" style="cursor:pointer" title="Nhấn để đăng nhập / đồng bộ">💾 KHÁCH (OFFLINE)</span>
             </div>
-            <div class="profile-rank" id="userRankDisplay">RANK: HỌC VIÊN (CẤP 1)</div>
+            <div class="profile-rank" id="userRankDisplay" onclick="openLeaderboardModal()" style="cursor:pointer" title="Nhấn để xem Bảng xếp hạng tuần">RANK: HỌC VIÊN (CẤP 1)</div>
             <div class="jlpt-mastery-wrap" id="userJlptMasteryContainer"></div>
             <div class="xp-bar-box">
               <div class="xp-meta">
@@ -2352,30 +2441,159 @@ small, .text-xs, .nav-item .label, [style*="font-size:.7"], [style*="font-size: 
   ══════════════════════════════════════════════════ -->
   <main class="screen" id="tab-party">
     <!-- Room Lobby Box -->
-    <div class="room-header" id="roomLobby">
-      <div style="font-size:1.15rem;font-weight:800;color:#fff;font-family:var(--font-serif)">Phòng Đấu Trực Tuyến PeerJS</div>
-      <div style="font-size:.82rem;color:var(--text-secondary);margin:.3rem 0 .75rem">Chơi thời gian thực 2 người không cần đăng ký tài khoản</div>
-      
+    <div class="room-header party-lobby-hero" id="roomLobby">
+      <!-- Header row: title, subtitle and live status badge -->
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:.75rem;margin-bottom:1.25rem">
+        <div>
+          <div style="font-size:1.25rem;font-weight:900;color:#fff;font-family:var(--font-serif);display:flex;align-items:center;gap:.5rem">
+            <span>⚔️</span>
+            <span>Phòng Đấu Trực Tuyến PeerJS (P2P Realtime)</span>
+          </div>
+          <div style="font-size:.85rem;color:var(--text-secondary);margin-top:.25rem">
+            Đấu đối kháng & hợp tác 2 người thời gian thực không cần tài khoản, kết nối WebRTC bảo mật và mượt mà.
+          </div>
+        </div>
+        <div id="partyRoomStatusBadge" style="display:inline-flex;align-items:center;gap:.4rem;padding:.35rem .75rem;background:rgba(5,217,232,0.12);border:1px solid var(--neon-cyan);border-radius:var(--radius-full);font-size:.78rem;font-weight:700;color:var(--neon-cyan)">
+          <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#05d9e8;box-shadow:0 0 8px #05d9e8"></span>
+          <span id="partyRoomStatusText">Sảnh Chờ • Sẵn Sàng</span>
+        </div>
+      </div>
+
+      <!-- Mode Selection Showcase (6 Arcade Modes) -->
+      <div style="margin-bottom:1.5rem">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem;flex-wrap:wrap;gap:.5rem">
+          <div style="font-size:.9rem;font-weight:800;color:#fff;display:flex;align-items:center;gap:.4rem">
+            <span>🎯</span>
+            <span>CHỌN CHẾ ĐỘ THI ĐẤU:</span>
+            <span id="partySelectedModeBadge" style="font-size:.75rem;color:var(--neon-gold);font-weight:800;background:rgba(255,215,0,0.1);padding:.15rem .5rem;border-radius:var(--radius-sm);border:1px solid rgba(255,215,0,0.3)">Shiritori Showdown</span>
+          </div>
+          <div style="font-size:.75rem;color:var(--text-muted)">💡 Chế độ được lưu tự động cho các ván tiếp theo</div>
+        </div>
+
+        <div class="party-modes-grid" id="partyModesGrid">
+          <!-- Card 1: Shiritori -->
+          <div class="party-mode-card selected" data-mode="shiritori" onclick="selectPartyMode('shiritori')">
+            <div class="pm-top">
+              <span class="pm-icon">🌸</span>
+              <span class="pm-badge">2P / VS AI</span>
+            </div>
+            <div class="pm-title">Shiritori Showdown</div>
+            <div class="pm-desc">Đấu nối từ Hiragana kinh điển theo lượt. Kho hơn 2.000 từ N5-N3 với gợi ý thông minh.</div>
+            <div class="pm-meta">
+              <span class="pm-diff">Độ khó: <strong style="color:var(--neon-cyan)">★☆☆</strong></span>
+              <span class="pm-select-tag">✓ ĐÃ CHỌN</span>
+            </div>
+          </div>
+
+          <!-- Card 2: Anime Duel -->
+          <div class="party-mode-card" data-mode="anime" onclick="selectPartyMode('anime')">
+            <div class="pm-top">
+              <span class="pm-icon">🎭</span>
+              <span class="pm-badge">2P Đối Kháng</span>
+            </div>
+            <div class="pm-title">Speed Anime Duel</div>
+            <div class="pm-desc">Đoán nhanh tên phim & bài hát Anime qua gợi ý trích đoạn và giai điệu siêu tốc.</div>
+            <div class="pm-meta">
+              <span class="pm-diff">Độ khó: <strong style="color:var(--neon-gold)">★★☆</strong></span>
+              <span class="pm-select-tag">✓ ĐÃ CHỌN</span>
+            </div>
+          </div>
+
+          <!-- Card 3: Kanji Blitz -->
+          <div class="party-mode-card" data-mode="kanji" onclick="selectPartyMode('kanji')">
+            <div class="pm-top">
+              <span class="pm-icon">⚡</span>
+              <span class="pm-badge">2P Đối Kháng</span>
+            </div>
+            <div class="pm-title">Kanji Reflex Blitz</div>
+            <div class="pm-desc">Phản xạ chớp nhoáng chọn đúng Hán tự, âm đọc Onyomi/Kunyomi hoặc nghĩa trong 10 giây.</div>
+            <div class="pm-meta">
+              <span class="pm-diff">Độ khó: <strong style="color:var(--neon-gold)">★★☆</strong></span>
+              <span class="pm-select-tag">✓ ĐÃ CHỌN</span>
+            </div>
+          </div>
+
+          <!-- Card 4: Speed Race -->
+          <div class="party-mode-card" data-mode="speed_race" onclick="selectPartyMode('speed_race')">
+            <div class="pm-top">
+              <span class="pm-icon">🏁</span>
+              <span class="pm-badge">2P Đua Tốc Độ</span>
+            </div>
+            <div class="pm-title">Speed Blitz</div>
+            <div class="pm-desc">Đua tốc độ giải 10 từ vựng mục tiêu. Người chơi hoàn thành trước sẽ đoạt cúp vô địch!</div>
+            <div class="pm-meta">
+              <span class="pm-diff">Độ khó: <strong style="color:var(--neon-pink)">★★★</strong></span>
+              <span class="pm-select-tag">✓ ĐÃ CHỌN</span>
+            </div>
+          </div>
+
+          <!-- Card 5: Co-op Boss -->
+          <div class="party-mode-card" data-mode="coop_boss" onclick="selectPartyMode('coop_boss')">
+            <div class="pm-top">
+              <span class="pm-icon">👹</span>
+              <span class="pm-badge">2P Hợp Tác</span>
+            </div>
+            <div class="pm-title">Co-op Boss Raid</div>
+            <div class="pm-desc">Chung lưng đấu cật! 2 người chơi hợp lực trả lời câu hỏi để trừ HP hạ gục Boss khổng lồ.</div>
+            <div class="pm-meta">
+              <span class="pm-diff">Độ khó: <strong style="color:var(--neon-pink)">★★★</strong></span>
+              <span class="pm-select-tag">✓ ĐÃ CHỌN</span>
+            </div>
+          </div>
+
+          <!-- Card 6: Survival Shiritori -->
+          <div class="party-mode-card" data-mode="survival_shiri" onclick="selectPartyMode('survival_shiri')">
+            <div class="pm-top">
+              <span class="pm-icon">❤️</span>
+              <span class="pm-badge">2P Sinh Tồn</span>
+            </div>
+            <div class="pm-title">Survival Shiritori</div>
+            <div class="pm-desc">Áp lực đếm ngược 5 giây mỗi lượt! Sai chữ hoặc quá giờ lập tức trừ 1 Tim đến người cuối cùng.</div>
+            <div class="pm-meta">
+              <span class="pm-diff">Độ khó: <strong style="color:var(--neon-pink)">★★★</strong></span>
+              <span class="pm-select-tag">✓ ĐÃ CHỌN</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Room Action Columns (Create vs Join) -->
       <div class="party-lobby-grid">
+        <!-- Col 1: Host Room -->
         <div class="lobby-action-col">
-          <div style="font-size:.82rem;color:var(--text-muted);margin-bottom:.4rem;font-weight:700">TẠO PHÒNG MỚI:</div>
-          <button class="btn btn-cyan btn-full" onclick="createPartyRoom()">⚡ Tạo Mã Phòng Mới</button>
+          <div style="font-size:.85rem;color:var(--text-secondary);margin-bottom:.55rem;font-weight:800;display:flex;align-items:center;gap:.35rem">
+            <span>👑</span>
+            <span>TẠO PHÒNG MỚI (LÀM CHỦ PHÒNG):</span>
+          </div>
+          <button class="btn btn-cyan btn-full btn-lg" onclick="createPartyRoom()" style="font-weight:800;font-size:1rem;padding:.9rem 1.25rem;display:flex;align-items:center;justify-content:center;gap:.5rem">
+            ⚡ Tạo Mã Phòng Mới
+          </button>
           
-          <div id="roomCodeDisplayBox" style="display:none;margin-top:.85rem;padding:.75rem;background:var(--bg-surface);border-radius:var(--radius-md);border:1px solid var(--border)">
-            <div style="font-size:.82rem;color:var(--text-muted)">MÃ PHÒNG (CHẠM ĐỂ CHÉP):</div>
-            <div class="room-code-tag" id="partyRoomCode" onclick="copyRoomCode()">...</div>
-            <div style="font-size:.82rem;color:var(--neon-cyan)" id="copyStatusText">📋 Gửi mã này cho bạn bè để cùng chơi</div>
+          <div id="roomCodeDisplayBox" style="display:none;margin-top:.85rem;padding:.85rem;background:var(--bg-surface);border-radius:var(--radius-md);border:1px solid var(--border);box-shadow:0 4px 16px rgba(0,0,0,0.3)">
+            <div style="font-size:.8rem;color:var(--text-muted);font-weight:700">MÃ PHÒNG CỦA BẠN (CHẠM ĐỂ CHÉP):</div>
+            <div class="room-code-tag" id="partyRoomCode" onclick="copyRoomCode()" title="Chạm để sao chép" style="font-size:1.8rem;letter-spacing:.2em;margin:.4rem 0">...</div>
+            <div style="font-size:.82rem;color:var(--neon-cyan);cursor:pointer" id="copyStatusText" onclick="copyRoomCode()">📋 Gửi mã này cho bạn bè để cùng kết nối</div>
+          </div>
+
+          <div style="margin-top:.75rem">
+            <button class="btn btn-ghost btn-full btn-sm" onclick="startSoloShiritori()" style="color:var(--text-secondary);font-size:.8rem;border:1px dashed var(--border)">
+              🌸 Chưa có bạn chơi? Luyện tập Shiritori VS AI Sakura Bot
+            </button>
           </div>
         </div>
 
+        <!-- Col 2: Join Room -->
         <div class="lobby-join-col">
-          <div style="font-size:.82rem;color:var(--text-muted);margin-bottom:.4rem;font-weight:700">HOẶC VÀO PHÒNG CỦA BẠN BÈ:</div>
-          <div style="display:flex;gap:.5rem;align-items:center">
-            <input class="inp" id="joinRoomCodeInput" placeholder="Nhập mã 6 ký tự..." maxlength="6" style="text-transform:uppercase;text-align:center;font-family:var(--font-arcade);font-weight:800;letter-spacing:.1em">
-            <button class="btn btn-primary" onclick="joinPartyRoom()" style="flex-shrink:0">Vào Phòng</button>
+          <div style="font-size:.85rem;color:var(--text-secondary);margin-bottom:.55rem;font-weight:800;display:flex;align-items:center;gap:.35rem">
+            <span>🎮</span>
+            <span>VÀO PHÒNG CỦA BẠN BÈ:</span>
           </div>
-          <div style="font-size:.82rem;color:var(--text-muted);margin-top:.6rem;line-height:1.4">
-            Kết nối trực tiếp 2P qua WebRTC không độ trễ. Nếu chưa có bạn chơi, bạn có thể chọn <strong>Shiritori VS AI</strong> tại Sảnh Hub!
+          <div style="display:flex;gap:.5rem;align-items:stretch">
+            <input class="inp" id="joinRoomCodeInput" placeholder="MÃ 6 KÝ TỰ" maxlength="6" style="flex:1;min-width:0;text-transform:uppercase;text-align:center;font-family:var(--font-arcade);font-weight:900;letter-spacing:.15em;font-size:1.05rem;padding:.75rem">
+            <button class="btn btn-primary" onclick="joinPartyRoom()" style="flex-shrink:0;font-weight:800;padding:0 1.25rem;font-size:.95rem">Vào Phòng</button>
+          </div>
+          <div style="font-size:.8rem;color:var(--text-muted);margin-top:.75rem;line-height:1.45">
+            Nhập mã 6 chữ cái do bạn bè gửi rồi nhấn <strong>Vào Phòng</strong>. Trình duyệt sẽ tự động bắt tay qua WebRTC ngang hàng không độ trễ.
           </div>
         </div>
       </div>
@@ -2689,6 +2907,10 @@ small, .text-xs, .nav-item .label, [style*="font-size:.7"], [style*="font-size: 
             <div id="scenarioArenaArea" style="display:none">
               <!-- Rendered by JS -->
             </div>
+          </div>
+        </div>
+
+        <!-- SOLO ANIME QUIZ VIEW -->
         <div id="dojoAnimeView" style="display:none">
           <div class="card" style="padding:1.4rem">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem">
@@ -2752,29 +2974,36 @@ small, .text-xs, .nav-item .label, [style*="font-size:.7"], [style*="font-size: 
             <button class="btn btn-ghost btn-sm" onclick="speakCurrentLyricTTS()" title="Phát âm tiếng Nhật">🔊 Lời</button>
           </div>
 
-          <!-- Lyric Synchronizer Box -->
-          <div style="background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:.75rem;margin:.75rem 0">
-            <div style="font-size:.82rem;color:var(--neon-gold);font-weight:700">ĐOẠN LYRICS TIÊU BIỂU:</div>
-            <div style="font-family:var(--font-kanji);font-size:1.05rem;line-height:1.8;color:#fff;margin-top:.2rem" id="nowPlayingLyric">
-              誰もが目を奪われていく 君は完璧で究極のアイドル
+          <!-- Lyric Synchronizer Box (Collapsible) -->
+          <div style="background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:.75rem;margin:.75rem 0" id="nowPlayingLyricBox">
+            <div style="display:flex;justify-content:space-between;align-items:center;cursor:pointer" onclick="toggleLyricsCollapse()">
+              <div style="font-size:.82rem;color:var(--neon-gold);font-weight:700">📜 ĐOẠN LYRICS TIÊU BIỂU:</div>
+              <button class="btn btn-ghost btn-sm" id="lyricsToggleBtn" style="padding:.1rem .4rem;font-size:.75rem;color:var(--neon-cyan)">▲ Thu gọn</button>
             </div>
-            <div style="font-size:.85rem;color:var(--text-muted);margin-top:.2rem" id="nowPlayingRomaji">
-              Daremo ga me wo ubawarete iku kimi wa kanpeki de kyuukyoku no aidoru
-            </div>
-            <div style="font-size:.85rem;color:var(--neon-cyan);margin-top:.2rem" id="nowPlayingViet">
-              Ai nấy đều bị hút trọn ánh nhìn, em chính là thần tượng hoàn hảo và tối thượng
+            <div id="lyricsContentWrapper">
+              <div style="font-family:var(--font-kanji);font-size:1.05rem;line-height:1.8;color:#fff;margin-top:.3rem" id="nowPlayingLyric">
+                誰もが目を奪われていく 君は完璧で究極のアイドル
+              </div>
+              <div style="font-size:.85rem;color:var(--text-muted);margin-top:.2rem" id="nowPlayingRomaji">
+                Daremo ga me wo ubawarete iku kimi wa kanpeki de kyuukyoku no aidoru
+              </div>
+              <div style="font-size:.85rem;color:var(--neon-cyan);margin-top:.2rem" id="nowPlayingViet">
+                Ai nấy đều bị hút trọn ánh nhìn, em chính là thần tượng hoàn hảo và tối thượng
+              </div>
             </div>
           </div>
 
-          <div style="display:flex;gap:.5rem">
-            <button class="btn btn-ghost btn-sm btn-full" onclick="navMusicTrack(-1)">⏮ Bài Trước</button>
-            <button class="btn btn-cyan btn-sm btn-full" onclick="navMusicTrack(1)">Bài Tiếp ⏭</button>
+          <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+            <button class="btn btn-ghost btn-sm" style="flex:1;min-height:42px" onclick="navMusicTrack(-1)" title="Bài trước">⏮ Trước</button>
+            <button class="btn btn-cyan btn-sm" style="flex:1;min-height:42px" onclick="navMusicTrack(1)" title="Bài kế tiếp">Tiếp ⏭</button>
+            <button class="btn btn-ghost btn-sm" id="mvPlayModeBtn" style="flex:1;min-height:42px;font-size:.78rem" onclick="toggleMvPlayMode()" title="Đổi chế độ phát">🔁 Tuần tự</button>
+            <button class="btn btn-ghost btn-sm" style="flex:1;min-height:42px;font-size:.78rem;color:var(--neon-gold)" onclick="skipBrokenTrack()" title="Tự động chuyển bài nếu video này bị chặn">⚠️ Bỏ qua lỗi</button>
           </div>
 
           <!-- YouTube Fallback Options & Custom Link -->
           <div style="display:flex;gap:.5rem;margin-top:.6rem">
             <button class="btn btn-ghost btn-sm btn-full" onclick="openCurrentTrackOnYouTube()" title="Mở tìm kiếm video gốc trên YouTube" style="font-size:.8rem">
-              🔍 Tìm trên YouTube
+              🔍 Mở trên YouTube
             </button>
             <button class="btn btn-ghost btn-sm btn-full" onclick="toggleCustomYtBox()" style="font-size:.8rem">
               🔗 Dán link dự phòng
@@ -2811,19 +3040,46 @@ small, .text-xs, .nav-item .label, [style*="font-size:.7"], [style*="font-size: 
           <div style="font-size:.82rem;margin-top:.5rem;text-align:center" id="musicBlankFeedback"></div>
         </div>
 
-        <!-- Select Playlist Deck -->
+        <!-- Select Playlist Deck with Search & Filter -->
         <div class="card" style="margin-top:1rem">
-          <div style="display:flex;justify-content:space-between;align-items:center">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem">
             <div class="card-title">🎧 Danh Sách Tuyển Chọn</div>
-            <span style="font-size:.75rem;color:var(--neon-cyan);font-weight:700" id="playlistCountBadge">36 bài (100% ID Thật)</span>
+            <span style="font-size:.75rem;color:var(--neon-cyan);font-weight:700" id="playlistCountBadge">36 bài</span>
           </div>
-          <div class="playlist-cards" id="playlistDeck">
+
+          <!-- Search & Filter Controls -->
+          <div style="display:flex;flex-direction:column;gap:.4rem;margin-bottom:.75rem">
+            <input class="inp" id="mvSearchInput" placeholder="🔍 Tìm bài hát hoặc anime..." oninput="onMvSearchInput(this.value)" style="font-size:.82rem;padding:.45rem .65rem">
+            <select class="inp" id="mvAnimeFilter" onchange="onMvFilterChange(this.value)" style="font-size:.82rem;padding:.4rem .6rem;background:var(--bg-surface);color:#fff">
+              <option value="ALL">🌸 Tất cả anime (36 bài)</option>
+              <option value="Demon Slayer">Kimetsu no Yaiba (Demon Slayer)</option>
+              <option value="Jujutsu Kaisen">Jujutsu Kaisen (Chú Thuật Hồi Chiến)</option>
+              <option value="Naruto">Naruto & Naruto Shippuden</option>
+              <option value="Your Name">Your Name / Suzume (Makoto Shinkai)</option>
+              <option value="推しの子">Oshi no Ko (【推しの子】)</option>
+              <option value="One Piece">One Piece Film Red</option>
+              <option value="My Hero Academia">My Hero Academia</option>
+              <option value="Tokyo Ghoul">Tokyo Ghoul</option>
+              <option value="Frieren">Sousou no Frieren</option>
+              <option value="OTHER">J-Pop & Anime khác</option>
+            </select>
+          </div>
+
+          <div class="playlist-cards" id="playlistDeck" style="max-height:360px;overflow-y:auto">
             <!-- Rendered by JS -->
           </div>
         </div>
       </div>
     </div>
   </main>
+
+  <!-- ── FOOTER CREDIT ── -->
+  <footer class="app-footer" style="text-align:center;padding:2rem 1rem calc(5rem + env(safe-area-inset-bottom, 0px)) 1rem;font-size:0.8rem;color:var(--text-muted);border-top:1px solid rgba(255,255,255,0.06);margin-top:2.5rem">
+    <div style="display:flex;align-items:center;justify-content:center;gap:.5rem;flex-wrap:wrap">
+      <span>🎙️ Âm thanh từ vựng tiếng Nhật:</span>
+      <span style="color:var(--neon-sakura);font-weight:700">VOICEVOX:もち子(cv 明日葉よもぎ)</span>
+    </div>
+  </footer>
 
   <!-- ── BOTTOM NAVIGATION BAR (Mobile Only) ── -->
   <nav class="bottom-nav">
@@ -2852,7 +3108,10 @@ small, .text-xs, .nav-item .label, [style*="font-size:.7"], [style*="font-size: 
 
 <!-- Modal Dialog -->
 <div class="modal-overlay" id="modalOverlay">
-  <div class="modal-box">
+  <div class="modal-box" style="position:relative">
+    <div style="display:flex;justify-content:flex-end;margin-bottom:-0.5rem">
+      <button class="btn btn-ghost btn-sm" onclick="closeModal()" style="padding:.2rem .6rem;font-size:1rem;line-height:1" title="Đóng">✕</button>
+    </div>
     <div class="modal-icon" id="modalIcon">🌸</div>
     <div class="modal-title" id="modalTitle">Thông Báo</div>
     <div class="modal-desc" id="modalDesc">...</div>
@@ -2957,7 +3216,10 @@ small, .text-xs, .nav-item .label, [style*="font-size:.7"], [style*="font-size: 
 
 <!-- MODAL 2: HIỂN THỊ MÃ KHÔI PHỤC MỘT LẦN DUY NHẤT -->
 <div class="modal-overlay" id="recoveryCodeModalOverlay" style="z-index:99999">
-  <div class="modal-box" style="max-width:480px;text-align:center">
+  <div class="modal-box" style="max-width:480px;text-align:center;position:relative">
+    <div style="display:flex;justify-content:flex-end;margin-bottom:-0.5rem">
+      <button class="btn btn-ghost btn-sm" onclick="closeRecoveryCodeModal()" style="padding:.2rem .6rem;font-size:1rem;line-height:1" title="Đóng">✕</button>
+    </div>
     <div style="font-size:2.2rem;margin-bottom:.4rem">⚠️</div>
     <div style="font-size:1.25rem;font-weight:800;color:var(--neon-gold);font-family:var(--font-serif);margin-bottom:.4rem">
       MÃ KHÔI PHỤC TÀI KHOẢN (DUY NHẤT 1 LẦN)
@@ -3206,6 +3468,9 @@ small, .text-xs, .nav-item .label, [style*="font-size:.7"], [style*="font-size: 
     <div id="questStepContentArea" style="min-height:280px">
       <!-- Injected by JS: Step 1, 2, 3, 4 or Victory Screen -->
     </div>
+  </div>
+</div>
+
 <!-- Leaderboard Modal Overlay -->
 <div class="modal-overlay" id="leaderboardModalOverlay">
   <div class="modal-box" style="max-width:560px;text-align:left;max-height:88vh;max-height:88dvh;overflow-y:auto">
@@ -3244,8 +3509,11 @@ small, .text-xs, .nav-item .label, [style*="font-size:.7"], [style*="font-size: 
 <!-- Daily Result Share Card Modal -->
 <div class="modal-overlay" id="dailyShareModal">
   <div class="modal-box" style="max-width:680px;text-align:center;max-height:92vh;max-height:92dvh;overflow-y:auto">
-    <div style="font-size:1.2rem;font-weight:800;color:var(--neon-gold);margin-bottom:.35rem">
-      🏆 THẺ KẾT QUẢ & TỪ CỦA NGÀY
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem">
+      <div style="font-size:1.15rem;font-weight:800;color:var(--neon-gold)">
+        🏆 THẺ KẾT QUẢ & TỪ CỦA NGÀY
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="closeDailyShareModal()" style="padding:.2rem .6rem;font-size:1rem;line-height:1" title="Đóng">✕</button>
     </div>
     <div style="font-size:.82rem;color:var(--text-secondary);margin-bottom:.85rem">
       Tạo tự động bằng Canvas (Zero Server) • Gồm Streak, EXP, Rank và Từ của ngày
@@ -3253,9 +3521,10 @@ small, .text-xs, .nav-item .label, [style*="font-size:.7"], [style*="font-size: 
     <div style="width:100%;max-width:600px;margin:0 auto;border-radius:var(--radius-md);overflow:hidden;border:1px solid var(--border);box-shadow:0 0 20px rgba(5,217,232,0.15)">
       <img id="dailyShareImg" src="" style="width:100%;height:auto;display:block" alt="Thẻ kết quả ngày">
     </div>
-    <div style="display:flex;gap:.75rem;justify-content:center;margin-top:1.1rem;flex-wrap:wrap">
+    <div style="display:flex;gap:.6rem;justify-content:center;margin-top:1.1rem;flex-wrap:wrap">
       <button class="btn btn-secondary" id="btnCopyDailyResult" onclick="copyDailyShareCard()">📋 Sao Chép Thẻ</button>
       <button class="btn btn-primary" id="btnWebShareDaily" onclick="shareDailyResultCard()">🚀 Chia Sẻ (Web Share)</button>
+      <button class="btn btn-cyan" onclick="downloadDailyShareCard()">📥 Tải Ảnh Về Máy</button>
       <button class="btn btn-ghost" onclick="closeDailyShareModal()">Đóng</button>
     </div>
   </div>
@@ -3320,7 +3589,10 @@ small, .text-xs, .nav-item .label, [style*="font-size:.7"], [style*="font-size: 
 
 <!-- Mystery Gacha Box Opening Modal -->
 <div class="modal-overlay" id="mysteryBoxModal">
-  <div class="modal-box" style="max-width:460px;text-align:center;padding:1.8rem 1.4rem">
+  <div class="modal-box" style="max-width:460px;text-align:center;padding:1.5rem 1.4rem;position:relative">
+    <div style="display:flex;justify-content:flex-end;margin-bottom:.2rem">
+      <button class="btn btn-ghost btn-sm" onclick="closeMysteryBoxModal()" style="padding:.2rem .6rem;font-size:1rem;line-height:1" title="Đóng">✕</button>
+    </div>
     <div id="mysteryBoxPreOpen">
       <div style="font-size:.78rem;font-weight:800;color:var(--neon-gold);letter-spacing:1px;text-transform:uppercase;margin-bottom:.4rem">
         ✨ PHẦN THƯỞNG NGHI THỨC NGÀY ✨
@@ -3549,25 +3821,145 @@ function loadSpeechVoices() {
   updateSettingsVoiceUI();
 }
 
-function speakJapaneseTTS(text, rate = 0.85) {
-  if (!('speechSynthesis' in window)) {
-    showToast('💡 Trình duyệt không hỗ trợ Web Speech API.');
-    return;
-  }
-  if (!text) return;
+let currentVocabAudio = null;
+let vocabLookupCache = null;
 
-  try {
-    window.speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = 'ja-JP';
-    u.rate = rate || 0.85;
+function buildVocabLookupCache() {
+  if (vocabLookupCache) return vocabLookupCache;
+  const list = window.ALL_VOCAB || window.N5_VOCAB || [];
+  if (!Array.isArray(list) || list.length === 0) return null;
 
-    if (currentJapaneseVoice) {
-      u.voice = currentJapaneseVoice;
+  const idMap = new Map();
+  const textMap = new Map();
+
+  for (let i = 0; i < list.length; i++) {
+    const item = list[i];
+    if (!item) continue;
+    if (item.id != null) {
+      idMap.set(Number(item.id), item);
     }
-    window.speechSynthesis.speak(u);
-  } catch(err) {
-    console.warn('Lỗi khi phát âm TTS:', err);
+    const candidates = [item.hiragana, item.kanji, item.w, item.kana, item.r, item.romaji];
+    for (let c = 0; c < candidates.length; c++) {
+      const val = candidates[c];
+      if (typeof val === 'string' && val.trim().length > 0) {
+        const norm = val.trim();
+        if (!textMap.has(norm)) {
+          textMap.set(norm, item);
+        }
+      }
+    }
+  }
+
+  vocabLookupCache = { idMap, textMap };
+  return vocabLookupCache;
+}
+
+function speakJapaneseTTS(target, rate = 0.85, explicitId = null) {
+  if (target == null) return;
+
+  let targetId = explicitId != null ? Number(explicitId) : null;
+  let textToSpeak = '';
+
+  if (typeof target === 'object') {
+    if (target.id != null) targetId = Number(target.id);
+    textToSpeak = target.hiragana || target.kana || target.kanji || target.w || target.text || '';
+  } else if (typeof target === 'number') {
+    targetId = target;
+    const cache = buildVocabLookupCache();
+    if (cache && cache.idMap.has(targetId)) {
+      const item = cache.idMap.get(targetId);
+      textToSpeak = item.hiragana || item.kana || item.kanji || item.w || '';
+    }
+  } else {
+    textToSpeak = String(target).trim();
+  }
+
+  // Tự động tìm ID từ từ điển nếu chưa có explicitId
+  if (!targetId && textToSpeak) {
+    const cache = buildVocabLookupCache();
+    if (cache) {
+      const clean = textToSpeak.replace(/^[\s(（]+|[\s)）]+$/g, '').trim();
+      if (cache.textMap.has(textToSpeak)) {
+        targetId = cache.textMap.get(textToSpeak).id;
+      } else if (clean && cache.textMap.has(clean)) {
+        targetId = cache.textMap.get(clean).id;
+      }
+    }
+  }
+
+  // Fallback về Web Speech API như hiện tại khi không có file audio hoặc lỗi
+  const executeSpeechSynthesisFallback = () => {
+    if (!('speechSynthesis' in window)) {
+      showToast('💡 Trình duyệt không hỗ trợ Web Speech API.');
+      return;
+    }
+    if (!textToSpeak) return;
+
+    try {
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(textToSpeak);
+      u.lang = 'ja-JP';
+      u.rate = rate || 0.85;
+
+      if (typeof currentJapaneseVoice !== 'undefined' && currentJapaneseVoice) {
+        u.voice = currentJapaneseVoice;
+      }
+      window.speechSynthesis.speak(u);
+    } catch (err) {
+      console.warn('Lỗi khi phát âm TTS fallback:', err);
+    }
+  };
+
+  // Thử phát file audio/ tương ứng trước (tải theo nhu cầu, không tải trước)
+  if (targetId != null && !isNaN(targetId) && typeof Audio !== 'undefined') {
+    if (currentVocabAudio) {
+      try {
+        currentVocabAudio.pause();
+        currentVocabAudio.currentTime = 0;
+      } catch (_) {}
+      currentVocabAudio = null;
+    }
+
+    if ('speechSynthesis' in window) {
+      try { window.speechSynthesis.cancel(); } catch (_) {}
+    }
+
+    const audioPath = `audio/${targetId}.mp3`;
+    const audio = new Audio();
+    audio.preload = 'none'; // Tải theo nhu cầu chứ không tải trước
+    audio.src = audioPath;
+    currentVocabAudio = audio;
+
+    let fallbackTriggered = false;
+    const triggerFallbackOnce = () => {
+      if (fallbackTriggered) return;
+      fallbackTriggered = true;
+      if (currentVocabAudio === audio) {
+        currentVocabAudio = null;
+      }
+      executeSpeechSynthesisFallback();
+    };
+
+    audio.onended = () => {
+      if (currentVocabAudio === audio) {
+        currentVocabAudio = null;
+      }
+    };
+
+    audio.onerror = () => {
+      // File không tồn tại (404/not found) hoặc lỗi tải -> rơi về speechSynthesis
+      triggerFallbackOnce();
+    };
+
+    const playPromise = audio.play();
+    if (playPromise !== undefined) {
+      playPromise.catch((err) => {
+        if (err && err.name === 'AbortError') return;
+        triggerFallbackOnce();
+      });
+    }
+  } else {
+    executeSpeechSynthesisFallback();
   }
 }
 
@@ -6222,6 +6614,10 @@ const ANIME_LIST = [
 // ══════════════════════════════════════════════════
 function switchTab(tabId) {
   playSfx('click');
+  if (tabId !== 'dojo' && typeof soloAnimeTimer !== 'undefined' && soloAnimeTimer) {
+    clearInterval(soloAnimeTimer);
+    soloAnimeTimer = null;
+  }
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   
@@ -6258,6 +6654,40 @@ function showModal(icon, title, desc, actionsHtml) {
 function closeModal() {
   document.getElementById('modalOverlay').classList.remove('show');
 }
+
+function closeActiveModal() {
+  const openModals = document.querySelectorAll('.modal-overlay.show');
+  if (!openModals || openModals.length === 0) return false;
+  const topModal = openModals[openModals.length - 1];
+  const id = topModal.id;
+  if (id === 'authModalOverlay' && typeof closeAuthModal === 'function') closeAuthModal();
+  else if (id === 'recoveryCodeModalOverlay' && typeof closeRecoveryCodeModal === 'function') closeRecoveryCodeModal();
+  else if (id === 'profileModalOverlay' && typeof closeProfileModal === 'function') closeProfileModal();
+  else if (id === 'settingsModalOverlay' && typeof closeSettingsModal === 'function') closeSettingsModal();
+  else if (id === 'questStageModal' && typeof closeQuestStageModal === 'function') closeQuestStageModal();
+  else if (id === 'leaderboardModalOverlay' && typeof closeLeaderboardModal === 'function') closeLeaderboardModal();
+  else if (id === 'dailyShareModal' && typeof closeDailyShareModal === 'function') closeDailyShareModal();
+  else if (id === 'sakuraWardrobeModal' && typeof closeSakuraWardrobeModal === 'function') closeSakuraWardrobeModal();
+  else if (id === 'mysteryBoxModal' && typeof closeMysteryBoxModal === 'function') closeMysteryBoxModal();
+  else if (id === 'collectiblesModal' && typeof closeCollectiblesModal === 'function') closeCollectiblesModal();
+  else if (id === 'modalOverlay' && typeof closeModal === 'function') closeModal();
+  else topModal.classList.remove('show');
+  return true;
+}
+
+// Global modal dismiss handlers: click outside (backdrop) & Escape key
+document.addEventListener('click', (e) => {
+  if (e.target && e.target.classList && e.target.classList.contains('modal-overlay') && e.target.classList.contains('show')) {
+    closeActiveModal();
+  }
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' || e.key === 'Esc') {
+    closeActiveModal();
+  }
+});
+
 
 // ══════════════════════════════════════════════════
 //  5B. CHẾ ĐỘ HÀNH TRÌNH JLPT (GAME QUEST ROADMAP: N5 -> N4 -> N3)
@@ -6944,7 +7374,7 @@ function renderQuestStep1_Cards() {
       </div>
 
       <div style="margin-top:1.2rem;display:flex;justify-content:center;gap:.6rem">
-        <button class="btn btn-ghost btn-sm" onclick="speakJapaneseTTS('${readingDisplay}', 0.85)">
+        <button class="btn btn-ghost btn-sm" onclick="speakJapaneseTTS('${readingDisplay}', 0.85, ${word && word.id ? word.id : 'null'})">
           🔊 Nghe Phát Âm (0.85x)
         </button>
       </div>
@@ -6968,7 +7398,7 @@ function renderQuestStep1_Cards() {
   `;
 
   // Tự động phát âm từ đang học
-  speakJapaneseTTS(readingDisplay, 0.85);
+  speakJapaneseTTS(readingDisplay, 0.85, word ? word.id : null);
 }
 
 function navQuestCard(dir) {
@@ -7085,7 +7515,7 @@ function renderQuestStep3_Question() {
       </div>
 
       <div style="margin:1.2rem 0">
-        <button class="btn btn-cyan btn-sm" style="padding:.7rem 1.5rem;font-size:1rem;border-radius:var(--radius-full)" onclick="speakJapaneseTTS('${readingDisplay}', 0.85)">
+        <button class="btn btn-cyan btn-sm" style="padding:.7rem 1.5rem;font-size:1rem;border-radius:var(--radius-full)" onclick="speakJapaneseTTS('${readingDisplay}', 0.85, ${currentWord && currentWord.id ? currentWord.id : 'null'})">
           🔊 Bấm Để Nghe Lại Âm Thanh
         </button>
       </div>
@@ -7105,7 +7535,7 @@ function renderQuestStep3_Question() {
   `;
 
   // Tự động phát âm ngay
-  speakJapaneseTTS(readingDisplay, 0.85);
+  speakJapaneseTTS(readingDisplay, 0.85, currentWord ? currentWord.id : null);
 }
 
 function submitQuestStep3Answer(btn, chosenEnc, rightEnc) {
@@ -7593,6 +8023,10 @@ let pronIdx = 0;
 
 function switchDojoMode(mode) {
   playSfx('click');
+  if (mode !== 'anime' && typeof soloAnimeTimer !== 'undefined' && soloAnimeTimer) {
+    clearInterval(soloAnimeTimer);
+    soloAnimeTimer = null;
+  }
   document.getElementById('dojoFCView').style.display = mode === 'fc' ? 'block' : 'none';
   document.getElementById('dojoQuizView').style.display = mode === 'quiz' ? 'block' : 'none';
   document.getElementById('dojoPronView').style.display = mode === 'pron' ? 'block' : 'none';
@@ -7712,7 +8146,7 @@ function speakCurrentWord() {
   const list = getDojoVocabList();
   if(!list || list.length === 0) return;
   const item = list[fcIdx % list.length];
-  speakJapaneseTTS(item.hiragana || item.w, 0.85);
+  speakJapaneseTTS(item.hiragana || item.w, 0.85, item ? item.id : null);
 }
 
 // Flashcard Quiz
@@ -7800,7 +8234,7 @@ function pronListenModel() {
   const list = getDojoVocabList();
   if(!list || list.length === 0) return;
   const item = list[pronIdx % list.length];
-  speakJapaneseTTS(item.hiragana || item.w, 0.85);
+  speakJapaneseTTS(item.hiragana || item.w, 0.85, item ? item.id : null);
 }
 
 let isPronRecording = false;
@@ -7887,6 +8321,83 @@ function judgePron(heard) {
 let currentTrackIdx = 0;
 let isSkippingOnError = false;
 let customTrackActive = false;
+let mvSearchQuery = '';
+let mvActiveFilter = 'ALL';
+let mvPlayMode = 'sequence'; // 'sequence' | 'loop_one' | 'shuffle'
+let mvLyricsCollapsed = false;
+
+function getFilteredAnimeList() {
+  let list = ANIME_LIST.map((item, originalIndex) => ({ ...item, originalIndex }));
+  if (mvActiveFilter && mvActiveFilter !== 'ALL') {
+    if (mvActiveFilter === 'OTHER') {
+      const mainKeywords = ['demon slayer', 'jujutsu kaisen', 'naruto', 'your name', 'suzume', '推しの子', 'oshi no ko', 'one piece', 'my hero academia', 'tokyo ghoul', 'frieren'];
+      list = list.filter(item => {
+        const t = (item.title + ' ' + item.song).toLowerCase();
+        return !mainKeywords.some(k => t.includes(k));
+      });
+    } else {
+      const q = mvActiveFilter.toLowerCase();
+      list = list.filter(item => (item.title + ' ' + item.song).toLowerCase().includes(q));
+    }
+  }
+  if (mvSearchQuery && mvSearchQuery.trim()) {
+    const q = mvSearchQuery.trim().toLowerCase();
+    list = list.filter(item => (item.song + ' ' + item.title + ' ' + (item.romaji || '')).toLowerCase().includes(q));
+  }
+  return list;
+}
+
+function onMvSearchInput(val) {
+  mvSearchQuery = val || '';
+  renderPlaylistDeck();
+}
+
+function onMvFilterChange(val) {
+  mvActiveFilter = val || 'ALL';
+  renderPlaylistDeck();
+}
+
+function toggleLyricsCollapse() {
+  mvLyricsCollapsed = !mvLyricsCollapsed;
+  const wrapper = document.getElementById('lyricsContentWrapper');
+  const btn = document.getElementById('lyricsToggleBtn');
+  if (wrapper) {
+    wrapper.style.display = mvLyricsCollapsed ? 'none' : 'block';
+  }
+  if (btn) {
+    btn.textContent = mvLyricsCollapsed ? '▼ Mở rộng' : '▲ Thu gọn';
+  }
+}
+
+function toggleMvPlayMode() {
+  playSfx('click');
+  const modes = ['sequence', 'shuffle', 'loop_one'];
+  const curIdx = modes.indexOf(mvPlayMode);
+  mvPlayMode = modes[(curIdx + 1) % modes.length];
+  updateMvPlayModeUI();
+}
+
+function updateMvPlayModeUI() {
+  const btn = document.getElementById('mvPlayModeBtn');
+  if (!btn) return;
+  if (mvPlayMode === 'sequence') {
+    btn.innerHTML = '🔁 Tuần tự';
+    btn.title = 'Phát lần lượt theo danh sách';
+  } else if (mvPlayMode === 'shuffle') {
+    btn.innerHTML = '🔀 Ngẫu nhiên';
+    btn.title = 'Trộn bài ngẫu nhiên';
+  } else if (mvPlayMode === 'loop_one') {
+    btn.innerHTML = '🔂 Lặp 1 bài';
+    btn.title = 'Phát lặp lại bài hát hiện tại';
+  }
+}
+
+function skipBrokenTrack() {
+  playSfx('click');
+  const failedSong = ANIME_LIST[currentTrackIdx] ? ANIME_LIST[currentTrackIdx].song : 'Bài hát';
+  showToast(`⏭️ Đang bỏ qua video "${failedSong}" để chuyển bài mới...`);
+  navMusicTrack(1);
+}
 
 function initYouTubePlayer() {
   const item = ANIME_LIST[currentTrackIdx];
@@ -7902,46 +8413,108 @@ function initYouTubePlayer() {
     </iframe>
   `;
 
-  document.getElementById('nowPlayingTitle').textContent = item.song;
-  document.getElementById('nowPlayingAnime').textContent = item.title;
-  document.getElementById('nowPlayingLyric').textContent = item.lyric;
-  document.getElementById('nowPlayingRomaji').textContent = item.romaji;
-  document.getElementById('nowPlayingViet').textContent = item.viet;
-  document.getElementById('musicBlankPrompt').textContent = `Điền từ khuyết: "${item.blank.q}" (Gợi ý: ${item.blank.hint})`;
-  document.getElementById('musicBlankInp').value = '';
-  document.getElementById('musicBlankFeedback').textContent = '';
+  const titleEl = document.getElementById('nowPlayingTitle');
+  const animeEl = document.getElementById('nowPlayingAnime');
+  const lyricEl = document.getElementById('nowPlayingLyric');
+  const romajiEl = document.getElementById('nowPlayingRomaji');
+  const vietEl = document.getElementById('nowPlayingViet');
+  const blankPromptEl = document.getElementById('musicBlankPrompt');
+  const blankInpEl = document.getElementById('musicBlankInp');
+  const blankFeedbackEl = document.getElementById('musicBlankFeedback');
+
+  if (titleEl) titleEl.textContent = item.song;
+  if (animeEl) animeEl.textContent = item.title;
+  if (lyricEl) lyricEl.textContent = item.lyric;
+  if (romajiEl) romajiEl.textContent = item.romaji;
+  if (vietEl) vietEl.textContent = item.viet;
+  if (blankPromptEl) blankPromptEl.textContent = `Điền từ khuyết: "${item.blank.q}" (Gợi ý: ${item.blank.hint})`;
+  if (blankInpEl) blankInpEl.value = '';
+  if (blankFeedbackEl) blankFeedbackEl.textContent = '';
   
-  const badge = document.getElementById('playlistCountBadge');
-  if(badge) badge.textContent = `${ANIME_LIST.length} bài (100% ID Thật)`;
-  
+  updateMvPlayModeUI();
   renderPlaylistDeck();
 }
 
 function renderPlaylistDeck() {
   const deck = document.getElementById('playlistDeck');
   if(!deck) return;
-  deck.innerHTML = ANIME_LIST.map((item, idx) => `
-    <div class="playlist-item ${idx === currentTrackIdx && !customTrackActive ? 'active' : ''}" onclick="selectTrack(${idx})">
-      <div style="flex:1;min-width:0;padding-right:.5rem">
-        <div class="playlist-item-title" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${idx + 1}. ${item.song}</div>
-        <div class="playlist-item-anime" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${item.title}</div>
+  const filtered = getFilteredAnimeList();
+  
+  const badge = document.getElementById('playlistCountBadge');
+  if(badge) badge.textContent = `${filtered.length}/${ANIME_LIST.length} bài`;
+
+  if (filtered.length === 0) {
+    deck.innerHTML = `
+      <div style="text-align:center;padding:1.5rem;color:var(--text-muted);font-size:.85rem">
+        Không tìm thấy bài hát nào khớp với từ khóa/bộ lọc.
       </div>
-      <span style="font-size:1.1rem;flex-shrink:0">${idx === currentTrackIdx && !customTrackActive ? '▶️' : '🎵'}</span>
-    </div>
-  `).join('');
+    `;
+    return;
+  }
+
+  deck.innerHTML = filtered.map((item, listIdx) => {
+    const isPlaying = (item.originalIndex === currentTrackIdx && !customTrackActive);
+    return `
+      <div class="playlist-item ${isPlaying ? 'active' : ''}" onclick="selectTrack(${item.originalIndex})" style="cursor:pointer;padding:.6rem .75rem;border-radius:var(--radius-sm);margin-bottom:.4rem;display:flex;align-items:center;justify-content:space-between;background:${isPlaying ? 'rgba(5,217,232,0.12)' : 'var(--bg-surface)'};border:1px solid ${isPlaying ? 'var(--neon-cyan)' : 'var(--border)'}">
+        <div style="flex:1;min-width:0;padding-right:.5rem">
+          <div class="playlist-item-title" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:${isPlaying ? '800' : '600'};color:${isPlaying ? 'var(--neon-cyan)' : '#fff'};font-size:.85rem">
+            ${item.originalIndex + 1}. ${escapeHTML(item.song)}
+          </div>
+          <div class="playlist-item-anime" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:.72rem;color:var(--text-muted)">
+            ${escapeHTML(item.title)}
+          </div>
+        </div>
+        <span style="font-size:1rem;flex-shrink:0">${isPlaying ? '▶️' : '🎵'}</span>
+      </div>
+    `;
+  }).join('');
 }
 
-function selectTrack(idx) {
+function selectTrack(originalIdx) {
   playSfx('click');
   customTrackActive = false;
-  currentTrackIdx = idx;
+  currentTrackIdx = originalIdx;
   initYouTubePlayer();
 }
 
 function navMusicTrack(dir) {
   playSfx('click');
   customTrackActive = false;
-  currentTrackIdx = (currentTrackIdx + dir + ANIME_LIST.length) % ANIME_LIST.length;
+  
+  const filtered = getFilteredAnimeList();
+  if (filtered.length === 0) {
+    currentTrackIdx = (currentTrackIdx + dir + ANIME_LIST.length) % ANIME_LIST.length;
+    initYouTubePlayer();
+    return;
+  }
+
+  if (mvPlayMode === 'loop_one' && dir > 0) {
+    initYouTubePlayer();
+    return;
+  }
+
+  if (mvPlayMode === 'shuffle') {
+    if (filtered.length === 1) {
+      currentTrackIdx = filtered[0].originalIndex;
+    } else {
+      let randIdx = Math.floor(Math.random() * filtered.length);
+      while (filtered[randIdx].originalIndex === currentTrackIdx && filtered.length > 1) {
+        randIdx = Math.floor(Math.random() * filtered.length);
+      }
+      currentTrackIdx = filtered[randIdx].originalIndex;
+    }
+    initYouTubePlayer();
+    return;
+  }
+
+  // Sequential within filtered list
+  const currentPosInFiltered = filtered.findIndex(f => f.originalIndex === currentTrackIdx);
+  if (currentPosInFiltered === -1) {
+    currentTrackIdx = filtered[0].originalIndex;
+  } else {
+    const nextPos = (currentPosInFiltered + dir + filtered.length) % filtered.length;
+    currentTrackIdx = filtered[nextPos].originalIndex;
+  }
   initYouTubePlayer();
 }
 
@@ -8062,9 +8635,67 @@ let isPartyHost = false;
 let myRoomCode = '';
 let partyP1Score = 0;
 let partyP2Score = 0;
-let activePartyGameType = ''; // 'shiritori' | 'anime' | 'kanji'
+let activePartyGameType = ''; // 'shiritori' | 'anime' | 'kanji' | 'speed_race' | 'coop_boss' | 'survival_shiri'
 let partyTurnTimer = null;
 let timeLeft = 20;
+
+const PARTY_MODE_NAMES = {
+  shiritori: '1. Shiritori Showdown',
+  anime: '2. Speed Anime Duel',
+  kanji: '3. Kanji Reflex Blitz',
+  speed_race: '4. Speed Blitz (Đua Tốc Độ)',
+  coop_boss: '5. Co-op Boss Raid (Đánh Boss)',
+  survival_shiri: '6. Survival Shiritori (Sinh Tồn)'
+};
+
+function getSelectedPartyMode() {
+  try {
+    const saved = localStorage.getItem('emi_party_mode');
+    return (saved && PARTY_MODE_NAMES[saved]) ? saved : 'shiritori';
+  } catch(e) {
+    return 'shiritori';
+  }
+}
+
+function selectPartyMode(modeKey) {
+  if (!PARTY_MODE_NAMES[modeKey]) modeKey = 'shiritori';
+  try {
+    localStorage.setItem('emi_party_mode', modeKey);
+  } catch(e) {}
+  activePartyGameType = modeKey;
+  updatePartyModeUI();
+  playSfx('click');
+  showToast(`🎯 Đã chọn: ${PARTY_MODE_NAMES[modeKey]}`);
+}
+
+function updatePartyModeUI() {
+  const currentMode = getSelectedPartyMode();
+  const cards = document.querySelectorAll('.party-mode-card');
+  cards.forEach(card => {
+    if (card.dataset && card.dataset.mode === currentMode) {
+      card.classList.add('selected');
+    } else {
+      card.classList.remove('selected');
+    }
+  });
+  const badge = document.getElementById('partySelectedModeBadge');
+  if (badge) badge.textContent = PARTY_MODE_NAMES[currentMode] || currentMode;
+
+  const selector = document.getElementById('partyGameSelector');
+  if (selector) {
+    const btns = selector.querySelectorAll('button');
+    btns.forEach(btn => {
+      const onclickAttr = btn.getAttribute('onclick') || '';
+      if (onclickAttr.includes(`'${currentMode}'`)) {
+        btn.classList.add('btn-cyan');
+        btn.classList.remove('btn-ghost');
+      } else {
+        btn.classList.remove('btn-cyan');
+        btn.classList.add('btn-ghost');
+      }
+    });
+  }
+}
 
 function createPartyRoom() {
   playSfx('click');
@@ -8074,6 +8705,9 @@ function createPartyRoom() {
 
   document.getElementById('partyRoomCode').textContent = code;
   document.getElementById('roomCodeDisplayBox').style.display = 'block';
+
+  const statusTxt = document.getElementById('partyRoomStatusText');
+  if (statusTxt) statusTxt.textContent = `Phòng ${code} • Chờ bạn chơi...`;
 
   try {
     if(peer) peer.destroy();
@@ -8093,6 +8727,7 @@ function createPartyRoom() {
 
     peer.on('error', err => {
       showModal('⚠️', 'Lỗi Kết Nối', 'Không thể khởi tạo phòng. Thử tạo lại mã mới nhé!');
+      if (statusTxt) statusTxt.textContent = 'Sảnh Chờ • Lỗi kết nối';
     });
   } catch(e) {}
 }
@@ -8133,9 +8768,15 @@ function setupPartyConn() {
     playSfx('win');
     document.getElementById('roomLobby').style.display = 'none';
     document.getElementById('activePartyRoom').style.display = 'block';
+    const statusTxt = document.getElementById('partyRoomStatusText');
+    if (statusTxt) statusTxt.textContent = 'Đang Trong Trận Đấu';
     
     if(!isPartyHost) {
       partyConn.send({ type: 'guest_info', guestName: userData.name, guestAvatar: userData.avatar });
+    } else {
+      const prefMode = getSelectedPartyMode();
+      activePartyGameType = prefMode;
+      updatePartyModeUI();
     }
   });
 
@@ -8236,6 +8877,10 @@ function handlePartyData(data) {
 function launchPartyGame(gameType) {
   playSfx('click');
   activePartyGameType = gameType;
+  try {
+    localStorage.setItem('emi_party_mode', gameType);
+  } catch(e) {}
+  updatePartyModeUI();
   startPartyBattleUI(gameType);
   if(partyConn) {
     partyConn.send({ type: 'launch_game', gameType });
@@ -9014,6 +9659,10 @@ let soloAnimeLocked = false;
 let soloAnimeCorrectCount = 0;
 
 function renderSoloAnimeQuiz() {
+  if (typeof soloAnimeTimer !== 'undefined' && soloAnimeTimer) {
+    clearInterval(soloAnimeTimer);
+    soloAnimeTimer = null;
+  }
   const cardArea = document.getElementById('soloAnimeCardArea');
   const optsGrid = document.getElementById('soloAnimeOpts');
   if (!cardArea || !optsGrid) return;
@@ -9166,7 +9815,12 @@ function nextSoloAnimeQuestion() {
 }
 
 function finishSoloAnimeQuiz() {
-  clearInterval(soloAnimeTimer);
+  if (typeof soloAnimeTimer !== 'undefined' && soloAnimeTimer) {
+    clearInterval(soloAnimeTimer);
+    soloAnimeTimer = null;
+  }
+  const timerPill = document.getElementById('soloAnimeTimer');
+  if (timerPill) timerPill.textContent = '10/10';
   playSfx('win');
   addXP(20, 'solo_anime_quiz', true);
   if (typeof triggerGameSync === 'function') triggerGameSync('solo_anime_end');
@@ -9617,6 +10271,9 @@ function resetPartyUI() {
   document.getElementById('activePartyRoom').style.display = 'none';
   document.getElementById('partyBattlefield').style.display = 'none';
   document.getElementById('partyGameSelector').style.display = 'block';
+  const statusTxt = document.getElementById('partyRoomStatusText');
+  if (statusTxt) statusTxt.textContent = 'Sảnh Chờ • Sẵn Sàng';
+  if (typeof updatePartyModeUI === 'function') updatePartyModeUI();
   clearInterval(partyTurnTimer);
   if (typeof survivalTimerInterval !== 'undefined') clearInterval(survivalTimerInterval);
   if (typeof survivalActive !== 'undefined') survivalActive = false;
@@ -9670,7 +10327,12 @@ function startSoloShiritori() {
   partyP1Score = 0;
   partyP2Score = 0;
   syncPartyScores();
-  startPartyBattleUI('shiritori');
+  const pref = (typeof getSelectedPartyMode === 'function') ? getSelectedPartyMode() : 'shiritori';
+  if (pref === 'survival_shiri') {
+    startPartyBattleUI('survival_shiri');
+  } else {
+    startPartyBattleUI('shiritori');
+  }
 }
 
 // ══════════════════════════════════════════════════
@@ -9710,7 +10372,7 @@ function updateWordOfTheDayUI() {
 function speakWordOfTheDay() {
   const wotd = getWordOfTheDay();
   if (wotd && typeof speakJapaneseTTS === 'function') {
-    speakJapaneseTTS(wotd.hiragana || wotd.kanji || wotd.w, 0.85);
+    speakJapaneseTTS(wotd.hiragana || wotd.kanji || wotd.w, 0.85, wotd.id);
     playSfx('click');
   }
 }
@@ -9914,6 +10576,27 @@ async function shareDailyResultCard() {
     }
   } else {
     copyDailyShareCard();
+  }
+}
+
+function downloadDailyShareCard() {
+  playSfx('click');
+  const canvas = dailyResultCanvasRef;
+  if (!canvas) {
+    showToast('⚠️ Không tìm thấy ảnh thẻ kết quả để tải!');
+    return;
+  }
+  try {
+    const dataUrl = canvas.toDataURL('image/png');
+    const a = document.createElement('a');
+    a.href = dataUrl;
+    a.download = `emi-daily-card-${getTodayStr()}.png`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    showToast('⬇️ Đã tải ảnh thẻ kết quả về máy!');
+  } catch (e) {
+    showToast('⚠️ Không thể tải trực tiếp, hãy thử sao chép hoặc chụp màn hình!');
   }
 }
 
@@ -10291,7 +10974,7 @@ function playDictationAudio() {
   if (!dictationCurrentWord) return;
   const wordToSpeak = dictationCurrentWord.hiragana || dictationCurrentWord.kanji || dictationCurrentWord.w;
   if (typeof speakJapaneseTTS === 'function') {
-    speakJapaneseTTS(wordToSpeak, 0.85);
+    speakJapaneseTTS(wordToSpeak, 0.85, dictationCurrentWord.id);
   }
 }
 
@@ -12069,6 +12752,7 @@ window.addEventListener('DOMContentLoaded', () => {
   if (typeof updateWordOfTheDayUI === 'function') updateWordOfTheDayUI();
   if (typeof renderKanaUI === 'function') renderKanaUI();
   if (typeof checkAndAwardBadges === 'function') checkAndAwardBadges();
+  if (typeof updatePartyModeUI === 'function') updatePartyModeUI();
 
   if ('speechSynthesis' in window) {
     loadSpeechVoices();
@@ -12082,6 +12766,16 @@ window.addEventListener('DOMContentLoaded', () => {
       if(e.key === 'Enter') {
         e.preventDefault();
         submitPartyWord();
+      }
+    });
+  }
+
+  const joinInp = document.getElementById('joinRoomCodeInput');
+  if (joinInp) {
+    joinInp.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        joinPartyRoom();
       }
     });
   }
