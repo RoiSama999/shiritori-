@@ -8,9 +8,10 @@
 <link rel="shortcut icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='85'%3E🌸%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif:ital,wght@0,600;0,700;0,900;1,400&family=Noto+Serif+JP:wght@600;700;900&family=Orbitron:wght@600;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@600;700;900&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
-<script src="vocab.js"></script>
+<!-- <script src="vocab.js"></script> -->
+<script src="vocab.js" defer></script>
 <style>
 /* ══════════════════════════════════════════════════
    TOKYO NEON ARCADE THEME (Responsive Design System)
@@ -45,15 +46,15 @@
   --radius-lg: 20px;
   --radius-full: 999px;
   
-  --font-ui: 'Be Vietnam Pro', -apple-system, sans-serif;
-  --font-arcade: 'Orbitron', monospace;
-  --font-serif: 'Noto Serif', 'Noto Serif JP', 'Be Vietnam Pro', serif;
-  --font-kanji: 'Noto Serif JP', 'Noto Serif', 'Be Vietnam Pro', serif;
-  --font-kana: 'Noto Sans JP', sans-serif;
+  --font-ui: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-arcade: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-serif: 'Be Vietnam Pro', 'Noto Serif JP', -apple-system, serif;
+  --font-kanji: 'Noto Serif JP', 'Be Vietnam Pro', serif;
+  --font-kana: 'Noto Sans JP', 'Be Vietnam Pro', sans-serif;
   
-  --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.45);
-  --shadow-neon-pink: 0 4px 18px rgba(0, 0, 0, 0.4);
-  --shadow-neon-cyan: 0 4px 18px rgba(0, 0, 0, 0.4);
+  --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.35);
+  --shadow-neon-pink: 0 2px 8px rgba(255, 42, 109, 0.2);
+  --shadow-neon-cyan: 0 2px 8px rgba(5, 217, 232, 0.2);
 }
 
 *, *::before, *::after {
@@ -67,7 +68,7 @@ html, body {
   background-color: var(--bg-deep);
   color: var(--text-primary);
   font-family: var(--font-ui);
-  font-size: clamp(15px, 0.35vw + 13.8px, 17px);
+  font-size: clamp(16px, 0.35vw + 14.7px, 17.5px);
   line-height: 1.5;
   min-height: 100vh;
   min-height: 100dvh;
@@ -98,7 +99,7 @@ body::before {
   position: relative;
   z-index: 1;
   background: var(--bg-deep);
-  box-shadow: 0 0 50px rgba(0, 0, 0, 0.8), 0 0 1px var(--border);
+  box-shadow: none;
   padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px)); /* Space for bottom nav with safe-area */
 }
 
@@ -117,6 +118,7 @@ body::before {
   .hub-pillars-area { order: 3; }
   .hub-review-box   { order: 4; }
   .hub-stats-area   { order: 5; }
+  .hub-info-deck    { order: 6; }
 }
 
 /* Browser Surfaces Craft */
@@ -132,8 +134,9 @@ input, textarea { caret-color: var(--neon-sakura); }
   position: sticky;
   top: 0;
   z-index: 200;
-  background: var(--bg-glass);
-  backdrop-filter: blur(16px);
+  background: rgba(15, 18, 29, 0.98);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
   border-bottom: 1px solid var(--border);
   padding: 0.75rem 1rem;
 }
@@ -222,8 +225,9 @@ input, textarea { caret-color: var(--neon-sakura); }
   width: 100%;
   max-width: 520px;
   height: calc(64px + env(safe-area-inset-bottom, 0px));
-  background: var(--bg-glass);
-  backdrop-filter: blur(18px);
+  background: rgba(15, 18, 29, 0.98);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
   border-top: 1px solid var(--border);
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -256,9 +260,9 @@ input, textarea { caret-color: var(--neon-sakura); }
   flex-shrink: 0;
 }
 .nav-item .label {
-  font-size: 0.72rem;
+  font-size: 12px;
   font-weight: 600;
-  letter-spacing: 0;
+  letter-spacing: -0.01em;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -295,7 +299,7 @@ input, textarea { caret-color: var(--neon-sakura); }
     font-size: 1.15rem;
   }
   .nav-item .label {
-    font-size: 0.65rem;
+    font-size: 12px;
     letter-spacing: -0.02em;
   }
 }
@@ -944,8 +948,9 @@ button, .btn, .nav-item, .quest-level-btn, .sfx-btn, [role="button"] {
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(7, 8, 14, 0.8);
-  backdrop-filter: blur(12px);
+  background: rgba(7, 8, 14, 0.88);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -964,7 +969,7 @@ button, .btn, .nav-item, .quest-level-btn, .sfx-btn, [role="button"] {
   max-width: 400px;
   width: 100%;
   text-align: center;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
   max-height: calc(100vh - 2rem);
   max-height: calc(100dvh - 2rem);
   overflow-y: auto;
@@ -1057,36 +1062,52 @@ button, .btn, .nav-item, .quest-level-btn, .sfx-btn, [role="button"] {
   /* ── MULTI-COLUMN SCREEN 1: HUB ── */
   .hub-desktop-grid {
     display: grid;
-    grid-template-columns: clamp(320px, 24vw, 400px) 1fr;
-    gap: clamp(1.25rem, 2vw, 2.25rem);
+    grid-template-columns: clamp(340px, 30vw, 440px) 1fr;
+    gap: clamp(1.25rem, 2vw, 2.5rem);
     align-items: start;
     width: 100%;
   }
 
-  /* Cột trái dính trên cùng khi cuộn (position: sticky) và lấp đầy thông tin hữu ích */
+  /* Cột trái dính trên cùng khi cuộn (position: sticky), không giới hạn chiều cao hay cắt nội dung */
   .hub-sidebar-col {
     display: flex;
     flex-direction: column;
     gap: clamp(1rem, 1.5vw, 1.35rem);
     position: sticky;
     top: calc(72px + 1rem);
-    max-height: calc(100dvh - 72px - 2rem);
-    overflow-y: auto;
-    scrollbar-width: thin;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+  .hub-sidebar-col .card,
+  .hub-sidebar-col .ritual-card,
+  .hub-sidebar-col .profile-banner {
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
   }
 
   .hub-main-col {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: clamp(1.25rem, 2vw, 2rem);
     min-width: 0;
   }
 
-  /* Lưới 5 thẻ chế độ chơi dùng repeat(auto-fit, minmax(280px, 1fr)) */
+  /* Lưới 5 thẻ chế độ chơi dùng repeat(auto-fit, minmax(260px, 1fr)) */
   .hub-pillars-area .grid-2 {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     gap: clamp(0.85rem, 1.2vw, 1.35rem);
+  }
+
+  .hub-featured-card {
+    grid-column: span 1;
+  }
+  @media (min-width: 920px) {
+    .hub-featured-card {
+      grid-column: span 2;
+    }
   }
 
   .mode-card {
@@ -1095,11 +1116,11 @@ button, .btn, .nav-item, .quest-level-btn, .sfx-btn, [role="button"] {
     flex-direction: column;
     justify-content: space-between;
     padding: clamp(1rem, 1.2vw, 1.4rem);
-    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s;
   }
   .mode-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+    transform: translateY(-3px);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
   }
   .mode-card .mode-desc {
     flex: 1;
@@ -1218,6 +1239,46 @@ button, .btn, .nav-item, .quest-level-btn, .sfx-btn, [role="button"] {
     border: none !important;
     padding: 0 !important;
   }
+}
+
+/* ── PERFORMANCE OPTIMIZATION & REDUCED MOTION ── */
+@media (prefers-reduced-motion: reduce), (max-width: 767px) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .app-header, .bottom-nav, .modal-overlay {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+  .mode-card:hover, .btn:hover, .quest-node-item:hover {
+    transform: none !important;
+    box-shadow: none !important;
+  }
+}
+
+/* Content visibility optimization for high performance 60fps scrolling */
+.hub-info-deck,
+.playlist-cards,
+.quest-roadmap,
+.quiz-options-grid,
+.flashcard-3d,
+.screen:not(.active) {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 400px;
+}
+
+/* Accessibility baseline: minimum font size 12px & button 44px */
+button, .btn, .nav-item, .quest-level-btn, .sfx-btn, .user-auth-btn, .choice-arcade-btn, .dojo-tab-btn, .kana-key, [role="button"] {
+  min-height: 44px !important;
+  min-width: 44px !important;
+  box-sizing: border-box;
+}
+
+small, .text-xs, .nav-item .label, [style*="font-size:.7"], [style*="font-size: .7"] {
+  font-size: max(12px, 0.75rem);
 }
 
 /* ── QUEST MODE STYLES ── */
@@ -1365,7 +1426,7 @@ button, .btn, .nav-item, .quest-level-btn, .sfx-btn, [role="button"] {
   text-align: center;
   padding: 0.4rem 0.2rem;
   border-radius: var(--radius-full);
-  font-size: 0.72rem;
+  font-size: 12px;
   font-weight: 700;
   background: var(--bg-card);
   color: var(--text-muted);
@@ -1453,7 +1514,7 @@ button, .btn, .nav-item, .quest-level-btn, .sfx-btn, [role="button"] {
   display: inline-flex;
   align-items: center;
   gap: .3rem;
-  font-size: .7rem;
+  font-size: 12px;
   padding: .2rem .55rem;
   border-radius: var(--radius-full);
   font-weight: 800;
@@ -1648,10 +1709,10 @@ button, .btn, .nav-item, .quest-level-btn, .sfx-btn, [role="button"] {
             <span>🔥 Ôn Luyện Từ Vựng</span>
             <span class="mode-badge badge-solo" id="hubWrongCountBadge">0 từ sai</span>
           </div>
-          <div style="font-size:.82rem;color:var(--text-muted);margin:.4rem 0 .75rem" id="hubWrongWordsDesc">
+          <div style="font-size:12px;color:var(--text-muted);margin:.4rem 0 .75rem;line-height:1.45" id="hubWrongWordsDesc">
             Tự động tổng hợp các từ bạn từng trả lời sai trong Hành Trình & Dojo để nhắc ôn luyện mỗi ngày.
           </div>
-          <button class="btn btn-ghost btn-sm btn-full" id="hubBtnReviewWrong" onclick="switchTab('quest'); startWrongWordsReview();" disabled>
+          <button class="btn btn-ghost btn-sm btn-full" id="hubBtnReviewWrong" onclick="switchTab('quest'); startWrongWordsReview();" style="min-height:44px;font-size:12px" disabled>
             ⚡ Ôn Luyện Từ Hay Sai
           </button>
         </div>
@@ -1660,20 +1721,20 @@ button, .btn, .nav-item, .quest-level-btn, .sfx-btn, [role="button"] {
         <div class="card hub-stats-area">
           <div class="card-header">
             <div class="card-title">📊 Tiến Độ Tích Luỹ</div>
-            <span style="font-size:.82rem;color:var(--text-muted)" id="lastActiveDate">Hôm nay</span>
+            <span style="font-size:12px;color:var(--text-muted)" id="lastActiveDate">Hôm nay</span>
           </div>
           <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;text-align:center">
-            <div style="background:var(--bg-surface);padding:.6rem;border-radius:var(--radius-sm)">
-              <div style="font-family:var(--font-arcade);font-size:1.3rem;font-weight:800;color:var(--neon-cyan)" id="statFC">0</div>
-              <div style="font-size:.82rem;color:var(--text-muted)">Thẻ N5 Thuộc</div>
+            <div style="background:var(--bg-surface);padding:.65rem .4rem;border-radius:var(--radius-sm)">
+              <div style="font-family:var(--font-arcade);font-size:1.35rem;font-weight:800;color:var(--neon-cyan)" id="statFC">0</div>
+              <div style="font-size:12px;color:var(--text-muted)">Thẻ N5 Thuộc</div>
             </div>
-            <div style="background:var(--bg-surface);padding:.6rem;border-radius:var(--radius-sm)">
-              <div style="font-family:var(--font-arcade);font-size:1.3rem;font-weight:800;color:var(--neon-lime)" id="statPron">0%</div>
-              <div style="font-size:.82rem;color:var(--text-muted)">Phát Âm Chuẩn</div>
+            <div style="background:var(--bg-surface);padding:.65rem .4rem;border-radius:var(--radius-sm)">
+              <div style="font-family:var(--font-arcade);font-size:1.35rem;font-weight:800;color:var(--neon-lime)" id="statPron">0%</div>
+              <div style="font-size:12px;color:var(--text-muted)">Phát Âm Chuẩn</div>
             </div>
-            <div style="background:var(--bg-surface);padding:.6rem;border-radius:var(--radius-sm)">
-              <div style="font-family:var(--font-arcade);font-size:1.3rem;font-weight:800;color:var(--neon-sakura)" id="statWins">0</div>
-              <div style="font-size:.82rem;color:var(--text-muted)">Chiến Thắng 2P</div>
+            <div style="background:var(--bg-surface);padding:.65rem .4rem;border-radius:var(--radius-sm)">
+              <div style="font-family:var(--font-arcade);font-size:1.35rem;font-weight:800;color:var(--neon-sakura)" id="statWins">0</div>
+              <div style="font-size:12px;color:var(--text-muted)">Chiến Thắng 2P</div>
             </div>
           </div>
         </div>
@@ -1683,13 +1744,29 @@ button, .btn, .nav-item, .quest-level-btn, .sfx-btn, [role="button"] {
       <section class="hub-main-col">
         <!-- Quick Access Pillars -->
         <div class="hub-pillars-area">
-          <div class="card-title" style="margin-bottom:.75rem">⚔️ KHU VỰC TRẢI NGHIỆM</div>
+          <div class="card-title" style="margin-bottom:.85rem;display:flex;align-items:center;justify-content:space-between">
+            <span>⚔️ KHU VỰC TRẢI NGHIỆM</span>
+            <span style="font-size:12px;color:var(--text-muted);font-weight:normal">5 Chế độ học & Đấu từ vựng</span>
+          </div>
           <div class="grid-2">
-            <div class="mode-card" onclick="switchTab('quest')" style="border-color:var(--neon-gold);background:linear-gradient(135deg, rgba(255,190,11,0.08), rgba(255,42,109,0.05))">
-              <div class="mode-icon">🗺️</div>
-              <div class="mode-title" style="color:var(--neon-gold)">Hành Trình JLPT</div>
-              <div class="mode-desc">Bản đồ 30 màn chơi 4 bước (N5 ➔ N4 ➔ N3), tích lũy sao và EXP.</div>
-              <span class="mode-badge badge-solo" style="border-color:var(--neon-gold);color:var(--neon-gold)">Quest Game 30 Màn</span>
+            <div class="mode-card hub-featured-card" onclick="switchTab('quest')" style="border-color:var(--neon-gold);background:linear-gradient(135deg, rgba(255,190,11,0.12), rgba(255,42,109,0.06))">
+              <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:0.75rem;flex-wrap:wrap">
+                <div style="display:flex;align-items:center;gap:.75rem">
+                  <div class="mode-icon" style="font-size:2.2rem;margin-bottom:0">🗺️</div>
+                  <div>
+                    <div class="mode-title" style="color:var(--neon-gold);font-size:1.12rem">Hành Trình JLPT</div>
+                    <div style="font-size:12px;color:var(--text-muted);margin-top:.15rem">Chế độ cốt lõi • Chinh phục N5 ➔ N4 ➔ N3</div>
+                  </div>
+                </div>
+                <span class="mode-badge badge-solo" style="border-color:var(--neon-gold);color:var(--neon-gold);margin-top:0">★ CHẾ ĐỘ NỔI BẬT</span>
+              </div>
+              <div class="mode-desc" style="margin:.6rem 0 .75rem">
+                Bản đồ 30 màn chơi 4 bước với hệ thống đánh giá 1-3 sao, tích lũy EXP, tự động thu thập từ vựng hay sai để nhắc ôn luyện mỗi ngày.
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;padding-top:.6rem;border-top:1px solid rgba(255,190,11,0.2)">
+                <div style="font-size:12px;color:var(--neon-gold);font-weight:700">30 Màn Chơi • 4 Chặng Mỗi Màn</div>
+                <span class="btn btn-ghost btn-sm" style="min-height:38px;padding:.25rem .75rem;color:var(--neon-gold);border-color:var(--neon-gold);font-size:12px">Khám Phá Ngay ➔</span>
+              </div>
             </div>
             <div class="mode-card" onclick="switchTab('party')">
               <div class="mode-icon">🎮</div>
@@ -1714,6 +1791,66 @@ button, .btn, .nav-item, .quest-level-btn, .sfx-btn, [role="button"] {
               <div class="mode-title">Shiritori VS AI</div>
               <div class="mode-desc">Đấu nối từ Danh từ → Động từ → Tính từ với Sakura Bot Claude.</div>
               <span class="mode-badge badge-solo">Bot AI</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Các khối thông tin lấp khoảng trống bên phải -->
+        <div class="hub-info-deck">
+          <div class="card hub-guide-card" style="margin-bottom:1rem">
+            <div class="card-header">
+              <div class="card-title">💡 Bí Quyết Chinh Phục Tiếng Nhật Thông Minh</div>
+              <span class="mode-badge badge-solo" style="color:var(--neon-cyan);border-color:var(--neon-cyan)">Phương Pháp Chuẩn</span>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));gap:.85rem;margin-top:.5rem">
+              <div style="background:var(--bg-surface);padding:.85rem;border-radius:var(--radius-md);border:1px solid var(--border)">
+                <div style="font-weight:700;color:var(--neon-cyan);font-size:.9rem;margin-bottom:.3rem">🔄 Lặp Lại Cách Quãng (SRS)</div>
+                <div style="font-size:12px;color:var(--text-secondary);line-height:1.45">
+                  Hệ thống tự động gom từ vựng bạn trả lời sai vào hộp ôn tập hàng ngày để chuyển hóa thành trí nhớ dài hạn.
+                </div>
+              </div>
+              <div style="background:var(--bg-surface);padding:.85rem;border-radius:var(--radius-md);border:1px solid var(--border)">
+                <div style="font-weight:700;color:var(--neon-lime);font-size:.9rem;margin-bottom:.3rem">⚡ Phản Xạ Nối Từ Tức Thì</div>
+                <div style="font-size:12px;color:var(--text-secondary);line-height:1.45">
+                  Luyện Shiritori giúp não bộ kích hoạt kho từ vựng, phản xạ nhanh với các âm đuôi kana trong 15 giây.
+                </div>
+              </div>
+              <div style="background:var(--bg-surface);padding:.85rem;border-radius:var(--radius-md);border:1px solid var(--border)">
+                <div style="font-weight:700;color:var(--neon-sakura);font-size:.9rem;margin-bottom:.3rem">🎧 Shadowing Nhạc Anime</div>
+                <div style="font-size:12px;color:var(--text-secondary);line-height:1.45">
+                  Nghe giai điệu oEmbed chính thức, kết hợp đọc lời romaji & furigana để phát âm chuẩn ngữ điệu người bản xứ.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card hub-milestone-card" style="margin-bottom:1rem">
+            <div class="card-header">
+              <div class="card-title">🏆 Thử Thách & Cột Mốc Tuần</div>
+              <span style="font-size:12px;color:var(--text-muted)">Làm mới mỗi tuần</span>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:.75rem">
+              <div style="display:flex;align-items:center;gap:.75rem;background:var(--bg-surface);padding:.75rem .85rem;border-radius:var(--radius-md);border:1px solid var(--border)">
+                <span style="font-size:1.8rem">🔥</span>
+                <div>
+                  <div style="font-weight:700;font-size:.88rem;color:#fff">Chuỗi 7 Ngày Streak</div>
+                  <div style="font-size:12px;color:var(--text-muted)">Hoàn thành Nghi Thức mỗi ngày (+100 EXP)</div>
+                </div>
+              </div>
+              <div style="display:flex;align-items:center;gap:.75rem;background:var(--bg-surface);padding:.75rem .85rem;border-radius:var(--radius-md);border:1px solid var(--border)">
+                <span style="font-size:1.8rem">⭐</span>
+                <div>
+                  <div style="font-weight:700;font-size:.88rem;color:#fff">Thợ Săn 15 Sao</div>
+                  <div style="font-size:12px;color:var(--text-muted)">Đạt tối thiểu 15 sao trong Hành Trình JLPT</div>
+                </div>
+              </div>
+              <div style="display:flex;align-items:center;gap:.75rem;background:var(--bg-surface);padding:.75rem .85rem;border-radius:var(--radius-md);border:1px solid var(--border)">
+                <span style="font-size:1.8rem">🎯</span>
+                <div>
+                  <div style="font-weight:700;font-size:.88rem;color:#fff">Chiến Binh Đấu Trường</div>
+                  <div style="font-size:12px;color:var(--text-muted)">Thắng 3 ván Shiritori hoặc Đoán Anime</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -1887,8 +2024,8 @@ button, .btn, .nav-item, .quest-level-btn, .sfx-btn, [role="button"] {
               <!-- Topic / Category Selector (90 Topics from vocab.js) -->
               <div style="display:flex;flex-direction:column;gap:.35rem">
                 <div style="display:flex;justify-content:space-between;align-items:center">
-                  <div style="font-size:.78rem;font-weight:700;color:var(--text-muted)">🏷️ CHỌN CHỦ ĐỀ TỪ VỰNG:</div>
-                  <div style="font-size:.72rem;color:var(--text-muted)" id="shiriCatCountLabel">90 chủ đề</div>
+                  <div style="font-size:12px;font-weight:700;color:var(--text-muted)">🏷️ CHỌN CHỦ ĐỀ TỪ VỰNG:</div>
+                  <div style="font-size:12px;color:var(--text-muted)" id="shiriCatCountLabel">90 chủ đề</div>
                 </div>
                 <div style="display:flex;gap:.4rem;align-items:center">
                   <select id="shiriCategorySelect" class="inp" style="padding:.4rem .6rem;font-size:.82rem;background:var(--bg-card);color:var(--text-primary);border:1px solid var(--border);border-radius:var(--radius-sm);flex:1" onchange="onShiritoriCategoryChange(this.value)">
@@ -2084,7 +2221,7 @@ button, .btn, .nav-item, .quest-level-btn, .sfx-btn, [role="button"] {
               <input class="inp" id="customYtInput" placeholder="Ví dụ: https://youtu.be/... hoặc ZRtdQ81jPUQ" style="font-size:.82rem;padding:.4rem .6rem">
               <button class="btn btn-primary btn-sm" style="flex-shrink:0" onclick="playCustomYouTubeUrl()">▶️ Phát</button>
             </div>
-            <div style="font-size:.72rem;color:var(--text-muted);margin-top:.35rem">
+            <div style="font-size:12px;color:var(--text-muted);margin-top:.35rem">
               💡 Phương án dự phòng: Tự do dán bất kỳ link bài hát YouTube nào để vừa nghe vừa điền từ!
             </div>
           </div>
@@ -2294,19 +2431,19 @@ button, .btn, .nav-item, .quest-level-btn, .sfx-btn, [role="button"] {
     <!-- Stats Bar -->
     <div style="display:grid;grid-template-columns:repeat(4, 1fr);gap:.4rem;margin-bottom:1.2rem;text-align:center">
       <div style="background:var(--bg-surface);padding:.5rem .3rem;border-radius:var(--radius-sm)">
-        <div style="font-size:.7rem;color:var(--text-muted)">CẤP BẬC</div>
+        <div style="font-size:12px;color:var(--text-muted)">CẤP BẬC</div>
         <div style="font-size:.85rem;font-weight:800;color:var(--neon-cyan)" id="profileRankTag">Tập Sự</div>
       </div>
       <div style="background:var(--bg-surface);padding:.5rem .3rem;border-radius:var(--radius-sm)">
-        <div style="font-size:.7rem;color:var(--text-muted)">KINH NGHIỆM</div>
+        <div style="font-size:12px;color:var(--text-muted)">KINH NGHIỆM</div>
         <div style="font-size:.85rem;font-weight:800;color:var(--neon-gold)" id="profileXpTag">0 EXP</div>
       </div>
       <div style="background:var(--bg-surface);padding:.5rem .3rem;border-radius:var(--radius-sm)">
-        <div style="font-size:.7rem;color:var(--text-muted)">STREAK</div>
+        <div style="font-size:12px;color:var(--text-muted)">STREAK</div>
         <div style="font-size:.85rem;font-weight:800;color:var(--neon-pink)" id="profileStreakTag">1 ngày</div>
       </div>
       <div style="background:var(--bg-surface);padding:.5rem .3rem;border-radius:var(--radius-sm)">
-        <div style="font-size:.7rem;color:var(--text-muted)">TỔNG SAO</div>
+        <div style="font-size:12px;color:var(--text-muted)">TỔNG SAO</div>
         <div style="font-size:.85rem;font-weight:800;color:var(--neon-gold)" id="profileStarsTag">0 ⭐</div>
       </div>
     </div>
@@ -2357,11 +2494,11 @@ button, .btn, .nav-item, .quest-level-btn, .sfx-btn, [role="button"] {
     <!-- Worker URL Configuration (Customizable) -->
     <div style="margin-bottom:1.25rem;background:var(--bg-surface);padding:.75rem;border-radius:var(--radius-sm);border:1px solid var(--border)">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.3rem">
-        <label style="font-size:.78rem;color:var(--text-muted);font-weight:700">ĐỊA CHỈ CLOUDFLARE WORKER AUTH:</label>
-        <span style="font-size:.72rem;color:var(--neon-green)">● Hoạt động</span>
+        <label style="font-size:12px;color:var(--text-muted);font-weight:700">ĐỊA CHỈ CLOUDFLARE WORKER AUTH:</label>
+        <span style="font-size:12px;color:var(--neon-green)">● Hoạt động</span>
       </div>
       <input class="inp" id="profileWorkerUrlInput" placeholder="https://emi-worker-auth.baova10ht.workers.dev" style="width:100%;font-size:.8rem;font-family:monospace">
-      <div style="font-size:.72rem;color:var(--text-muted);margin-top:.3rem">
+      <div style="font-size:12px;color:var(--text-muted);margin-top:.3rem">
         💡 Bạn có thể điền địa chỉ Worker riêng của mình sau khi deploy theo hướng dẫn.
       </div>
     </div>
@@ -5786,7 +5923,7 @@ function renderShiritoriBoard() {
   document.getElementById('battleContentArea').innerHTML = `
     <div style="background:linear-gradient(135deg, rgba(255,42,109,0.08), rgba(5,217,232,0.08));border:1px solid var(--border);border-radius:var(--radius-md);padding:1.2rem;text-align:center">
       <div style="display:flex;justify-content:center;gap:.4rem;align-items:center;margin-bottom:.4rem">
-        <span style="background:${levelColor};color:#000;font-size:.72rem;font-weight:900;padding:.15rem .5rem;border-radius:var(--radius-full)">${levelDisplay}</span>
+        <span style="background:${levelColor};color:#000;font-size:12px;font-weight:900;padding:.15rem .5rem;border-radius:var(--radius-full)">${levelDisplay}</span>
         <span style="background:rgba(255,255,255,0.06);color:var(--text-secondary);font-size:.75rem;padding:.15rem .6rem;border-radius:var(--radius-full);border:1px solid var(--border)">🏷️ ${categoryDisplay}</span>
       </div>
       <div style="font-size:.78rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em">Từ Hiện Tại Trên Sàn Đấu</div>
