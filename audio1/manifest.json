@@ -1,0 +1,723 @@
+{
+  "pat_1": {
+    "file": "pat_1.mp3",
+    "path": "audio1/pat_1.mp3",
+    "category": "pat",
+    "mood": "happy",
+    "jp": "えへへ、頭撫でてくれてありがとう！嬉しいな！",
+    "vi": "Ehehe, cảm ơn bạn đã xoa đầu mình! Vui quá đi!"
+  },
+  "pat_2": {
+    "file": "pat_2.mp3",
+    "path": "audio1/pat_2.mp3",
+    "category": "pat",
+    "mood": "wink",
+    "jp": "大好きだよ！一緒にいると元気が出るの！",
+    "vi": "Mình yêu bạn nhiều lắm! Ở bên bạn là tràn đầy năng lượng luôn!"
+  },
+  "pat_3": {
+    "file": "pat_3.mp3",
+    "path": "audio1/pat_3.mp3",
+    "category": "pat",
+    "mood": "happy",
+    "jp": "にゃーん！なでなで気持ちいいにゃ！",
+    "vi": "Nyaa~ Được xoa đầu thế này thích mê luôn Nya~!"
+  },
+  "pat_4": {
+    "file": "pat_4.mp3",
+    "path": "audio1/pat_4.mp3",
+    "category": "pat",
+    "mood": "shy",
+    "jp": "ぽかぽかして、あったかい気持ちになるね！",
+    "vi": "Ấm áp quá chừng, cảm giác thật bình yên và hạnh phúc!"
+  },
+  "pat_5": {
+    "file": "pat_5.mp3",
+    "path": "audio1/pat_5.mp3",
+    "category": "pat",
+    "mood": "wink",
+    "jp": "もっと撫でてほしいな...なんちゃって！",
+    "vi": "Giá mà được bạn xoa đầu thêm chút nữa... hihi trêu bạn xíu thôi!"
+  },
+  "outfit_1": {
+    "file": "outfit_1.mp3",
+    "path": "audio1/outfit_1.mp3",
+    "category": "outfit",
+    "mood": "happy",
+    "jp": "わぁ！新しいお洋服、似合ってるかな？ありがとう！",
+    "vi": "Waa! Bộ trang phục mới này có hợp với mình không? Cảm ơn bạn nha!"
+  },
+  "outfit_2": {
+    "file": "outfit_2.mp3",
+    "path": "audio1/outfit_2.mp3",
+    "category": "outfit",
+    "mood": "wink",
+    "jp": "見て見て！すごく可愛いでしょ？えっへん！",
+    "vi": "Nhìn này nhìn này! Đáng yêu lung linh luôn đúng không nè!"
+  },
+  "outfit_3": {
+    "file": "outfit_3.mp3",
+    "path": "audio1/outfit_3.mp3",
+    "category": "outfit",
+    "mood": "happy",
+    "jp": "着替えると、なんだか新しい冒険に行きたくなるね！",
+    "vi": "Mặc đồ mới vào là lại thấy háo hức muốn đi phiêu lưu cùng bạn ngay!"
+  },
+  "outfit_4": {
+    "file": "outfit_4.mp3",
+    "path": "audio1/outfit_4.mp3",
+    "category": "outfit",
+    "mood": "shy",
+    "jp": "ふふっ、今日はずっとこの姿で一緒に勉強しようね！",
+    "vi": "Hì hì, hôm nay mình sẽ mặc bộ này học cùng bạn cả ngày nhé!"
+  },
+  "cheer_1": {
+    "file": "cheer_1.mp3",
+    "path": "audio1/cheer_1.mp3",
+    "category": "cheer",
+    "mood": "happy",
+    "jp": "すごいすごい！大正解だよ！その調子！",
+    "vi": "Tuyệt vời quá! Trả lời đúng xuất sắc luôn, cứ phát huy nhé!"
+  },
+  "cheer_2": {
+    "file": "cheer_2.mp3",
+    "path": "audio1/cheer_2.mp3",
+    "category": "cheer",
+    "mood": "wink",
+    "jp": "頑張ってるあなた、とってもかっこいいよ！",
+    "vi": "Thấy bạn chăm chỉ học tập thế này, ngầu thực sự luôn đó!"
+  },
+  "cheer_3": {
+    "file": "cheer_3.mp3",
+    "path": "audio1/cheer_3.mp3",
+    "category": "cheer",
+    "mood": "happy",
+    "jp": "一歩ずつ、夢に向かって進んでるね！ファイト！",
+    "vi": "Từng bước từng bước tiến gần đến ước mơ rồi, cố lên nào!"
+  },
+  "cheer_4": {
+    "file": "cheer_4.mp3",
+    "path": "audio1/cheer_4.mp3",
+    "category": "cheer",
+    "mood": "shy",
+    "jp": "疲れたら無理しないで、深呼吸してね！",
+    "vi": "Nếu mệt thì nhớ nghỉ tay một chút, hít thở sâu rồi tiếp tục nhé!"
+  },
+  "greet_morning": {
+    "file": "greet_morning.mp3",
+    "path": "audio1/greet_morning.mp3",
+    "category": "greet",
+    "mood": "happy",
+    "jp": "おはようございます！今日も一日、一緒に頑張ろうね！",
+    "vi": "Chào buổi sáng! Hôm nay cùng cố gắng học tập nhé!"
+  },
+  "greet_afternoon": {
+    "file": "greet_afternoon.mp3",
+    "path": "audio1/greet_afternoon.mp3",
+    "category": "greet",
+    "mood": "wink",
+    "jp": "こんにちは！お昼からも楽しく日本語を学ぼう！",
+    "vi": "Chào buổi chiều! Cùng học tiếng Nhật thật vui nào!"
+  },
+  "greet_evening": {
+    "file": "greet_evening.mp3",
+    "path": "audio1/greet_evening.mp3",
+    "category": "greet",
+    "mood": "shy",
+    "jp": "こんばんは！今日もお疲れ様でした！ゆっくり休んでね！",
+    "vi": "Chào buổi tối! Hôm nay bạn đã vất vả nhiều rồi! Nghỉ ngơi thật tốt nhé!"
+  },
+  "mood_happy": {
+    "file": "mood_happy.mp3",
+    "path": "audio1/mood_happy.mp3",
+    "category": "mood",
+    "mood": "happy",
+    "jp": "やったー！すごく嬉しいな！",
+    "vi": "Yatta~! Vui quá chừng luôn!"
+  },
+  "mood_wink": {
+    "file": "mood_wink.mp3",
+    "path": "audio1/mood_wink.mp3",
+    "category": "mood",
+    "mood": "wink",
+    "jp": "任せて！一緒なら百人力だよ！",
+    "vi": "Cứ để mình lo! Có nhau là mạnh mẽ gấp trăm lần luôn nè!"
+  },
+  "mood_shy": {
+    "file": "mood_shy.mp3",
+    "path": "audio1/mood_shy.mp3",
+    "category": "mood",
+    "mood": "shy",
+    "jp": "そんなに見つめられると、ちょっと照れちゃうな...",
+    "vi": "Cứ nhìn mình chằm chằm vậy làm mình ngượng quá đi..."
+  },
+  "mood_surprised": {
+    "file": "mood_surprised.mp3",
+    "path": "audio1/mood_surprised.mp3",
+    "category": "mood",
+    "mood": "surprised",
+    "jp": "えっ！？本当！？びっくりしたよー！",
+    "vi": "Hả!? Thật sao!? Bất ngờ quá đi mất!"
+  },
+  "outfit_default": {
+    "file": "outfit_default.mp3",
+    "path": "audio1/outfit_default.mp3",
+    "category": "outfit_specific",
+    "mood": "happy",
+    "jp": "いつものお気に入りの服だよ！落ち着くなぁ！",
+    "vi": "Bộ đồ quen thuộc yêu thích nè! Thật thoải mái dễ chịu!"
+  },
+  "outfit_school": {
+    "file": "outfit_school.mp3",
+    "path": "audio1/outfit_school.mp3",
+    "category": "outfit_specific",
+    "mood": "wink",
+    "jp": "セーラー服、学生気分で気合が入るね！",
+    "vi": "Đồng phục thuỷ thủ, cảm giác như học sinh đầy nhiệt huyết!"
+  },
+  "outfit_ninja": {
+    "file": "outfit_ninja.mp3",
+    "path": "audio1/outfit_ninja.mp3",
+    "category": "outfit_specific",
+    "mood": "wink",
+    "jp": "シュタタッ！影の忍び、参上！にんにん！",
+    "vi": "Vút vút! Ninja bóng đêm xuất hiện! Nin nin!"
+  },
+  "outfit_miko": {
+    "file": "outfit_miko.mp3",
+    "path": "audio1/outfit_miko.mp3",
+    "category": "outfit_specific",
+    "mood": "shy",
+    "jp": "巫女さんの衣装だよ！あなたに神のご加護がありますように！",
+    "vi": "Trang phục Vu nữ Miko nè! Chúc bạn nhận được phước lành từ thần linh!"
+  },
+  "outfit_matsuri": {
+    "file": "outfit_matsuri.mp3",
+    "path": "audio1/outfit_matsuri.mp3",
+    "category": "outfit_specific",
+    "mood": "happy",
+    "jp": "夏祭りのはっぴだよ！わっしょいわっしょい、楽しもう！",
+    "vi": "Áo happi lễ hội mùa hè! Cùng hòa mình vào lễ hội rộn ràng nào!"
+  },
+  "outfit_cyber": {
+    "file": "outfit_cyber.mp3",
+    "path": "audio1/outfit_cyber.mp3",
+    "category": "outfit_specific",
+    "mood": "wink",
+    "jp": "サイバーネオントーキョー！未来へアクセス完了！ピピピッ！",
+    "vi": "Cyber Neon Tokyo! Kết nối tương lai hoàn tất! Bíp bíp!"
+  },
+  "mv_intro": {
+    "file": "mv_intro.mp3",
+    "path": "audio1/mv_intro.mp3",
+    "category": "mv_dj",
+    "mood": "happy",
+    "jp": "アニメミュージックラウンジへようこそ！大好きなアニソンで楽しく日本語を学ぼう！",
+    "reading": "あにめみゅーじっくらうんじへようこそ！だいすきなあにそんでたのしくにほんごをまなぼう！",
+    "vi": "Chào mừng đến với Anime Music Lounge! Cùng nghe bài hát anime yêu thích và học tiếng Nhật nhé!"
+  },
+  "mv_next": {
+    "file": "mv_next.mp3",
+    "path": "audio1/mv_next.mp3",
+    "category": "mv_dj",
+    "mood": "wink",
+    "jp": "次の曲を再生するよ！耳を澄まして歌詞を聞き取ってみてね！",
+    "reading": "つぎのきょくをさいせいするよ！みみをすましてしかしをききとってみてね！",
+    "vi": "Phát bài hát tiếp theo nè! Lắng nghe kỹ lời bài hát nhé!"
+  },
+  "mv_prev": {
+    "file": "mv_prev.mp3",
+    "path": "audio1/mv_prev.mp3",
+    "category": "mv_dj",
+    "mood": "happy",
+    "jp": "前の曲に戻るよ！もう一度復習してみよう！",
+    "reading": "まえのきょくにもどるよ！もういちどふくしゅうしてみよう！",
+    "vi": "Quay lại bài trước nè! Cùng ôn lại lời bài hát một lần nữa nhé!"
+  },
+  "mv_karaoke": {
+    "file": "mv_karaoke.mp3",
+    "path": "audio1/mv_karaoke.mp3",
+    "category": "mv_dj",
+    "mood": "happy",
+    "jp": "カラオケモード起動！リズムに乗って一緒に歌ってみよう！",
+    "reading": "からおけもーどきどう！りずむにのっていっしょにうたってみよう！",
+    "vi": "Bật chế độ Karaoke toàn màn hình! Cùng hòa theo giai điệu và hát thật to nào!"
+  },
+  "mv_correct": {
+    "file": "mv_correct.mp3",
+    "path": "audio1/mv_correct.mp3",
+    "category": "mv_dj",
+    "mood": "happy",
+    "jp": "大正解！すごい！アニソンの歌詞を完璧に聞き取れたね！",
+    "reading": "だいせいかい！すごい！あにそんのかしをかんぺきにききとれたね！",
+    "vi": "Đại chính xác! Bạn nghe lời bài hát anime đỉnh thật đấy!"
+  },
+  "mv_wrong": {
+    "file": "mv_wrong.mp3",
+    "path": "audio1/mv_wrong.mp3",
+    "category": "mv_dj",
+    "mood": "shy",
+    "jp": "惜しい！もう一回曲を聴いて、歌詞を確かめてみてね！",
+    "reading": "おしい！もういっかいきょくをきいて、かしをたしかめてみてね！",
+    "vi": "Tiếc quá! Hãy nghe lại bài hát một lần nữa và kiểm tra từ khuyết nhé!"
+  },
+  "mv_dj_play": {
+    "file": "mv_dj_play.mp3",
+    "path": "audio1/mv_dj_play.mp3",
+    "category": "mv_dj",
+    "mood": "wink",
+    "jp": "ミュージックスタート！楽しく聴いてね！",
+    "reading": "みゅーじっくすたーと！たのしくきいてね！",
+    "vi": "Music start! Chúc bạn nghe nhạc vui vẻ!"
+  },
+  "mv_song_1": {
+    "file": "mv_song_1.mp3",
+    "path": "audio1/mv_song_1.mp3",
+    "category": "mv_song_vocab",
+    "mood": "happy",
+    "jp": "きゅうきょく",
+    "reading": "きゅうきょく",
+    "vi": "究極 (きゅうきょく): tối thượng / cùng cực"
+  },
+  "mv_song_2": {
+    "file": "mv_song_2.mp3",
+    "path": "audio1/mv_song_2.mp3",
+    "category": "mv_song_vocab",
+    "mood": "happy",
+    "jp": "どりょく",
+    "reading": "どりょく",
+    "vi": "努力 (どりょく): nỗ lực"
+  },
+  "mv_song_3": {
+    "file": "mv_song_3.mp3",
+    "path": "audio1/mv_song_3.mp3",
+    "category": "mv_song_vocab",
+    "mood": "happy",
+    "jp": "はらって",
+    "reading": "はらって",
+    "vi": "祓って (はらって): thanh tẩy / trừ tà"
+  },
+  "mv_song_4": {
+    "file": "mv_song_4.mp3",
+    "path": "audio1/mv_song_4.mp3",
+    "category": "mv_song_vocab",
+    "mood": "happy",
+    "jp": "なまみ",
+    "reading": "なまみ",
+    "vi": "生身 (なまみ): cơ thể người thật (không phép thuật)"
+  },
+  "mv_song_5": {
+    "file": "mv_song_5.mp3",
+    "path": "audio1/mv_song_5.mp3",
+    "category": "mv_song_vocab",
+    "mood": "happy",
+    "jp": "きょうそう",
+    "reading": "きょうそう",
+    "vi": "狂騒 (きょうそう): cuồng nhiệt / náo loạn"
+  },
+  "mv_song_6": {
+    "file": "mv_song_6.mp3",
+    "path": "audio1/mv_song_6.mp3",
+    "category": "mv_song_vocab",
+    "mood": "happy",
+    "jp": "とおく",
+    "reading": "とおく",
+    "vi": "遠く (とおく): nơi xa"
+  },
+  "mv_song_7": {
+    "file": "mv_song_7.mp3",
+    "path": "audio1/mv_song_7.mp3",
+    "category": "mv_song_vocab",
+    "mood": "happy",
+    "jp": "しあわせ",
+    "reading": "しあわせ",
+    "vi": "幸せ (しあわせ): niềm hạnh phúc"
+  },
+  "mv_song_8": {
+    "file": "mv_song_8.mp3",
+    "path": "audio1/mv_song_8.mp3",
+    "category": "mv_song_vocab",
+    "mood": "happy",
+    "jp": "しんじだい",
+    "reading": "しんじだい",
+    "vi": "新時代 (しんじだい): thời đại mới"
+  },
+  "mv_song_9": {
+    "file": "mv_song_9.mp3",
+    "path": "audio1/mv_song_9.mp3",
+    "category": "mv_song_vocab",
+    "mood": "happy",
+    "jp": "さました",
+    "reading": "さました",
+    "vi": "覚ました (さました): tỉnh dậy"
+  },
+  "mv_song_10": {
+    "file": "mv_song_10.mp3",
+    "path": "audio1/mv_song_10.mp3",
+    "category": "mv_song_vocab",
+    "mood": "happy",
+    "jp": "おぼえて",
+    "reading": "おぼえて",
+    "vi": "覚えて (おぼえて): ghi nhớ"
+  },
+  "mv_song_11": {
+    "file": "mv_song_11.mp3",
+    "path": "audio1/mv_song_11.mp3",
+    "category": "mv_song_vocab",
+    "mood": "happy",
+    "jp": "おしえて",
+    "reading": "おしえて",
+    "vi": "教えて (おしえて): hãy chỉ / bảo cho tôi"
+  },
+  "mv_song_12": {
+    "file": "mv_song_12.mp3",
+    "path": "audio1/mv_song_12.mp3",
+    "category": "mv_song_vocab",
+    "mood": "happy",
+    "jp": "あおい",
+    "reading": "あおい",
+    "vi": "蒼い (あおい): xanh biếc"
+  },
+  "mv_song_13": {
+    "file": "mv_song_13.mp3",
+    "path": "audio1/mv_song_13.mp3",
+    "category": "mv_song_vocab",
+    "mood": "happy",
+    "jp": "うんめい",
+    "reading": "うんめい",
+    "vi": "運命 (うんめい): định mệnh / số phận"
+  },
+  "mv_song_14": {
+    "file": "mv_song_14.mp3",
+    "path": "audio1/mv_song_14.mp3",
+    "category": "mv_song_vocab",
+    "mood": "happy",
+    "jp": "あせ",
+    "reading": "あせ",
+    "vi": "汗 (あせ): mồ hôi"
+  },
+  "mv_song_15": {
+    "file": "mv_song_15.mp3",
+    "path": "audio1/mv_song_15.mp3",
+    "category": "mv_song_vocab",
+    "mood": "happy",
+    "jp": "さいて",
+    "reading": "さいて",
+    "vi": "裂いて (さいて): xé toạc"
+  },
+  "mv_song_16": {
+    "file": "mv_song_16.mp3",
+    "path": "audio1/mv_song_16.mp3",
+    "category": "mv_song_vocab",
+    "mood": "happy",
+    "jp": "せかい",
+    "reading": "せかい",
+    "vi": "世界 (せかい): thế giới"
+  },
+  "mv_song_17": {
+    "file": "mv_song_17.mp3",
+    "path": "audio1/mv_song_17.mp3",
+    "category": "mv_song_vocab",
+    "mood": "happy",
+    "jp": "ふたり",
+    "reading": "ふたり",
+    "vi": "二人 (ふたり): hai người"
+  },
+  "mv_song_18": {
+    "file": "mv_song_18.mp3",
+    "path": "audio1/mv_song_18.mp3",
+    "category": "mv_song_vocab",
+    "mood": "happy",
+    "jp": "きょうれつ",
+    "reading": "きょうれつ",
+    "vi": "強烈 (きょうれつ): mãnh liệt / dữ dội"
+  },
+  "mv_song_19": {
+    "file": "mv_song_19.mp3",
+    "path": "audio1/mv_song_19.mp3",
+    "category": "mv_song_vocab",
+    "mood": "happy",
+    "jp": "てらす",
+    "reading": "てらす",
+    "vi": "照らす (てらす): soi rọi / chiếu sáng"
+  },
+  "mv_song_20": {
+    "file": "mv_song_20.mp3",
+    "path": "audio1/mv_song_20.mp3",
+    "category": "mv_song_vocab",
+    "mood": "happy",
+    "jp": "とざした",
+    "reading": "とざした",
+    "vi": "閉ざした (とざした): khép lại / giam kín"
+  },
+  "mv_song_21": {
+    "file": "mv_song_21.mp3",
+    "path": "audio1/mv_song_21.mp3",
+    "category": "mv_song_vocab",
+    "mood": "happy",
+    "jp": "ひかる",
+    "reading": "ひかる",
+    "vi": "光る (ひかる): tỏa sáng"
+  },
+  "mv_song_22": {
+    "file": "mv_song_22.mp3",
+    "path": "audio1/mv_song_22.mp3",
+    "category": "mv_song_vocab",
+    "mood": "happy",
+    "jp": "とんだ",
+    "reading": "とんだ",
+    "vi": "跳んだ (とんだ): nhảy cao / bay vút"
+  },
+  "mv_song_23": {
+    "file": "mv_song_23.mp3",
+    "path": "audio1/mv_song_23.mp3",
+    "category": "mv_song_vocab",
+    "mood": "happy",
+    "jp": "つづき",
+    "reading": "つづき",
+    "vi": "つづき (つづき): sự tiếp nối"
+  },
+  "mv_song_24": {
+    "file": "mv_song_24.mp3",
+    "path": "audio1/mv_song_24.mp3",
+    "category": "mv_song_vocab",
+    "mood": "happy",
+    "jp": "ゆうしゃ",
+    "reading": "ゆうしゃ",
+    "vi": "勇者 (ゆうしゃ): dũng giả / anh hùng"
+  },
+  "mv_song_25": {
+    "file": "mv_song_25.mp3",
+    "path": "audio1/mv_song_25.mp3",
+    "category": "mv_song_vocab",
+    "mood": "happy",
+    "jp": "だいじ",
+    "reading": "だいじ",
+    "vi": "大事 (だいじ): quan trọng / quý giá"
+  },
+  "mv_song_26": {
+    "file": "mv_song_26.mp3",
+    "path": "audio1/mv_song_26.mp3",
+    "category": "mv_song_vocab",
+    "mood": "happy",
+    "jp": "みじゅく",
+    "reading": "みじゅく",
+    "vi": "未熟 (みじゅく): chưa chín chắn / non nớt"
+  },
+  "mv_song_27": {
+    "file": "mv_song_27.mp3",
+    "path": "audio1/mv_song_27.mp3",
+    "category": "mv_song_vocab",
+    "mood": "happy",
+    "jp": "ゆめ",
+    "reading": "ゆめ",
+    "vi": "夢 (ゆめ): giấc mơ"
+  },
+  "mv_song_28": {
+    "file": "mv_song_28.mp3",
+    "path": "audio1/mv_song_28.mp3",
+    "category": "mv_song_vocab",
+    "mood": "happy",
+    "jp": "はな",
+    "reading": "はな",
+    "vi": "花 (はな): bông hoa"
+  },
+  "mv_song_29": {
+    "file": "mv_song_29.mp3",
+    "path": "audio1/mv_song_29.mp3",
+    "category": "mv_song_vocab",
+    "mood": "happy",
+    "jp": "りそう",
+    "reading": "りそう",
+    "vi": "理想 (りそう): lý tưởng"
+  },
+  "mv_song_30": {
+    "file": "mv_song_30.mp3",
+    "path": "audio1/mv_song_30.mp3",
+    "category": "mv_song_vocab",
+    "mood": "happy",
+    "jp": "さけべ",
+    "reading": "さけべ",
+    "vi": "叫べ (さけべ): hãy hét lên"
+  },
+  "mv_song_31": {
+    "file": "mv_song_31.mp3",
+    "path": "audio1/mv_song_31.mp3",
+    "category": "mv_song_vocab",
+    "mood": "happy",
+    "jp": "たかみ",
+    "reading": "たかみ",
+    "vi": "高み (たかみ): đỉnh cao"
+  },
+  "mv_song_32": {
+    "file": "mv_song_32.mp3",
+    "path": "audio1/mv_song_32.mp3",
+    "category": "mv_song_vocab",
+    "mood": "happy",
+    "jp": "あくせる",
+    "reading": "あくせる",
+    "vi": "アクセル (あくせる): chân ga xe"
+  },
+  "mv_song_33": {
+    "file": "mv_song_33.mp3",
+    "path": "audio1/mv_song_33.mp3",
+    "category": "mv_song_vocab",
+    "mood": "happy",
+    "jp": "きずな",
+    "reading": "きずな",
+    "vi": "絆 (きずな): sợi dây gắn kết / tình bằng hữu"
+  },
+  "mv_song_34": {
+    "file": "mv_song_34.mp3",
+    "path": "audio1/mv_song_34.mp3",
+    "category": "mv_song_vocab",
+    "mood": "happy",
+    "jp": "あか",
+    "reading": "あか",
+    "vi": "赤 (あか): sắc đỏ"
+  },
+  "mv_song_35": {
+    "file": "mv_song_35.mp3",
+    "path": "audio1/mv_song_35.mp3",
+    "category": "mv_song_vocab",
+    "mood": "happy",
+    "jp": "さいご",
+    "reading": "さいご",
+    "vi": "最後 (さいご): sự cuối cùng / giây phút cuối"
+  },
+  "mv_song_36": {
+    "file": "mv_song_36.mp3",
+    "path": "audio1/mv_song_36.mp3",
+    "category": "mv_song_vocab",
+    "mood": "happy",
+    "jp": "まもりたい",
+    "reading": "まもりたい",
+    "vi": "守りたい (まもりたい): muốn bảo vệ"
+  },
+  "mv_song_37": {
+    "file": "mv_song_37.mp3",
+    "path": "audio1/mv_song_37.mp3",
+    "category": "mv_song_vocab",
+    "mood": "happy",
+    "jp": "ひかり",
+    "reading": "ひかり",
+    "vi": "光 (ひかり): ánh sáng"
+  },
+  "mv_song_38": {
+    "file": "mv_song_38.mp3",
+    "path": "audio1/mv_song_38.mp3",
+    "category": "mv_song_vocab",
+    "mood": "happy",
+    "jp": "なみだ",
+    "reading": "なみだ",
+    "vi": "涙 (なみだ): giọt nước mắt"
+  },
+  "mv_song_39": {
+    "file": "mv_song_39.mp3",
+    "path": "audio1/mv_song_39.mp3",
+    "category": "mv_song_vocab",
+    "mood": "happy",
+    "jp": "つよく",
+    "reading": "つよく",
+    "vi": "強く (つよく): mạnh mẽ"
+  },
+  "mv_song_40": {
+    "file": "mv_song_40.mp3",
+    "path": "audio1/mv_song_40.mp3",
+    "category": "mv_song_vocab",
+    "mood": "happy",
+    "jp": "かいきげんしょう",
+    "reading": "かいきげんしょう",
+    "vi": "怪奇現象 (かいきげんしょう): hiện tượng kỳ bí"
+  },
+  "mv_song_41": {
+    "file": "mv_song_41.mp3",
+    "path": "audio1/mv_song_41.mp3",
+    "category": "mv_song_vocab",
+    "mood": "happy",
+    "jp": "じゆう",
+    "reading": "じゆう",
+    "vi": "自由 (じゆう): tự do"
+  },
+  "mv_song_42": {
+    "file": "mv_song_42.mp3",
+    "path": "audio1/mv_song_42.mp3",
+    "category": "mv_song_vocab",
+    "mood": "happy",
+    "jp": "めざめて",
+    "reading": "めざめて",
+    "vi": "目覚めて (めざめて): thức tỉnh"
+  },
+  "mv_song_43": {
+    "file": "mv_song_43.mp3",
+    "path": "audio1/mv_song_43.mp3",
+    "category": "mv_song_vocab",
+    "mood": "happy",
+    "jp": "しんわ",
+    "reading": "しんわ",
+    "vi": "神話 (しんわ): thần thoại / huyền thoại"
+  },
+  "mv_song_44": {
+    "file": "mv_song_44.mp3",
+    "path": "audio1/mv_song_44.mp3",
+    "category": "mv_song_vocab",
+    "mood": "happy",
+    "jp": "あきらめ",
+    "reading": "あきらめ",
+    "vi": "諦め (あきらめ): từ bỏ, bỏ cuộc"
+  },
+  "mv_song_45": {
+    "file": "mv_song_45.mp3",
+    "path": "audio1/mv_song_45.mp3",
+    "category": "mv_song_vocab",
+    "mood": "happy",
+    "jp": "ひみつ",
+    "reading": "ひみつ",
+    "vi": "秘密 (ひみつ): bí mật"
+  },
+  "mv_song_46": {
+    "file": "mv_song_46.mp3",
+    "path": "audio1/mv_song_46.mp3",
+    "category": "mv_song_vocab",
+    "mood": "happy",
+    "jp": "げんかい",
+    "reading": "げんかい",
+    "vi": "限界 (げんかい): giới hạn"
+  },
+  "mv_song_47": {
+    "file": "mv_song_47.mp3",
+    "path": "audio1/mv_song_47.mp3",
+    "category": "mv_song_vocab",
+    "mood": "happy",
+    "jp": "うんめい",
+    "reading": "うんめい",
+    "vi": "運命 (うんめい): vận mệnh / định mệnh"
+  },
+  "mv_song_48": {
+    "file": "mv_song_48.mp3",
+    "path": "audio1/mv_song_48.mp3",
+    "category": "mv_song_vocab",
+    "mood": "happy",
+    "jp": "すこし",
+    "reading": "すこし",
+    "vi": "少し (すこし): một chút / một ít"
+  },
+  "mv_song_49": {
+    "file": "mv_song_49.mp3",
+    "path": "audio1/mv_song_49.mp3",
+    "category": "mv_song_vocab",
+    "mood": "happy",
+    "jp": "むげんだい",
+    "reading": "むげんだい",
+    "vi": "無限大 (むげんだい): vô hạn"
+  },
+  "mv_song_50": {
+    "file": "mv_song_50.mp3",
+    "path": "audio1/mv_song_50.mp3",
+    "category": "mv_song_vocab",
+    "mood": "happy",
+    "jp": "むてき",
+    "reading": "むてき",
+    "vi": "無敵 (むてき): vô địch, không có đối thủ"
+  }
+}
