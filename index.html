@@ -4,8 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>emi.io.vn v2 · Tokyo Neon Arcade 🌸⚡</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='85'%3E🌸%3C/text%3E%3C/svg%3E">
-<link rel="shortcut icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='85'%3E🌸%3C/text%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="icon.svg">
+<link rel="alternate icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='85'%3E🌸%3C/text%3E%3C/svg%3E">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0d1117">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@600;700;900&display=swap" rel="stylesheet">
@@ -1606,6 +1611,173 @@ small, .text-xs, .nav-item .label, [style*="font-size:.7"], [style*="font-size: 
   border: 1px solid rgba(255, 215, 0, 0.3);
 }
 
+/* ── BADGES & AVATARS ── */
+.avatar-opt.locked {
+  opacity: 0.45;
+  filter: grayscale(80%);
+  cursor: not-allowed;
+  position: relative;
+}
+.avatar-opt.locked::after {
+  content: '🔒';
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  font-size: 11px;
+}
+.badge-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: .6rem;
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  transition: transform .15s ease, border-color .15s ease;
+}
+.badge-card.unlocked {
+  border-color: var(--neon-gold);
+  background: rgba(255, 190, 11, 0.08);
+}
+.badge-card.locked {
+  opacity: 0.5;
+  filter: grayscale(90%);
+}
+.badge-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+.badge-info {
+  display: flex;
+  flex-direction: column;
+}
+.badge-name {
+  font-size: .8rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.badge-card.unlocked .badge-name {
+  color: var(--neon-gold);
+}
+.badge-desc {
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.3;
+}
+
+/* ── LEADERBOARD ── */
+.lb-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: .6rem .8rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  transition: background .15s ease;
+}
+.lb-row.me {
+  border-color: var(--neon-cyan);
+  background: rgba(5, 217, 232, 0.12);
+  box-shadow: 0 0 10px rgba(5, 217, 232, 0.2);
+}
+.lb-row.top-1 { border-color: var(--neon-gold); background: rgba(255, 190, 11, 0.1); }
+.lb-row.top-2 { border-color: #cbd5e1; background: rgba(203, 213, 225, 0.08); }
+.lb-row.top-3 { border-color: #d97706; background: rgba(217, 119, 6, 0.08); }
+
+.lb-rank-badge {
+  font-family: var(--font-arcade);
+  font-size: 1rem;
+  font-weight: 900;
+  width: 32px;
+  flex-shrink: 0;
+  text-align: center;
+  color: var(--text-muted);
+}
+.lb-row.top-1 .lb-rank-badge { color: var(--neon-gold); font-size: 1.2rem; }
+.lb-row.top-2 .lb-rank-badge { color: #cbd5e1; font-size: 1.15rem; }
+.lb-row.top-3 .lb-rank-badge { color: #f59e0b; font-size: 1.15rem; }
+
+.lb-user-info {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  flex: 1;
+  margin: 0 .6rem;
+  overflow: hidden;
+}
+.lb-user-name {
+  font-size: .85rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.lb-xp-val {
+  font-family: var(--font-arcade);
+  font-weight: 800;
+  font-size: .88rem;
+  color: var(--neon-cyan);
+}
+
+/* ── KANA TRAINER ── */
+.kana-row-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: .85rem;
+  margin-bottom: .75rem;
+}
+.kana-row-card.locked {
+  opacity: 0.55;
+  filter: grayscale(60%);
+}
+.kana-char-box {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 60px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  margin: .2rem;
+  cursor: pointer;
+  transition: all .15s ease;
+}
+.kana-char-box:hover {
+  border-color: var(--neon-cyan);
+  transform: translateY(-2px);
+}
+.kana-match-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: .6rem;
+}
+.kana-tile {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: .8rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all .15s ease;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+.kana-tile.selected {
+  border-color: var(--neon-cyan);
+  background: rgba(5, 217, 232, 0.2);
+}
+.kana-tile.matched {
+  border-color: var(--neon-lime);
+  background: rgba(0, 245, 155, 0.15);
+  cursor: default;
+  opacity: 0.6;
+}
+
 </style>
 </head>
 <body>
@@ -1651,6 +1823,7 @@ small, .text-xs, .nav-item .label, [style*="font-size:.7"], [style*="font-size: 
           🔥 <span id="streakCount">1</span>d
         </div>
         <button class="sfx-btn" id="sfxToggle" onclick="toggleSfx()" title="Bật/Tắt âm thanh">🔊</button>
+        <button class="sfx-btn" id="headerLeaderboardBtn" onclick="openLeaderboardModal()" title="Bảng xếp hạng tuần">🏆</button>
         <button class="sfx-btn" id="settingsBtn" onclick="openSettingsModal()" title="Cài đặt giọng đọc tiếng Nhật & hệ thống">⚙️</button>
         <button class="user-auth-btn" id="headerAuthBtn" onclick="handleAuthButtonClick()" title="Tài khoản cá nhân & Đồng bộ đám mây">
           <span class="user-avatar" id="headerUserAvatar">🦊</span>
@@ -1701,6 +1874,25 @@ small, .text-xs, .nav-item .label, [style*="font-size:.7"], [style*="font-size: 
             <div class="step-chip" id="rStep4">4. Shiritori</div>
           </div>
           <button class="btn btn-primary btn-full" onclick="startDailyRitual()">Bắt Đầu Nghi Thức Hôm Nay ⚡</button>
+        </div>
+
+        <!-- Word of the Day (Từ Của Ngày Cố Định Theo Ngày) -->
+        <div class="card hub-wotd-area" id="hubWordOfTheDayCard" style="background:linear-gradient(135deg, rgba(255,42,109,0.08), rgba(5,217,232,0.08));border:1px solid var(--border-glow)">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.35rem">
+            <span style="font-size:12px;font-weight:800;color:var(--neon-gold)">🌸 TỪ CỦA NGÀY (WORD OF THE DAY)</span>
+            <span class="mode-badge badge-solo" id="wotdLevelBadge">N5</span>
+          </div>
+          <div style="display:flex;align-items:baseline;gap:.5rem;margin:.25rem 0">
+            <div style="font-family:var(--font-kanji);font-size:2rem;font-weight:900;color:var(--neon-cyan)" id="wotdKanji">桜</div>
+            <div style="font-size:1rem;color:var(--neon-sakura);font-weight:700" id="wotdKana">さくら</div>
+          </div>
+          <div style="font-size:.85rem;color:var(--text-secondary);margin-bottom:.5rem">
+            Nghĩa: <strong id="wotdMeaning">Hoa anh đào</strong>
+          </div>
+          <div style="display:flex;gap:.4rem">
+            <button class="btn btn-ghost btn-sm" onclick="speakWordOfTheDay()" style="flex:1;min-height:40px;font-size:12px" title="Phát âm tiếng Nhật chuẩn">🔊 Nghe</button>
+            <button class="btn btn-cyan btn-sm" onclick="showDailyResultModal()" style="flex:2;min-height:40px;font-size:12px" title="Tạo thẻ kết quả đẹp và chia sẻ">🎨 Thẻ Kết Quả & Chia Sẻ</button>
+          </div>
         </div>
 
         <!-- Wrong Words Review Box in Hub Sidebar -->
@@ -1791,6 +1983,18 @@ small, .text-xs, .nav-item .label, [style*="font-size:.7"], [style*="font-size: 
               <div class="mode-title">Shiritori VS AI</div>
               <div class="mode-desc">Đấu nối từ Danh từ → Động từ → Tính từ với Sakura Bot Claude.</div>
               <span class="mode-badge badge-solo">Bot AI</span>
+            </div>
+            <div class="mode-card" onclick="switchTab('dojo'); switchDojoMode('kana');">
+              <div class="mode-icon">🔤</div>
+              <div class="mode-title">Bảng Chữ Cái Kana</div>
+              <div class="mode-desc">Luyện Hiragana & Katakana từng hàng: nhận mặt chữ, nghe âm thanh, ghép Romaji.</div>
+              <span class="mode-badge badge-solo">Người Mới Bắt Đầu</span>
+            </div>
+            <div class="mode-card" onclick="switchTab('dojo'); switchDojoMode('dictation');">
+              <div class="mode-icon">🎧</div>
+              <div class="mode-title">Nghe Chép Chính Tả</div>
+              <div class="mode-desc">Luyện đôi tai với TTS chuẩn Nhật: gõ Romaji hoặc chọn đáp án, tự đưa từ sai vào SRS.</div>
+              <span class="mode-badge badge-solo">Luyện Nghe Siêu Tốc</span>
             </div>
           </div>
         </div>
@@ -1992,6 +2196,9 @@ small, .text-xs, .nav-item .label, [style*="font-size:.7"], [style*="font-size: 
               <button class="btn btn-ghost" style="justify-content:flex-start" onclick="launchPartyGame('kanji')">
                 ⚡ <strong>3. Kanji Reflex Blitz</strong>
               </button>
+              <button class="btn btn-ghost" style="justify-content:flex-start" onclick="launchPartyGame('speed_race')">
+                🏁 <strong>4. Đua Tốc Độ (Speed Blitz)</strong>
+              </button>
             </div>
           </div>
         </div>
@@ -2068,6 +2275,8 @@ small, .text-xs, .nav-item .label, [style*="font-size:.7"], [style*="font-size: 
           <button class="btn btn-sm btn-cyan dojo-tab-btn" id="dojoSubFC" onclick="switchDojoMode('fc')">📇 Flashcard</button>
           <button class="btn btn-sm btn-ghost dojo-tab-btn" id="dojoSubQuiz" onclick="switchDojoMode('quiz')">📝 Trắc Nghiệm</button>
           <button class="btn btn-sm btn-ghost dojo-tab-btn" id="dojoSubPron" onclick="switchDojoMode('pron')">🎤 Phát Âm AI</button>
+          <button class="btn btn-sm btn-ghost dojo-tab-btn" id="dojoSubKana" onclick="switchDojoMode('kana')">🔤 Bảng Chữ Kana</button>
+          <button class="btn btn-sm btn-ghost dojo-tab-btn" id="dojoSubDictation" onclick="switchDojoMode('dictation')">🎧 Nghe Chép Chính Tả</button>
         </div>
 
         <!-- Level Selector for Dojo -->
@@ -2159,6 +2368,76 @@ small, .text-xs, .nav-item .label, [style*="font-size:.7"], [style*="font-size: 
           <div style="display:flex;gap:.5rem;max-width:580px;margin:.75rem auto 0">
             <button class="btn btn-ghost btn-full" onclick="navPron(-1)">← Từ Trước</button>
             <button class="btn btn-ghost btn-full" onclick="navPron(1)">Từ Tiếp →</button>
+          </div>
+        </div>
+
+        <!-- KANA LEARNING VIEW (HIRAGANA & KATAKANA) -->
+        <div id="dojoKanaView" style="display:none">
+          <div class="card" style="padding:1.25rem">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem;flex-wrap:wrap;gap:.5rem">
+              <div>
+                <div style="font-size:1.1rem;font-weight:800;color:var(--neon-cyan)">🔤 Bảng Chữ Cái Kana Cho Người Mới</div>
+                <div style="font-size:.78rem;color:var(--text-muted)">Nhận diện mặt chữ · Nghe âm thanh · Ghép cặp Romaji · Mở khóa theo từng hàng</div>
+              </div>
+              <div style="display:flex;gap:.35rem">
+                <button class="btn btn-sm btn-cyan" id="btnKanaHiragana" onclick="setKanaAlphabet('hiragana')">Hiragana (あ)</button>
+                <button class="btn btn-sm btn-ghost" id="btnKanaKatakana" onclick="setKanaAlphabet('katakana')">Katakana (ア)</button>
+              </div>
+            </div>
+
+            <!-- Kana Practice Mode Switcher -->
+            <div style="display:flex;gap:.35rem;margin-bottom:1rem;flex-wrap:wrap">
+              <button class="btn btn-sm btn-cyan" id="btnKanaSubRecognize" onclick="setKanaPracticeType('recognize')">👁️ Nhận Mặt Chữ</button>
+              <button class="btn btn-sm btn-ghost" id="btnKanaSubListen" onclick="setKanaPracticeType('listen')">🎧 Nghe Chọn Chữ</button>
+              <button class="btn btn-sm btn-ghost" id="btnKanaSubMatch" onclick="setKanaPracticeType('match')">🧩 Ghép Romaji</button>
+            </div>
+
+            <!-- Dynamic Kana Practice Area -->
+            <div id="kanaPracticeArea" style="min-height:220px">
+              <!-- Rendered by JS -->
+            </div>
+
+            <!-- Kana Row Navigator / Selector -->
+            <div style="margin-top:1.2rem;border-top:1px solid var(--border);padding-top:1rem">
+              <div style="font-size:.82rem;font-weight:700;color:var(--text-secondary);margin-bottom:.5rem">DANH SÁCH HÀNG KANA (MỞ KHÓA TUẦN TỰ):</div>
+              <div id="kanaRowButtonsGrid" style="display:grid;grid-template-columns:repeat(auto-fill, minmax(130px, 1fr));gap:.4rem">
+                <!-- Rendered by JS -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DICTATION VIEW (NGHE CHÉP CHÍNH TẢ) -->
+        <div id="dojoDictationView" style="display:none">
+          <div class="card" style="text-align:center;padding:1.5rem">
+            <div style="font-size:.82rem;font-weight:700;color:var(--neon-sakura);letter-spacing:.05em">🎧 NGHE CHÉP CHÍNH TẢ (DICTATION ARENA)</div>
+            <div style="font-size:.82rem;color:var(--text-muted);margin:.2rem 0 1rem">
+              Nghe từ tiếng Nhật và gõ Romaji hoặc chọn đáp án. Từ sai được tự động đưa vào hệ thống lặp lại ngắt quãng SRS!
+            </div>
+
+            <div style="margin:1rem 0">
+              <button class="btn btn-primary" id="btnPlayDictationAudio" onclick="playDictationAudio()" style="min-width:140px;padding:.6rem 1.2rem;font-size:1rem">
+                🔊 Nghe Lại Từ
+              </button>
+            </div>
+
+            <div style="background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:.75rem;max-width:480px;margin:0 auto 1.25rem">
+              <div style="font-size:12px;color:var(--text-muted)">GỢI Ý NGHĨA TIẾNG VIỆT:</div>
+              <div style="font-size:1.05rem;font-weight:700;color:var(--text-primary);margin-top:.2rem" id="dictationMeaningHint">...</div>
+            </div>
+
+            <!-- Answer mode 1: Type romaji / hiragana -->
+            <div style="max-width:480px;margin:0 auto 1rem">
+              <div style="display:flex;gap:.5rem">
+                <input class="inp" id="dictationInput" placeholder="Gõ romaji (vd: sakura) hoặc hiragana..." style="text-align:center;font-size:1rem;flex:1">
+                <button class="btn btn-cyan" onclick="submitDictationInput()" style="flex-shrink:0">Gửi ⚡</button>
+              </div>
+            </div>
+
+            <div style="font-size:.78rem;color:var(--text-muted);margin-bottom:.75rem">— HOẶC CHỌN 1 TRONG 4 ĐÁP ÁN BÊN DƯỚI —</div>
+            <div class="quiz-options-grid" id="dictationOptionsGrid" style="max-width:580px;margin:0 auto"></div>
+
+            <div id="dictationFeedback" style="min-height:28px;margin-top:1rem;font-size:.9rem;font-weight:700"></div>
           </div>
         </div>
       </div>
@@ -2450,10 +2729,11 @@ small, .text-xs, .nav-item .label, [style*="font-size:.7"], [style*="font-size: 
 
     <!-- Edit Profile Section -->
     <div style="margin-bottom:1rem">
-      <label style="font-size:.8rem;color:var(--text-secondary);font-weight:700;display:block;margin-bottom:.3rem">
-        CHỌN AVATAR NHẬT BẢN:
-      </label>
-      <div class="avatar-grid">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.3rem">
+        <label style="font-size:.8rem;color:var(--text-secondary);font-weight:700">CHỌN AVATAR NHẬT BẢN:</label>
+        <span style="font-size:12px;color:var(--neon-cyan)" id="profileAvatarUnlockHint">Mở khóa theo EXP & Streak</span>
+      </div>
+      <div class="avatar-grid" id="profileAvatarGrid">
         <div class="avatar-opt selected" onclick="selectProfileAvatar('🦊')">🦊</div>
         <div class="avatar-opt" onclick="selectProfileAvatar('🥷')">🥷</div>
         <div class="avatar-opt" onclick="selectProfileAvatar('🌸')">🌸</div>
@@ -2466,6 +2746,17 @@ small, .text-xs, .nav-item .label, [style*="font-size:.7"], [style*="font-size: 
         <div class="avatar-opt" onclick="selectProfileAvatar('🐉')">🐉</div>
         <div class="avatar-opt" onclick="selectProfileAvatar('🍱')">🍱</div>
         <div class="avatar-opt" onclick="selectProfileAvatar('⚡')">⚡</div>
+      </div>
+    </div>
+
+    <!-- Badges Showcase Section (Huy Hiệu & Thành Tích) -->
+    <div style="margin-bottom:1.1rem">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem">
+        <label style="font-size:.8rem;color:var(--text-secondary);font-weight:700">HUY HIỆU CHIẾN TÍCH:</label>
+        <span style="font-size:12px;color:var(--neon-gold)" id="profileBadgesCount">0 / 9 đã mở</span>
+      </div>
+      <div id="profileBadgesGrid" style="display:grid;grid-template-columns:repeat(auto-fill, minmax(140px, 1fr));gap:.45rem">
+        <!-- Rendered by JS -->
       </div>
     </div>
 
@@ -2614,10 +2905,100 @@ small, .text-xs, .nav-item .label, [style*="font-size:.7"], [style*="font-size: 
     <div id="questStepContentArea" style="min-height:280px">
       <!-- Injected by JS: Step 1, 2, 3, 4 or Victory Screen -->
     </div>
+<!-- Leaderboard Modal Overlay -->
+<div class="modal-overlay" id="leaderboardModalOverlay">
+  <div class="modal-box" style="max-width:560px;text-align:left;max-height:88vh;max-height:88dvh;overflow-y:auto">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;border-bottom:1px solid var(--border);padding-bottom:.6rem">
+      <div>
+        <div style="font-size:1.15rem;font-weight:800;color:var(--neon-gold);display:flex;align-items:center;gap:.4rem">
+          <span>🏆 BẢNG XẾP HẠNG TUẦN (EXP)</span>
+        </div>
+        <div style="font-size:.78rem;color:var(--text-muted)" id="leaderboardWeekTag">Top 50 Chiến Binh Tuần Này</div>
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="closeLeaderboardModal()" style="padding:.2rem .6rem;font-size:1rem;line-height:1">✕</button>
+    </div>
+    
+    <!-- User current rank highlight banner -->
+    <div id="userLeaderboardBanner" style="background:rgba(5,217,232,0.08);border:1px solid var(--neon-cyan);border-radius:var(--radius-md);padding:.75rem 1rem;margin-bottom:1rem;display:flex;justify-content:space-between;align-items:center">
+      <div style="display:flex;align-items:center;gap:.6rem">
+        <span style="font-size:1.6rem" id="lbUserAvatar">🦊</span>
+        <div>
+          <div style="font-weight:800;font-size:.9rem;color:#fff" id="lbUserName">Bạn</div>
+          <div style="font-size:.78rem;color:var(--neon-cyan)" id="lbUserExp">0 EXP</div>
+        </div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase">Thứ hạng của bạn</div>
+        <div style="font-family:var(--font-arcade);font-size:1.15rem;font-weight:900;color:var(--neon-gold)" id="lbUserRank">Chưa lọt Top 50</div>
+      </div>
+    </div>
+
+    <!-- Leaderboard Top 50 Table -->
+    <div id="leaderboardListContainer" style="display:flex;flex-direction:column;gap:.4rem">
+      <div style="text-align:center;padding:1.5rem;color:var(--text-muted)">⏳ Đang tải bảng xếp hạng...</div>
+    </div>
+  </div>
+</div>
+
+<!-- Daily Result Share Card Modal -->
+<div class="modal-overlay" id="dailyShareModal">
+  <div class="modal-box" style="max-width:680px;text-align:center;max-height:92vh;max-height:92dvh;overflow-y:auto">
+    <div style="font-size:1.2rem;font-weight:800;color:var(--neon-gold);margin-bottom:.35rem">
+      🏆 THẺ KẾT QUẢ & TỪ CỦA NGÀY
+    </div>
+    <div style="font-size:.82rem;color:var(--text-secondary);margin-bottom:.85rem">
+      Tạo tự động bằng Canvas (Zero Server) • Gồm Streak, EXP, Rank và Từ của ngày
+    </div>
+    <div style="width:100%;max-width:600px;margin:0 auto;border-radius:var(--radius-md);overflow:hidden;border:1px solid var(--border);box-shadow:0 0 20px rgba(5,217,232,0.15)">
+      <img id="dailyShareImg" src="" style="width:100%;height:auto;display:block" alt="Thẻ kết quả ngày">
+    </div>
+    <div style="display:flex;gap:.75rem;justify-content:center;margin-top:1.1rem;flex-wrap:wrap">
+      <button class="btn btn-secondary" id="btnCopyDailyResult" onclick="copyDailyShareCard()">📋 Sao Chép Thẻ</button>
+      <button class="btn btn-primary" id="btnWebShareDaily" onclick="shareDailyResultCard()">🚀 Chia Sẻ (Web Share)</button>
+      <button class="btn btn-ghost" onclick="closeDailyShareModal()">Đóng</button>
+    </div>
   </div>
 </div>
 
 <script>
+// ══════════════════════════════════════════════════
+//  0. SECURITY UTILITIES & SRS CORE HELPERS
+// ══════════════════════════════════════════════════
+function escapeHTML(str) {
+  if (typeof str !== 'string') return '';
+  return str.replace(/[&<>'"]/g, tag => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    "'": '&#39;',
+    '"': '&quot;'
+  }[tag] || tag));
+}
+
+function getTodayStr() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
+function addDaysToStr(dateStr, days) {
+  const base = dateStr || getTodayStr();
+  const parts = base.split('-').map(Number);
+  const d = new Date(parts[0], parts[1] - 1, parts[2]);
+  d.setDate(d.getDate() + days);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
+const SRS_INTERVALS = [1, 2, 4, 8, 16]; // Hộp 1: 1d, Hộp 2: 2d, Hộp 3: 4d, Hộp 4: 8d, Hộp 5: 16d
+
+// Đăng ký Service Worker an toàn (tránh lỗi SecurityError khi chạy local file://)
+if (typeof navigator !== 'undefined' && 'serviceWorker' in navigator && typeof window !== 'undefined' && window.location && (window.location.protocol === 'https:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(err => {
+      console.warn('SW registration skipped or failed:', err);
+    });
+  });
+}
+
 // ══════════════════════════════════════════════════
 //  1. SMART ROMAJI-TO-KANA ENGINE (Pure Vanilla JS)
 // ══════════════════════════════════════════════════
@@ -2979,7 +3360,7 @@ function updateUserUI() {
   const r = getRank(userData.xp);
   document.getElementById('userNameDisplay').textContent = userData.name;
   document.getElementById('userRankDisplay').textContent = `RANK: ${r.title}`;
-  document.getElementById('avatarDisplay').textContent = r.emoji;
+  document.getElementById('avatarDisplay').textContent = userData.avatar || r.emoji;
   document.getElementById('streakCount').textContent = userData.streak;
   document.getElementById('xpDisplay').textContent = `${userData.xp} / ${r.maxXP}`;
   
@@ -2990,14 +3371,25 @@ function updateUserUI() {
   document.getElementById('statPron').textContent = (userData.pronBest || 0) + '%';
   document.getElementById('statWins').textContent = userData.partyWins || 0;
 
-  // Wrong words review UI on Hub Sidebar
-  const wrongList = (userData.questData && userData.questData.wrongWords) || [];
+  // Wrong words review UI on Hub Sidebar (Spaced Repetition SRS)
+  const dueList = (typeof getDueWrongWords === 'function') ? getDueWrongWords() : [];
+  const totalWrong = (userData.questData && userData.questData.wrongWords) ? userData.questData.wrongWords.length : 0;
   const hubWBadge = document.getElementById('hubWrongCountBadge');
-  if (hubWBadge) hubWBadge.textContent = `${wrongList.length} từ sai`;
+  if (hubWBadge) hubWBadge.textContent = `${dueList.length} cần ôn (${totalWrong} từ)`;
   const hubWBtn = document.getElementById('hubBtnReviewWrong');
   if (hubWBtn) {
-    hubWBtn.disabled = wrongList.length === 0;
-    hubWBtn.textContent = wrongList.length > 0 ? `⚡ Ôn Luyện ${wrongList.length} Từ Hay Sai` : '⚡ Chưa có từ sai';
+    hubWBtn.disabled = dueList.length === 0;
+    hubWBtn.textContent = dueList.length > 0 ? `⚡ Ôn Luyện ${dueList.length} Từ Đến Hạn (SRS)` : '⚡ Chưa có từ đến hạn';
+  }
+
+  // Word of the Day widget update
+  if (typeof updateWordOfTheDayUI === 'function') {
+    updateWordOfTheDayUI();
+  }
+
+  // Badges update
+  if (typeof checkAndAwardBadges === 'function') {
+    checkAndAwardBadges();
   }
 
   // Ritual steps UI
@@ -3432,6 +3824,9 @@ function openProfileModal() {
   }
   if (starsTag) starsTag.textContent = `${totalStars} ⭐`;
 
+  renderProfileAvatars();
+  renderProfileBadges();
+
   modal.classList.add('show');
 }
 
@@ -3440,13 +3835,111 @@ function closeProfileModal() {
   if (modal) modal.classList.remove('show');
 }
 
+// ══════════════════════════════════════════════════
+//  HUY HIỆU (BADGES) & MỞ KHÓA AVATAR
+// ══════════════════════════════════════════════════
+const AVATAR_UNLOCK_CONDITIONS = {
+  '🦊': { req: 'Mặc định' },
+  '🥷': { xp: 150, req: 'Cần 150 EXP' },
+  '🌸': { streak: 3, req: 'Streak 3 ngày' },
+  '⚔️': { wins: 1, req: 'Thắng 1 trận 2P/Bot' },
+  '🐱': { req: 'Mặc định' },
+  '🍙': { req: 'Mặc định' },
+  '⛩️': { xp: 400, req: 'Cần 400 EXP' },
+  '🏮': { xp: 250, req: 'Cần 250 EXP' },
+  '🎭': { streak: 5, req: 'Streak 5 ngày' },
+  '🐉': { xp: 800, req: 'Cần 800 EXP' },
+  '🍱': { xp: 500, req: 'Cần 500 EXP' },
+  '⚡': { streak: 7, req: 'Streak 7 ngày' }
+};
+
+function isAvatarUnlocked(emoji) {
+  const cond = AVATAR_UNLOCK_CONDITIONS[emoji];
+  if (!cond) return true;
+  if (cond.req === 'Mặc định') return true;
+  if (cond.xp && (userData.xp || 0) < cond.xp) return false;
+  if (cond.streak && (userData.streak || 0) < cond.streak) return false;
+  if (cond.wins && (userData.partyWins || 0) < cond.wins) return false;
+  return true;
+}
+
+const SYSTEM_BADGES = [
+  { id: 'b_start', icon: '🌸', name: 'Tân Thủ Khởi Đầu', desc: 'Bắt đầu học tiếng Nhật tại Emi', check: (u) => true },
+  { id: 'b_streak3', icon: '🔥', name: 'Chiến Binh 3 Ngày', desc: 'Duy trì streak 3 ngày liên tục', check: (u) => (u.streak || 0) >= 3 },
+  { id: 'b_streak7', icon: '⚡', name: 'Bậc Thầy Chuỗi', desc: 'Duy trì streak 7 ngày liên tục', check: (u) => (u.streak || 0) >= 7 },
+  { id: 'b_xp100', icon: '🥋', name: 'Đai Trắng Ninja', desc: 'Tích lũy đạt 100 EXP', check: (u) => (u.xp || 0) >= 100 },
+  { id: 'b_xp500', icon: '🥷', name: 'Ninja Thực Thụ', desc: 'Tích lũy đạt 500 EXP', check: (u) => (u.xp || 0) >= 500 },
+  { id: 'b_xp1500', icon: '👑', name: 'Đại Tông Sư', desc: 'Tích lũy đạt 1,500 EXP', check: (u) => (u.xp || 0) >= 1500 },
+  { id: 'b_party', icon: '⚔️', name: 'Cao Thủ Song Đấu', desc: 'Thắng ít nhất 1 trận đấu phòng', check: (u) => (u.partyWins || 0) >= 1 },
+  { id: 'b_srs', icon: '🧠', name: 'Bộ Não Vô Song', desc: 'Hoàn thành lượt ôn tập SRS', check: (u) => (u.srsReviewsDone || 0) >= 1 },
+  { id: 'b_kana', icon: '🔤', name: 'Thần Tốc Kana', desc: 'Mở khóa các hàng chữ Kana', check: (u) => (u.kanaUnlockedRows || 1) >= 2 }
+];
+
+function checkAndAwardBadges() {
+  if (!userData.badges) userData.badges = [];
+  let changed = false;
+  SYSTEM_BADGES.forEach(b => {
+    if (!userData.badges.includes(b.id) && b.check(userData)) {
+      userData.badges.push(b.id);
+      changed = true;
+    }
+  });
+  if (changed) {
+    saveUserData();
+  }
+}
+
+function renderProfileAvatars() {
+  const container = document.getElementById('profileAvatarGrid');
+  if (!container) return;
+  const avatars = ['🦊', '🥷', '🌸', '⚔️', '🐱', '🍙', '⛩️', '🏮', '🎭', '🐉', '🍱', '⚡'];
+  container.innerHTML = avatars.map(emoji => {
+    const unlocked = isAvatarUnlocked(emoji);
+    const isSel = selectedProfileAvatar === emoji;
+    const cond = AVATAR_UNLOCK_CONDITIONS[emoji];
+    const hint = cond && cond.req !== 'Mặc định' ? cond.req : 'Đã mở';
+    return `<div class="avatar-opt ${isSel ? 'selected' : ''} ${unlocked ? '' : 'locked'}" 
+                 onclick="onProfileAvatarClicked('${emoji}')" 
+                 title="${emoji} • ${hint}">${emoji}</div>`;
+  }).join('');
+}
+
+function onProfileAvatarClicked(emoji) {
+  if (!isAvatarUnlocked(emoji)) {
+    const cond = AVATAR_UNLOCK_CONDITIONS[emoji];
+    showToast(`🔒 Avatar này đang khóa! Điều kiện: ${cond ? cond.req : 'Chưa mở'}`);
+    playSfx('wrong');
+    return;
+  }
+  selectProfileAvatar(emoji);
+}
+
+function renderProfileBadges() {
+  const grid = document.getElementById('profileBadgesGrid');
+  const countEl = document.getElementById('profileBadgesCount');
+  if (!grid) return;
+  checkAndAwardBadges();
+  const unlockedBadges = userData.badges || [];
+  if (countEl) countEl.textContent = `${unlockedBadges.length} / ${SYSTEM_BADGES.length} đã mở`;
+
+  grid.innerHTML = SYSTEM_BADGES.map(b => {
+    const isUnlocked = unlockedBadges.includes(b.id);
+    return `
+      <div class="badge-card ${isUnlocked ? 'unlocked' : 'locked'}" title="${escapeHTML(b.desc)}">
+        <div class="badge-icon">${b.icon}</div>
+        <div class="badge-info">
+          <div class="badge-name">${escapeHTML(b.name)}</div>
+          <div class="badge-desc">${isUnlocked ? '✓ Đã nhận' : escapeHTML(b.desc)}</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
 let selectedProfileAvatar = '🦊';
 function selectProfileAvatar(avatar, markDirty = true) {
   selectedProfileAvatar = avatar;
-  document.querySelectorAll('.avatar-opt').forEach(opt => {
-    if (opt.textContent.trim() === avatar) opt.classList.add('selected');
-    else opt.classList.remove('selected');
-  });
+  renderProfileAvatars();
   const preview = document.getElementById('profileAvatarPreview');
   if (preview) preview.textContent = avatar;
 }
@@ -4353,23 +4846,24 @@ function renderQuestRoadmap() {
   const clearedEl = document.getElementById('questClearedStages');
   if (clearedEl) clearedEl.textContent = `${clearedCount} / 30`;
 
-  // Wrong words counter & button
-  const wrongList = qData.wrongWords || [];
+  // Wrong words counter & button (Spaced Repetition SRS)
+  const dueList = (typeof getDueWrongWords === 'function') ? getDueWrongWords() : [];
+  const totalWrongCount = (qData.wrongWords || []).length;
   const wrongBadge = document.getElementById('questWrongCountBadge');
-  if (wrongBadge) wrongBadge.textContent = `${wrongList.length} từ`;
+  if (wrongBadge) wrongBadge.textContent = `${dueList.length} đến hạn`;
   const wrongBtn = document.getElementById('btnReviewWrongWords');
   if (wrongBtn) {
-    wrongBtn.disabled = wrongList.length === 0;
-    wrongBtn.textContent = wrongList.length > 0 ? `⚡ Ôn Luyện ${wrongList.length} Từ Hay Sai` : '⚡ Chưa có từ sai để ôn';
+    wrongBtn.disabled = dueList.length === 0;
+    wrongBtn.textContent = dueList.length > 0 ? `⚡ Ôn Luyện ${dueList.length} Từ Đến Hạn (SRS)` : '⚡ Chưa có từ đến hạn';
   }
 
   // Also sync Hub wrong words box
   const hubWBadge = document.getElementById('hubWrongCountBadge');
-  if (hubWBadge) hubWBadge.textContent = `${wrongList.length} từ sai`;
+  if (hubWBadge) hubWBadge.textContent = `${dueList.length} cần ôn (${totalWrongCount} từ)`;
   const hubWBtn = document.getElementById('hubBtnReviewWrong');
   if (hubWBtn) {
-    hubWBtn.disabled = wrongList.length === 0;
-    hubWBtn.textContent = wrongList.length > 0 ? `⚡ Ôn Luyện ${wrongList.length} Từ Hay Sai` : '⚡ Chưa có từ sai';
+    hubWBtn.disabled = dueList.length === 0;
+    hubWBtn.textContent = dueList.length > 0 ? `⚡ Ôn Luyện ${dueList.length} Từ Đến Hạn (SRS)` : '⚡ Chưa có từ đến hạn';
   }
 
   // Update Level Tabs UI
@@ -5019,36 +5513,46 @@ function renderQuestStageResult(forcedStars) {
 function recordWrongWord(wordItem) {
   if (!wordItem) return;
   ensureQuestData();
-  const key = wordItem.kanji || wordItem.w;
-  const exists = userData.questData.wrongWords.some(w => (w.kanji || w.w) === key);
-  if (!exists) {
+  const key = wordItem.kanji || wordItem.w || wordItem.hiragana || wordItem.kana;
+  if (!key) return;
+  const todayStr = getTodayStr();
+  const existing = userData.questData.wrongWords.find(w => (w.kanji || w.w || w.hiragana || w.kana) === key);
+  if (existing) {
+    existing.box = 1;
+    existing.nextReview = todayStr;
+  } else {
     userData.questData.wrongWords.push({
-      kanji: wordItem.kanji || wordItem.w,
+      kanji: wordItem.kanji || wordItem.w || '',
       hiragana: wordItem.hiragana || wordItem.r || wordItem.kana || '',
       kana: wordItem.hiragana || wordItem.kana || wordItem.r || '',
-      romaji: wordItem.romaji || wordItem.r,
-      meaning: wordItem.meaning || wordItem.m,
+      romaji: wordItem.romaji || wordItem.r || '',
+      meaning: wordItem.meaning || wordItem.m || wordItem.vi || '',
       level: wordItem.level || 'N5',
-      category: wordItem.category || 'Chung'
+      category: wordItem.category || 'Chung',
+      box: 1,
+      nextReview: todayStr
     });
-    saveUserData();
   }
+  saveUserData();
+  updateUserUI();
+  if (typeof renderQuestRoadmap === 'function') renderQuestRoadmap();
+  if (typeof queueCloudSync === 'function') queueCloudSync();
 }
 
-// ── TÍNH NĂNG ÔN LẬP TỪ HAY SAI ──
+// ── TÍNH NĂNG ÔN LẬP NGẮT QUÃNG SRS CHO TỪ HAY SAI (HỘP 1 - 5) ──
 function startWrongWordsReview() {
   ensureQuestData();
-  const list = userData.questData.wrongWords || [];
-  if (list.length === 0) {
-    showToast('🎉 Tuyệt vời! Bạn không có từ nào bị sai cần ôn.');
+  const dueList = (typeof getDueWrongWords === 'function') ? getDueWrongWords() : [];
+  if (dueList.length === 0) {
+    showToast('🎉 Tuyệt vời! Bạn không có từ nào đến hạn ôn hôm nay.');
     return;
   }
   playSfx('click');
   isReviewingWrongWords = true;
-  wrongWordsQuizPool = list.slice(0, 5); // Ôn 5 từ một lần
+  wrongWordsQuizPool = dueList.slice(0, 5); // Ôn 5 từ đến hạn một lần
 
-  document.getElementById('questStageModalTitle').textContent = '🔥 Ôn Luyện Từ Vựng Hay Sai';
-  document.getElementById('questStageModalSubtitle').textContent = `Đang ôn ${wrongWordsQuizPool.length} từ khó • Trả lời đúng để xóa khỏi danh sách sai!`;
+  document.getElementById('questStageModalTitle').textContent = '🔥 Ôn Lặp Ngắt Quãng SRS (Hộp 1-5)';
+  document.getElementById('questStageModalSubtitle').textContent = `Đang ôn ${wrongWordsQuizPool.length} từ đến hạn hôm nay • Đúng tăng hộp & dãn lịch, sai về hộp 1!`;
 
   const modal = document.getElementById('questStageModal');
   if (modal) modal.classList.add('show');
@@ -5061,15 +5565,19 @@ function renderWrongWordQuestion(qIdx) {
     // Hoàn tất đợt ôn tập
     playSfx('win');
     addXP(25);
+    userData.srsReviewsDone = (userData.srsReviewsDone || 0) + 1;
+    saveUserData();
+    updateUserUI();
+    if (typeof submitScoreToLeaderboard === 'function') submitScoreToLeaderboard();
     const container = document.getElementById('questStepContentArea');
     container.innerHTML = `
       <div style="background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:1.5rem;text-align:center">
         <div style="font-size:2.8rem">🎯</div>
         <div style="font-size:1.15rem;font-weight:800;color:var(--neon-lime);margin:.5rem 0">
-          HOÀN TẤT ĐỢT ÔN TẬP TỪ SAI!
+          HOÀN TẤT ĐỢT ÔN TẬP SRS!
         </div>
         <div style="font-size:.85rem;color:var(--text-secondary);margin-bottom:1rem">
-          Các từ trả lời đúng đã được loại bỏ khỏi danh sách cần ôn. Thưởng: +25 EXP!
+          Bạn đã hoàn thành các từ đến hạn hôm nay. Các từ trả lời đúng đã được chuyển lên hộp cao hơn với chu kỳ dãn cách 1, 2, 4, 8, 16 ngày. Thưởng: +25 EXP!
         </div>
         <button class="btn btn-primary" onclick="closeQuestStageModal()">Về Bản Đồ 🗺️</button>
       </div>
@@ -5081,6 +5589,7 @@ function renderWrongWordQuestion(qIdx) {
   const kanjiDisplay = currentWord.kanji || currentWord.w;
   const readingDisplay = currentWord.hiragana || currentWord.r;
   const rightMeaning = currentWord.meaning || currentWord.m;
+  const curBox = currentWord.box || 1;
 
   const pool = window.ALL_VOCAB || [];
   const otherWords = pool.filter(w => (w.meaning || w.m) !== rightMeaning);
@@ -5091,7 +5600,7 @@ function renderWrongWordQuestion(qIdx) {
   container.innerHTML = `
     <div style="background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:1.25rem;text-align:center">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem">
-        <span style="font-size:.78rem;color:var(--neon-gold);font-weight:700">🔥 ÔN TẬP TỪ HAY SAI</span>
+        <span style="font-size:.78rem;color:var(--neon-gold);font-weight:700">🔥 SRS • HỘP ${curBox}/5</span>
         <span style="font-size:.78rem;color:var(--neon-cyan);font-weight:700">${qIdx + 1} / ${wrongWordsQuizPool.length}</span>
       </div>
 
@@ -5102,7 +5611,7 @@ function renderWrongWordQuestion(qIdx) {
         ${readingDisplay}
       </div>
       <div style="font-size:.82rem;color:var(--text-muted);margin:.3rem 0 .9rem">
-        Chọn nghĩa chính xác để gỡ từ này khỏi danh sách sai:
+        Chọn nghĩa chính xác (Đúng: tăng hộp & dãn lịch; Sai: về hộp 1):
       </div>
 
       <div style="display:flex;flex-direction:column;gap:.5rem" id="wrongQuizOpts">
@@ -5123,26 +5632,46 @@ function submitWrongReviewAnswer(btn, chosenEnc, rightEnc, qIdx) {
   const buttons = document.querySelectorAll('#wrongQuizOpts button');
   buttons.forEach(b => b.disabled = true);
 
+  const todayStr = getTodayStr();
+  const key = currentWord.kanji || currentWord.w || currentWord.hiragana || currentWord.kana;
+  const wordInStorage = userData.questData.wrongWords.find(w => (w.kanji || w.w || w.hiragana || w.kana) === key);
+
   if (chosen === right) {
     playSfx('correct');
     btn.classList.add('correct');
-    // Xóa từ khỏi wrongWords
-    const key = currentWord.kanji || currentWord.w;
-    userData.questData.wrongWords = userData.questData.wrongWords.filter(w => (w.kanji || w.w) !== key);
-    saveUserData();
-    showToast('✓ Đã nhớ từ này! Đã loại khỏi danh sách sai.');
+    if (wordInStorage) {
+      const currentBox = wordInStorage.box || 1;
+      const nextBox = Math.min(5, currentBox + 1);
+      const intervalDays = SRS_INTERVALS[nextBox - 1]; // [1, 2, 4, 8, 16]
+      wordInStorage.box = nextBox;
+      wordInStorage.nextReview = addDaysToStr(todayStr, intervalDays);
+      showToast(`✓ Chính xác! Lên Hộp ${nextBox}/5 (ôn lại sau ${intervalDays} ngày)`);
+    } else {
+      showToast('✓ Chính xác!');
+    }
   } else {
     playSfx('wrong');
     btn.classList.add('wrong');
     buttons.forEach(b => {
       if (b.textContent.trim() === right) b.classList.add('correct');
     });
-    showToast(`✗ Vẫn chưa chính xác! Nghĩa đúng: ${right}`);
+    if (wordInStorage) {
+      wordInStorage.box = 1;
+      wordInStorage.nextReview = addDaysToStr(todayStr, 1);
+      showToast(`✗ Chưa đúng! Về Hộp 1 (ôn lại sau 1 ngày). Đáp án: ${right}`);
+    } else {
+      showToast(`✗ Chưa đúng! Đáp án: ${right}`);
+    }
   }
+
+  saveUserData();
+  updateUserUI();
+  if (typeof renderQuestRoadmap === 'function') renderQuestRoadmap();
+  if (typeof queueCloudSync === 'function') queueCloudSync();
 
   setTimeout(() => {
     renderWrongWordQuestion(qIdx + 1);
-  }, 1000);
+  }, 1200);
 }
 
 
@@ -5160,13 +5689,23 @@ function switchDojoMode(mode) {
   document.getElementById('dojoFCView').style.display = mode === 'fc' ? 'block' : 'none';
   document.getElementById('dojoQuizView').style.display = mode === 'quiz' ? 'block' : 'none';
   document.getElementById('dojoPronView').style.display = mode === 'pron' ? 'block' : 'none';
+  const kanaView = document.getElementById('dojoKanaView');
+  if (kanaView) kanaView.style.display = mode === 'kana' ? 'block' : 'none';
+  const dictationView = document.getElementById('dojoDictationView');
+  if (dictationView) dictationView.style.display = mode === 'dictation' ? 'block' : 'none';
   
   document.getElementById('dojoSubFC').className = 'btn btn-sm ' + (mode === 'fc' ? 'btn-cyan' : 'btn-ghost');
   document.getElementById('dojoSubQuiz').className = 'btn btn-sm ' + (mode === 'quiz' ? 'btn-cyan' : 'btn-ghost');
   document.getElementById('dojoSubPron').className = 'btn btn-sm ' + (mode === 'pron' ? 'btn-cyan' : 'btn-ghost');
+  const subKana = document.getElementById('dojoSubKana');
+  if (subKana) subKana.className = 'btn btn-sm ' + (mode === 'kana' ? 'btn-cyan' : 'btn-ghost');
+  const subDic = document.getElementById('dojoSubDictation');
+  if (subDic) subDic.className = 'btn btn-sm ' + (mode === 'dictation' ? 'btn-cyan' : 'btn-ghost');
 
   if(mode === 'quiz') renderQuizQ();
   if(mode === 'pron') renderPronQ();
+  if(mode === 'kana' && typeof renderKanaUI === 'function') renderKanaUI();
+  if(mode === 'dictation' && typeof renderDictationQ === 'function') renderDictationQ();
 }
 
 let currentDojoLevel = 'ALL';
@@ -5729,6 +6268,16 @@ function handlePartyData(data) {
     updateShiritoriFilterUI();
     showToast(`⚙️ Chế độ nối từ: ${shiriLevelFilter === 'ALL' ? 'N5-N3' : shiriLevelFilter} • ${shiriCategoryFilter === 'ALL' ? 'Tất cả chủ đề' : shiriCategoryFilter}`);
     restartShiritoriGame(false);
+  } else if(data.type === 'speed_question') {
+    if (typeof renderSpeedQuestion === 'function') renderSpeedQuestion(data);
+  } else if(data.type === 'speed_answer') {
+    if(data.isCorrect) {
+      showToast(`⚡ Đối thủ vừa ghi được +${data.points}đ tốc độ!`);
+    }
+  } else if(data.type === 'speed_game_over') {
+    partyP1Score = data.p1;
+    partyP2Score = data.p2;
+    if (typeof renderSpeedRaceEnd === 'function') renderSpeedRaceEnd(data.winner);
   }
 }
 
@@ -5896,6 +6445,9 @@ function startPartyBattleUI(gameType) {
     } else if(gameType === 'kanji') {
       document.getElementById('battleInputBar').style.display = 'none';
       renderPartyKanjiBlitz();
+    } else if(gameType === 'speed_race') {
+      document.getElementById('battleInputBar').style.display = 'none';
+      startPartySpeedRace();
     }
   }
 }
@@ -6225,6 +6777,15 @@ function startDailyRitual() {
   updateUserUI();
 }
 
+function finishDailyRitualAndShare() {
+  userData.ritualSteps = [true, true, true, true];
+  addXP(50);
+  saveUserData();
+  updateUserUI();
+  if (typeof submitScoreToLeaderboard === 'function') submitScoreToLeaderboard();
+  showDailyResultModal();
+}
+
 function startSoloShiritori() {
   switchTab('party');
   shiriIsSoloVsAi = true;
@@ -6241,6 +6802,836 @@ function startSoloShiritori() {
 }
 
 // ══════════════════════════════════════════════════
+//  TỪ CỦA NGÀY (WORD OF THE DAY) & CANVAS RESULT CARD
+// ══════════════════════════════════════════════════
+function getWordOfTheDay() {
+  const pool = window.ALL_VOCAB || window.N5_VOCAB || [];
+  if (!pool || pool.length === 0) return null;
+  const userLvl = userData.jlptTarget || 'N5';
+  let targetPool = pool.filter(w => (w.level || 'N5') === userLvl);
+  if (targetPool.length === 0) targetPool = pool;
+  
+  const todayStr = getTodayStr();
+  let hash = 0;
+  for (let i = 0; i < todayStr.length; i++) {
+    hash = (hash << 5) - hash + todayStr.charCodeAt(i);
+    hash |= 0;
+  }
+  const idx = Math.abs(hash) % targetPool.length;
+  return targetPool[idx];
+}
+
+function updateWordOfTheDayUI() {
+  const wotd = getWordOfTheDay();
+  if (!wotd) return;
+  const kanjiEl = document.getElementById('wotdKanji');
+  const kanaEl = document.getElementById('wotdKana');
+  const meanEl = document.getElementById('wotdMeaning');
+  const badgeEl = document.getElementById('wotdLevelBadge');
+  
+  if (kanjiEl) kanjiEl.textContent = wotd.kanji || wotd.w;
+  if (kanaEl) kanaEl.textContent = wotd.hiragana || wotd.r;
+  if (meanEl) meanEl.textContent = wotd.meaning || wotd.m;
+  if (badgeEl) badgeEl.textContent = wotd.level || 'N5';
+}
+
+function speakWordOfTheDay() {
+  const wotd = getWordOfTheDay();
+  if (wotd && typeof speakJapaneseTTS === 'function') {
+    speakJapaneseTTS(wotd.hiragana || wotd.kanji || wotd.w, 0.85);
+    playSfx('click');
+  }
+}
+
+async function generateDailyResultCard() {
+  const canvas = document.createElement('canvas');
+  canvas.width = 720;
+  canvas.height = 480;
+  const ctx = canvas.getContext('2d');
+
+  // Background dark cyber gradient
+  const bgGrad = ctx.createLinearGradient(0, 0, 720, 480);
+  bgGrad.addColorStop(0, '#0a0e17');
+  bgGrad.addColorStop(0.5, '#121826');
+  bgGrad.addColorStop(1, '#1b122c');
+  ctx.fillStyle = bgGrad;
+  ctx.fillRect(0, 0, 720, 480);
+
+  // Outer border with neon gradient
+  const borderGrad = ctx.createLinearGradient(0, 0, 720, 480);
+  borderGrad.addColorStop(0, '#ff2a6d');
+  borderGrad.addColorStop(0.5, '#05d9e2');
+  borderGrad.addColorStop(1, '#d800ff');
+  ctx.strokeStyle = borderGrad;
+  ctx.lineWidth = 4;
+  ctx.strokeRect(10, 10, 700, 460);
+
+  // Decorative inner line
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(20, 20, 680, 440);
+
+  // Header Title
+  ctx.fillStyle = '#ff2a6d';
+  ctx.font = 'bold 16px "Be Vietnam Pro", sans-serif';
+  ctx.fillText('🌸 EMI NIHONGO • NHẬT KÝ CHIẾN TÍCH HẰNG NGÀY', 40, 52);
+
+  const todayStr = getTodayStr();
+  ctx.fillStyle = '#8b9bb4';
+  ctx.font = '14px "Be Vietnam Pro", sans-serif';
+  ctx.textAlign = 'right';
+  ctx.fillText(`📅 ${todayStr}`, 680, 52);
+  ctx.textAlign = 'left';
+
+  // Divider
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+  ctx.beginPath();
+  ctx.moveTo(40, 70);
+  ctx.lineTo(680, 70);
+  ctx.stroke();
+
+  // Left Section: Word of the Day Highlight
+  const wotd = getWordOfTheDay();
+  const wordDisplay = wotd ? (wotd.kanji || wotd.w) : '勉強';
+  const readingDisplay = wotd ? (wotd.hiragana || wotd.r) : 'べんきょう';
+  const meaningDisplay = wotd ? (wotd.meaning || wotd.m) : 'Học tập';
+  const levelDisplay = wotd ? (wotd.level || 'N5') : 'N5';
+
+  // Word of the day box
+  ctx.fillStyle = 'rgba(255, 42, 109, 0.06)';
+  ctx.fillRect(40, 90, 310, 240);
+  ctx.strokeStyle = 'rgba(255, 42, 109, 0.3)';
+  ctx.strokeRect(40, 90, 310, 240);
+
+  ctx.fillStyle = '#ffbe0b';
+  ctx.font = 'bold 13px "Be Vietnam Pro", sans-serif';
+  ctx.fillText(`🌟 TỪ CỦA NGÀY [${levelDisplay}]`, 56, 120);
+
+  // Big Kanji
+  ctx.fillStyle = '#05d9e2';
+  ctx.font = 'bold 50px "Noto Serif JP", "Be Vietnam Pro", serif';
+  ctx.fillText(wordDisplay, 56, 185);
+
+  // Kana reading
+  ctx.fillStyle = '#ff7597';
+  ctx.font = 'bold 20px "Be Vietnam Pro", sans-serif';
+  ctx.fillText(readingDisplay, 56, 225);
+
+  // Meaning
+  ctx.fillStyle = '#e6edf3';
+  ctx.font = '16px "Be Vietnam Pro", sans-serif';
+  ctx.fillText(`Nghĩa: ${meaningDisplay}`, 56, 265);
+
+  ctx.fillStyle = '#8b9bb4';
+  ctx.font = '12px "Be Vietnam Pro", sans-serif';
+  ctx.fillText(`Chủ đề: ${wotd ? (wotd.category || 'Cơ bản') : 'Cơ bản'}`, 56, 300);
+
+  // Right Section: Player Stats (Streak, EXP, Rank, Avatar)
+  const r = getRank(userData.xp);
+  ctx.fillStyle = 'rgba(5, 217, 232, 0.06)';
+  ctx.fillRect(370, 90, 310, 240);
+  ctx.strokeStyle = 'rgba(5, 217, 232, 0.3)';
+  ctx.strokeRect(370, 90, 310, 240);
+
+  // User Header
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 20px "Be Vietnam Pro", sans-serif';
+  ctx.fillText(`${userData.avatar || '🦊'} ${userData.name || 'Học viên Ninja'}`, 390, 130);
+
+  ctx.fillStyle = '#05d9e2';
+  ctx.font = 'bold 15px "Be Vietnam Pro", sans-serif';
+  ctx.fillText(`👑 ${r.title}`, 390, 162);
+
+  // Streak
+  ctx.fillStyle = '#ffbe0b';
+  ctx.font = 'bold 24px "Be Vietnam Pro", sans-serif';
+  ctx.fillText(`🔥 ${userData.streak} Ngày`, 390, 215);
+  ctx.fillStyle = '#8b9bb4';
+  ctx.font = '12px "Be Vietnam Pro", sans-serif';
+  ctx.fillText('Chuỗi học liên tục', 390, 235);
+
+  // EXP
+  ctx.fillStyle = '#05d9e2';
+  ctx.font = 'bold 24px "Be Vietnam Pro", sans-serif';
+  ctx.fillText(`⚡ ${userData.xp.toLocaleString()} EXP`, 530, 215);
+  ctx.fillStyle = '#8b9bb4';
+  ctx.font = '12px "Be Vietnam Pro", sans-serif';
+  ctx.fillText('Kinh nghiệm tích lũy', 530, 235);
+
+  // Status
+  ctx.fillStyle = '#00f0ff';
+  ctx.font = 'bold 14px "Be Vietnam Pro", sans-serif';
+  ctx.fillText('✓ ĐÃ HOÀN THÀNH NHIỆM VỤ NGÀY', 390, 290);
+
+  // Bottom Banner
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.04)';
+  ctx.fillRect(40, 350, 640, 75);
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+  ctx.strokeRect(40, 350, 640, 75);
+
+  ctx.fillStyle = '#e6edf3';
+  ctx.font = 'bold 14px "Be Vietnam Pro", sans-serif';
+  ctx.fillText('🌸 Emi Nihongo • Nền Tảng Luyện Tiếng Nhật Gamified Đỉnh Cao', 60, 382);
+  ctx.fillStyle = '#8b9bb4';
+  ctx.font = '12px "Be Vietnam Pro", sans-serif';
+  ctx.fillText('Nối từ Shiritori • Luyện JLPT N5-N3 • Ôn ngắt quãng SRS • Web: emi.io.vn', 60, 404);
+
+  return canvas;
+}
+
+let dailyResultCanvasRef = null;
+async function showDailyResultModal() {
+  const canvas = await generateDailyResultCard();
+  dailyResultCanvasRef = canvas;
+  const dataUrl = canvas.toDataURL('image/png');
+  const img = document.getElementById('dailyShareImg');
+  if (img) img.src = dataUrl;
+  const modal = document.getElementById('dailyShareModal');
+  if (modal) modal.classList.add('show');
+}
+
+function closeDailyShareModal() {
+  const modal = document.getElementById('dailyShareModal');
+  if (modal) modal.classList.remove('show');
+}
+
+async function copyDailyShareCard() {
+  const canvas = dailyResultCanvasRef;
+  const wotd = getWordOfTheDay();
+  const summaryText = `🌸 Emi Nihongo (${getTodayStr()}): Mình vừa hoàn thành nhiệm vụ ngày!\nTừ hôm nay: ${wotd ? (wotd.kanji || wotd.w) : ''} (${wotd ? (wotd.meaning || wotd.m) : ''})\n🔥 Streak: ${userData.streak} ngày | ⚡ ${userData.xp} EXP | 👑 ${getRank(userData.xp).title}\nTrải nghiệm ngay tại: emi.io.vn`;
+
+  if (canvas && window.ClipboardItem && navigator.clipboard && navigator.clipboard.write) {
+    try {
+      const blob = await new Promise(r => canvas.toBlob(r, 'image/png'));
+      await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
+      showToast('📋 Đã sao chép hình ảnh thẻ kết quả vào khay nhớ tạm!');
+      return;
+    } catch (e) {}
+  }
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    await navigator.clipboard.writeText(summaryText);
+    showToast('📋 Đã sao chép nội dung chiến tích vào khay nhớ tạm!');
+  } else {
+    showToast('📋 ' + summaryText);
+  }
+}
+
+async function shareDailyResultCard() {
+  const canvas = dailyResultCanvasRef;
+  const wotd = getWordOfTheDay();
+  const title = '🌸 Emi Nihongo - Nhật Ký Luyện Tiếng Nhật';
+  const text = `Hôm nay mình đã hoàn thành chuỗi ${userData.streak} ngày học tại Emi Nihongo!\nTừ của ngày: ${wotd ? ((wotd.kanji || wotd.w) + ' - ' + (wotd.meaning || wotd.m)) : ''}\nEXP: ${userData.xp} EXP ⚡`;
+
+  if (navigator.share) {
+    try {
+      if (canvas && navigator.canShare) {
+        const blob = await new Promise(r => canvas.toBlob(r, 'image/png'));
+        const file = new File([blob], `emi-result-${getTodayStr()}.png`, { type: 'image/png' });
+        if (navigator.canShare({ files: [file] })) {
+          await navigator.share({ title, text, files: [file] });
+          showToast('✓ Đã chia sẻ thành công!');
+          return;
+        }
+      }
+      await navigator.share({ title, text, url: 'https://emi.io.vn' });
+      showToast('✓ Đã chia sẻ thành công!');
+      return;
+    } catch (e) {
+      if (e.name !== 'AbortError') copyDailyShareCard();
+    }
+  } else {
+    copyDailyShareCard();
+  }
+}
+
+// ══════════════════════════════════════════════════
+//  BẢNG XẾP HẠNG TUẦN (WEEKLY LEADERBOARD)
+// ══════════════════════════════════════════════════
+let lastLeaderboardSubmitTime = 0;
+
+async function openLeaderboardModal() {
+  playSfx('click');
+  const modal = document.getElementById('leaderboardModalOverlay');
+  if (modal) modal.classList.add('show');
+  await fetchAndRenderLeaderboard();
+}
+
+function closeLeaderboardModal() {
+  const modal = document.getElementById('leaderboardModalOverlay');
+  if (modal) modal.classList.remove('show');
+}
+
+async function fetchAndRenderLeaderboard() {
+  const container = document.getElementById('leaderboardListContainer');
+  const userRankEl = document.getElementById('lbUserRank');
+  const userAvatarEl = document.getElementById('lbUserAvatar');
+  const userNameEl = document.getElementById('lbUserName');
+  const userExpEl = document.getElementById('lbUserExp');
+  const weekTagEl = document.getElementById('leaderboardWeekTag');
+
+  if (userAvatarEl) userAvatarEl.textContent = userData.avatar || '🦊';
+  if (userNameEl) userNameEl.textContent = userData.name || 'Bạn';
+  if (userExpEl) userExpEl.textContent = `${userData.xp.toLocaleString()} EXP`;
+
+  try {
+    const res = await fetch(`${AUTH_WORKER_URL}/api/leaderboard`);
+    const data = await res.json();
+    if (!res.ok || !data.success) {
+      if (container) container.innerHTML = `<div style="text-align:center;padding:1rem;color:var(--text-muted)">Không thể nạp bảng xếp hạng (${data.error || 'Lỗi mạng'})</div>`;
+      return;
+    }
+
+    if (weekTagEl && data.weekKey) {
+      weekTagEl.textContent = `Tuần ${data.weekKey} • Top 50 Chiến Binh Toàn Hệ Thống`;
+    }
+
+    const list = data.leaderboard || [];
+    if (list.length === 0) {
+      if (container) container.innerHTML = '<div style="text-align:center;padding:1.5rem;color:var(--text-muted)">Chưa có ai ghi điểm tuần này. Hãy là người đầu tiên! ⚡</div>';
+      if (userRankEl) userRankEl.textContent = 'Chưa xếp hạng';
+      return;
+    }
+
+    const currentUsername = authCurrentUser ? authCurrentUser.username : null;
+    let myRank = null;
+    if (currentUsername) {
+      const found = list.find(item => item.username === currentUsername);
+      if (found) myRank = found.rank;
+    }
+
+    if (userRankEl) {
+      userRankEl.textContent = myRank ? `#${myRank}` : 'Chưa lọt Top 50';
+    }
+
+    container.innerHTML = list.map((item, idx) => {
+      const isMe = currentUsername && item.username === currentUsername;
+      const rankNum = item.rank || (idx + 1);
+      const topClass = rankNum === 1 ? 'top-1' : (rankNum === 2 ? 'top-2' : (rankNum === 3 ? 'top-3' : ''));
+      const rankBadge = rankNum === 1 ? '🥇' : (rankNum === 2 ? '🥈' : (rankNum === 3 ? '🥉' : `#${rankNum}`));
+
+      return `
+        <div class="lb-row ${topClass} ${isMe ? 'me' : ''}">
+          <div class="lb-rank-badge">${rankBadge}</div>
+          <div class="lb-user-info">
+            <span style="font-size:1.3rem;flex-shrink:0">${escapeHTML(item.avatar || '🦊')}</span>
+            <span class="lb-user-name">${escapeHTML(item.displayName || item.username)} ${isMe ? '<strong>(BẠN)</strong>' : ''}</span>
+          </div>
+          <div class="lb-xp-val">${(item.xp || 0).toLocaleString()} EXP</div>
+        </div>
+      `;
+    }).join('');
+  } catch (err) {
+    if (container) container.innerHTML = `<div style="text-align:center;padding:1rem;color:var(--text-muted)">Lỗi kết nối máy chủ bảng xếp hạng</div>`;
+  }
+}
+
+async function submitScoreToLeaderboard() {
+  if (!authCurrentUser || !authSessionToken) return;
+  const now = Date.now();
+  if (now - lastLeaderboardSubmitTime < 60000) return;
+  lastLeaderboardSubmitTime = now;
+
+  try {
+    await fetch(`${AUTH_WORKER_URL}/api/leaderboard/submit`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authSessionToken}`
+      },
+      body: JSON.stringify({ xp: userData.xp })
+    });
+  } catch (e) {}
+}
+
+// ══════════════════════════════════════════════════
+//  KANA LEARNING SYSTEM (HIRAGANA & KATAKANA)
+// ══════════════════════════════════════════════════
+const KANA_ROWS_DATA = [
+  { name: 'Hàng A (a, i, u, e, o)', chars: [{ h: 'あ', k: 'ア', r: 'a' }, { h: 'い', k: 'イ', r: 'i' }, { h: 'う', k: 'ウ', r: 'u' }, { h: 'え', k: 'エ', r: 'e' }, { h: 'お', k: 'オ', r: 'o' }] },
+  { name: 'Hàng Ka (ka, ki, ku, ke, ko)', chars: [{ h: 'か', k: 'カ', r: 'ka' }, { h: 'き', k: 'キ', r: 'ki' }, { h: 'く', k: 'ク', r: 'ku' }, { h: 'け', k: 'ケ', r: 'ke' }, { h: 'こ', k: 'コ', r: 'ko' }] },
+  { name: 'Hàng Sa (sa, shi, su, se, so)', chars: [{ h: 'さ', k: 'サ', r: 'sa' }, { h: 'し', k: 'シ', r: 'shi' }, { h: 'す', k: 'ス', r: 'su' }, { h: 'せ', k: 'セ', r: 'se' }, { h: 'そ', k: 'ソ', r: 'so' }] },
+  { name: 'Hàng Ta (ta, chi, tsu, te, to)', chars: [{ h: 'た', k: 'タ', r: 'ta' }, { h: 'ち', k: 'チ', r: 'chi' }, { h: 'つ', k: 'ツ', r: 'tsu' }, { h: 'て', k: 'テ', r: 'te' }, { h: 'と', k: 'ト', r: 'to' }] },
+  { name: 'Hàng Na (na, ni, nu, ne, no)', chars: [{ h: 'な', k: 'ナ', r: 'na' }, { h: 'に', k: 'ニ', r: 'ni' }, { h: 'ぬ', k: 'ヌ', r: 'nu' }, { h: 'ね', k: 'ネ', r: 'ne' }, { h: 'の', k: 'ノ', r: 'no' }] },
+  { name: 'Hàng Ha (ha, hi, fu, he, ho)', chars: [{ h: 'は', k: 'ハ', r: 'ha' }, { h: 'ひ', k: 'ヒ', r: 'hi' }, { h: 'ふ', k: 'フ', r: 'fu' }, { h: 'へ', k: 'ヘ', r: 'he' }, { h: 'ほ', k: 'ホ', r: 'ho' }] },
+  { name: 'Hàng Ma (ma, mi, mu, me, mo)', chars: [{ h: 'ま', k: 'マ', r: 'ma' }, { h: 'み', k: 'ミ', r: 'mi' }, { h: 'む', k: 'ム', r: 'mu' }, { h: 'め', k: 'メ', r: 'me' }, { h: 'も', k: 'モ', r: 'mo' }] },
+  { name: 'Hàng Ya (ya, yu, yo)', chars: [{ h: 'や', k: 'ヤ', r: 'ya' }, { h: 'ゆ', k: 'ユ', r: 'yu' }, { h: 'よ', k: 'ヨ', r: 'yo' }] },
+  { name: 'Hàng Ra (ra, ri, ru, re, ro)', chars: [{ h: 'ら', k: 'ラ', r: 'ra' }, { h: 'り', k: 'リ', r: 'ri' }, { h: 'る', k: 'ル', r: 'ru' }, { h: 'れ', k: 'レ', r: 're' }, { h: 'ろ', k: 'ロ', r: 'ro' }] },
+  { name: 'Hàng Wa/N (wa, wo, n)', chars: [{ h: 'わ', k: 'ワ', r: 'wa' }, { h: 'を', k: 'ヲ', r: 'wo' }, { h: 'ん', k: 'ン', r: 'n' }] },
+  { name: 'Hàng Đục Dakuon (ga, za, da, ba, pa)', chars: [{ h: 'が', k: 'ガ', r: 'ga' }, { h: 'ざ', k: 'ザ', r: 'za' }, { h: 'だ', k: 'ダ', r: 'da' }, { h: 'ば', k: 'バ', r: 'ba' }, { h: 'ぱ', k: 'パ', r: 'pa' }] }
+];
+
+let kanaCurrentAlphabet = 'hiragana';
+let kanaCurrentPracticeType = 'recognize';
+let kanaActiveRowIdx = 0;
+let kanaMatchSelectedTile = null;
+let kanaMatchPairsLeft = 0;
+
+function setKanaAlphabet(type) {
+  playSfx('click');
+  kanaCurrentAlphabet = type;
+  document.getElementById('btnKanaHiragana').className = 'btn btn-sm ' + (type === 'hiragana' ? 'btn-cyan' : 'btn-ghost');
+  document.getElementById('btnKanaKatakana').className = 'btn btn-sm ' + (type === 'katakana' ? 'btn-cyan' : 'btn-ghost');
+  renderKanaUI();
+}
+
+function setKanaPracticeType(type) {
+  playSfx('click');
+  kanaCurrentPracticeType = type;
+  document.getElementById('btnKanaSubRecognize').className = 'btn btn-sm ' + (type === 'recognize' ? 'btn-cyan' : 'btn-ghost');
+  document.getElementById('btnKanaSubListen').className = 'btn btn-sm ' + (type === 'listen' ? 'btn-cyan' : 'btn-ghost');
+  document.getElementById('btnKanaSubMatch').className = 'btn btn-sm ' + (type === 'match' ? 'btn-cyan' : 'btn-ghost');
+  renderKanaUI();
+}
+
+function selectKanaRow(rowIdx) {
+  const maxUnlocked = userData.kanaUnlockedRows || 1;
+  if (rowIdx >= maxUnlocked) {
+    showToast('🔒 Hãy hoàn thành hàng trước để mở khóa hàng này!');
+    playSfx('wrong');
+    return;
+  }
+  playSfx('click');
+  kanaActiveRowIdx = rowIdx;
+  renderKanaUI();
+}
+
+function renderKanaUI() {
+  const maxUnlocked = userData.kanaUnlockedRows || 1;
+  const navContainer = document.getElementById('kanaRowButtonsGrid');
+  if (navContainer) {
+    navContainer.innerHTML = KANA_ROWS_DATA.map((r, idx) => {
+      const isLocked = idx >= maxUnlocked;
+      const isActive = idx === kanaActiveRowIdx;
+      return `
+        <button class="btn btn-sm ${isActive ? 'btn-cyan' : (isLocked ? 'btn-ghost locked' : 'btn-ghost')}" 
+                style="${isLocked ? 'opacity:0.4;' : ''}"
+                onclick="selectKanaRow(${idx})">
+          ${isLocked ? '🔒' : '✓'} ${r.name.split(' ')[0]} ${r.name.split(' ')[1]}
+        </button>
+      `;
+    }).join('');
+  }
+
+  const area = document.getElementById('kanaPracticeArea');
+  if (!area) return;
+
+  const currentRow = KANA_ROWS_DATA[kanaActiveRowIdx];
+  const charList = currentRow.chars;
+
+  if (kanaCurrentPracticeType === 'recognize') {
+    const target = charList[Math.floor(Math.random() * charList.length)];
+    const targetKana = kanaCurrentAlphabet === 'hiragana' ? target.h : target.k;
+    const rightRomaji = target.r;
+
+    const otherChars = charList.filter(c => c.r !== rightRomaji);
+    const wrongs = otherChars.sort(() => Math.random() - 0.5).slice(0, 3).map(c => c.r);
+    const opts = [rightRomaji, ...wrongs].sort(() => Math.random() - 0.5);
+
+    area.innerHTML = `
+      <div style="text-align:center;padding:1.5rem;background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-md)">
+        <div style="font-size:12px;color:var(--neon-gold);font-weight:700">${currentRow.name.toUpperCase()}</div>
+        <div style="font-family:var(--font-kanji);font-size:4rem;font-weight:900;color:var(--neon-cyan);margin:.3rem 0">${targetKana}</div>
+        <div style="font-size:.82rem;color:var(--text-muted);margin-bottom:1rem">Chọn cách đọc Romaji tương ứng:</div>
+        <div class="quiz-options-grid" style="max-width:480px;margin:0 auto">
+          ${opts.map(opt => `
+            <button class="choice-arcade-btn" onclick="submitKanaAnswer(this, '${opt}', '${rightRomaji}')">${opt}</button>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  } else if (kanaCurrentPracticeType === 'listen') {
+    const target = charList[Math.floor(Math.random() * charList.length)];
+    const targetKana = kanaCurrentAlphabet === 'hiragana' ? target.h : target.k;
+    const rightRomaji = target.r;
+
+    const otherChars = charList.filter(c => c.r !== rightRomaji);
+    const wrongs = otherChars.sort(() => Math.random() - 0.5).slice(0, 3).map(c => kanaCurrentAlphabet === 'hiragana' ? c.h : c.k);
+    const opts = [targetKana, ...wrongs].sort(() => Math.random() - 0.5);
+
+    area.innerHTML = `
+      <div style="text-align:center;padding:1.5rem;background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-md)">
+        <div style="font-size:12px;color:var(--neon-sakura);font-weight:700">NGHE ÂM THANH RỒI CHỌN KANA ĐÚNG:</div>
+        <div style="margin:1rem 0">
+          <button class="btn btn-primary" onclick="speakJapaneseTTS('${target.h}', 0.85); playSfx('click');" style="padding:.6rem 1.4rem;font-size:1.1rem">
+            🔊 Nghe Phát Âm
+          </button>
+        </div>
+        <div style="font-size:.82rem;color:var(--text-muted);margin-bottom:1rem">Bấm vào loa để nghe lại</div>
+        <div class="quiz-options-grid" style="max-width:480px;margin:0 auto">
+          ${opts.map(opt => `
+            <button class="choice-arcade-btn" style="font-family:var(--font-kanji);font-size:1.8rem" onclick="submitKanaAnswer(this, '${opt}', '${targetKana}')">${opt}</button>
+          `).join('')}
+        </div>
+      </div>
+    `;
+    setTimeout(() => { speakJapaneseTTS(target.h, 0.85); }, 300);
+  } else if (kanaCurrentPracticeType === 'match') {
+    const selectedChars = charList.slice(0, 4);
+    kanaMatchPairsLeft = selectedChars.length;
+    kanaMatchSelectedTile = null;
+
+    const tiles = [];
+    selectedChars.forEach((c, idx) => {
+      tiles.push({ id: `k_${idx}`, pairId: idx, text: kanaCurrentAlphabet === 'hiragana' ? c.h : c.k, type: 'kana' });
+      tiles.push({ id: `r_${idx}`, pairId: idx, text: c.r, type: 'romaji' });
+    });
+    tiles.sort(() => Math.random() - 0.5);
+
+    area.innerHTML = `
+      <div style="text-align:center;padding:1.25rem;background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-md)">
+        <div style="font-size:12px;color:var(--neon-gold);font-weight:700;margin-bottom:.5rem">GHÉP CẶP KANA ⇄ ROMAJI TƯƠNG ỨNG</div>
+        <div class="kana-match-grid" style="max-width:540px;margin:0 auto">
+          ${tiles.map(t => `
+            <div class="kana-tile" id="ktile_${t.id}" data-pair="${t.pairId}" onclick="onKanaTileClick(this, ${t.pairId})">
+              ${t.text}
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }
+}
+
+function submitKanaAnswer(btn, chosen, right) {
+  const buttons = document.querySelectorAll('#kanaPracticeArea button');
+  buttons.forEach(b => b.disabled = true);
+
+  if (chosen === right) {
+    playSfx('correct');
+    btn.classList.add('correct');
+    addXP(5);
+    showToast('✓ Chính xác! +5 EXP');
+
+    const maxUnlocked = userData.kanaUnlockedRows || 1;
+    if (kanaActiveRowIdx + 1 === maxUnlocked && maxUnlocked < KANA_ROWS_DATA.length) {
+      userData.kanaUnlockedRows = maxUnlocked + 1;
+      saveUserData();
+      showToast(`🎉 Mở khóa thành công hàng Kana tiếp theo! +20 EXP`);
+      addXP(20);
+    }
+  } else {
+    playSfx('wrong');
+    btn.classList.add('wrong');
+    buttons.forEach(b => {
+      if (b.textContent.trim() === right) b.classList.add('correct');
+    });
+    showToast(`✗ Chưa đúng! Đáp án đúng: ${right}`);
+  }
+
+  setTimeout(() => {
+    renderKanaUI();
+  }, 1200);
+}
+
+function onKanaTileClick(el, pairId) {
+  if (el.classList.contains('matched')) return;
+
+  if (!kanaMatchSelectedTile) {
+    kanaMatchSelectedTile = el;
+    el.classList.add('selected');
+    playSfx('click');
+    return;
+  }
+
+  if (kanaMatchSelectedTile === el) {
+    el.classList.remove('selected');
+    kanaMatchSelectedTile = null;
+    return;
+  }
+
+  const prevTile = kanaMatchSelectedTile;
+  const prevPair = parseInt(prevTile.dataset.pair, 10);
+  const curPair = parseInt(el.dataset.pair, 10);
+
+  if (prevPair === curPair) {
+    playSfx('correct');
+    prevTile.classList.remove('selected');
+    prevTile.classList.add('matched');
+    el.classList.add('matched');
+    kanaMatchSelectedTile = null;
+    kanaMatchPairsLeft--;
+    addXP(5);
+
+    if (kanaMatchPairsLeft <= 0) {
+      playSfx('win');
+      addXP(15);
+      showToast('🎉 Xuất sắc! Bạn đã ghép đúng toàn bộ cặp Kana! +15 EXP');
+      const maxUnlocked = userData.kanaUnlockedRows || 1;
+      if (kanaActiveRowIdx + 1 === maxUnlocked && maxUnlocked < KANA_ROWS_DATA.length) {
+        userData.kanaUnlockedRows = maxUnlocked + 1;
+        saveUserData();
+      }
+      setTimeout(renderKanaUI, 1200);
+    }
+  } else {
+    playSfx('wrong');
+    el.classList.add('wrong');
+    prevTile.classList.add('wrong');
+    setTimeout(() => {
+      el.classList.remove('wrong', 'selected');
+      prevTile.classList.remove('wrong', 'selected');
+      kanaMatchSelectedTile = null;
+    }, 600);
+  }
+}
+
+// ══════════════════════════════════════════════════
+//  DICTATION SYSTEM (NGHE CHÉP CHÍNH TẢ)
+// ══════════════════════════════════════════════════
+let dictationCurrentWord = null;
+
+function renderDictationQ() {
+  const pool = window.ALL_VOCAB || window.N5_VOCAB || [];
+  if (pool.length === 0) return;
+  const userLvl = userData.jlptTarget || 'N5';
+  let targetPool = pool.filter(w => (w.level || 'N5') === userLvl);
+  if (targetPool.length === 0) targetPool = pool;
+
+  dictationCurrentWord = targetPool[Math.floor(Math.random() * targetPool.length)];
+
+  const hintEl = document.getElementById('dictationMeaningHint');
+  const inp = document.getElementById('dictationInput');
+  const feedback = document.getElementById('dictationFeedback');
+  const grid = document.getElementById('dictationOptionsGrid');
+
+  if (hintEl) hintEl.textContent = dictationCurrentWord.meaning || dictationCurrentWord.m;
+  if (inp) { inp.value = ''; inp.disabled = false; }
+  if (feedback) feedback.innerHTML = '';
+
+  const otherWords = pool.filter(w => (w.kanji || w.w) !== (dictationCurrentWord.kanji || dictationCurrentWord.w));
+  const wrongs = otherWords.sort(() => Math.random() - 0.5).slice(0, 3).map(w => `${w.kanji || w.w} (${w.hiragana || w.r})`);
+  const correctChoice = `${dictationCurrentWord.kanji || dictationCurrentWord.w} (${dictationCurrentWord.hiragana || dictationCurrentWord.r})`;
+  const opts = [correctChoice, ...wrongs].sort(() => Math.random() - 0.5);
+
+  if (grid) {
+    grid.innerHTML = opts.map(opt => `
+      <button class="choice-arcade-btn" onclick="submitDictationChoice(this, '${encodeURIComponent(opt)}', '${encodeURIComponent(correctChoice)}')">
+        ${opt}
+      </button>
+    `).join('');
+  }
+
+  setTimeout(playDictationAudio, 300);
+}
+
+function playDictationAudio() {
+  if (!dictationCurrentWord) return;
+  const wordToSpeak = dictationCurrentWord.hiragana || dictationCurrentWord.kanji || dictationCurrentWord.w;
+  if (typeof speakJapaneseTTS === 'function') {
+    speakJapaneseTTS(wordToSpeak, 0.85);
+  }
+}
+
+function submitDictationInput() {
+  if (!dictationCurrentWord) return;
+  const inp = document.getElementById('dictationInput');
+  const val = inp ? inp.value.trim().toLowerCase() : '';
+  if (!val) return;
+
+  const targetRomaji = (dictationCurrentWord.romaji || dictationCurrentWord.r || '').toLowerCase();
+  const targetKana = dictationCurrentWord.hiragana || dictationCurrentWord.kana || '';
+  const targetKanji = dictationCurrentWord.kanji || dictationCurrentWord.w || '';
+
+  const isCorrect = (val === targetRomaji || val === targetKana || val === targetKanji || romajiToKana(val) === targetKana);
+
+  handleDictationResult(isCorrect);
+}
+
+function submitDictationChoice(btn, chosenEnc, rightEnc) {
+  const chosen = decodeURIComponent(chosenEnc);
+  const right = decodeURIComponent(rightEnc);
+  const isCorrect = chosen === right;
+
+  const buttons = document.querySelectorAll('#dictationOptionsGrid button');
+  buttons.forEach(b => b.disabled = true);
+  if (isCorrect) btn.classList.add('correct');
+  else {
+    btn.classList.add('wrong');
+    buttons.forEach(b => { if (b.textContent.trim() === right) b.classList.add('correct'); });
+  }
+
+  handleDictationResult(isCorrect);
+}
+
+function handleDictationResult(isCorrect) {
+  const feedback = document.getElementById('dictationFeedback');
+  const rightWord = `${dictationCurrentWord.kanji || dictationCurrentWord.w} 【${dictationCurrentWord.hiragana || dictationCurrentWord.r}】`;
+
+  if (isCorrect) {
+    playSfx('correct');
+    addXP(15);
+    if (feedback) feedback.innerHTML = `<span style="color:var(--neon-lime)">✓ CHÍNH XÁC! ${rightWord} (+15 EXP)</span>`;
+    showToast(`✓ Chính xác! +15 EXP`);
+  } else {
+    playSfx('wrong');
+    recordWrongWord(dictationCurrentWord);
+    if (feedback) feedback.innerHTML = `<span style="color:var(--neon-crimson)">✗ Đáp án đúng: <strong>${rightWord}</strong> (Đã gửi vào SRS)</span>`;
+    showToast(`✗ Đã đưa từ "${dictationCurrentWord.kanji || dictationCurrentWord.w}" vào ôn lặp SRS!`);
+  }
+
+  setTimeout(renderDictationQ, 1600);
+}
+
+// ══════════════════════════════════════════════════
+//  PEERJS SPEED RACE (ĐUA TỐC ĐỘ 2P MULTIPLAYER)
+// ══════════════════════════════════════════════════
+let speedRaceCurrentQ = null;
+let speedRaceRound = 0;
+let speedRaceMaxRounds = 5;
+let speedRaceTimer = null;
+let speedRaceAnswered = false;
+
+function startPartySpeedRace() {
+  speedRaceRound = 0;
+  partyP1Score = 0;
+  partyP2Score = 0;
+  syncPartyScores();
+
+  document.getElementById('battleStatusText').textContent = '🏁 Đua Tốc Độ: Ai trả lời đúng và nhanh hơn được nhiều điểm!';
+  if (isPartyHost) {
+    sendNextSpeedRaceQuestion();
+  }
+}
+
+function sendNextSpeedRaceQuestion() {
+  if (speedRaceRound >= speedRaceMaxRounds) {
+    const winner = partyP1Score > partyP2Score ? document.getElementById('p1Name').textContent : (partyP2Score > partyP1Score ? document.getElementById('p2Name').textContent : 'Hòa');
+    if (partyConn) {
+      partyConn.send({ type: 'speed_game_over', p1: partyP1Score, p2: partyP2Score, winner });
+    }
+    renderSpeedRaceEnd(winner);
+    return;
+  }
+
+  speedRaceRound++;
+  const pool = window.ALL_VOCAB || window.N5_VOCAB || [];
+  const item = pool[Math.floor(Math.random() * pool.length)];
+  const itemKanji = item.kanji || item.w;
+  const itemReading = item.hiragana || item.r;
+  const rightMeaning = item.meaning || item.m;
+
+  const otherWords = pool.filter(x => (x.meaning || x.m) !== rightMeaning);
+  const wrongs = otherWords.sort(() => Math.random() - 0.5).slice(0, 3).map(x => x.meaning || x.m);
+  const opts = [rightMeaning, ...wrongs].sort(() => Math.random() - 0.5);
+
+  const q = {
+    type: 'speed_question',
+    round: speedRaceRound,
+    word: itemKanji,
+    reading: itemReading,
+    rightMeaning: rightMeaning,
+    options: opts,
+    qId: Date.now()
+  };
+
+  speedRaceCurrentQ = q;
+  renderSpeedQuestion(q);
+  if (partyConn) {
+    partyConn.send(q);
+  }
+}
+
+function renderSpeedQuestion(q) {
+  speedRaceCurrentQ = q;
+  speedRaceAnswered = false;
+  clearInterval(speedRaceTimer);
+
+  document.getElementById('battleStatusText').textContent = `🏁 VÒNG ${q.round}/${speedRaceMaxRounds} • AI NHANH NHẤT GIÀNH ĐIỂM!`;
+  
+  document.getElementById('battleContentArea').innerHTML = `
+    <div style="background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:1.25rem;text-align:center">
+      <div style="font-size:12px;color:var(--neon-gold);font-weight:700">ĐUA TỐC ĐỘ • VÒNG ${q.round}/${speedRaceMaxRounds}</div>
+      <div style="font-family:var(--font-kanji);font-size:3rem;font-weight:900;color:var(--neon-cyan);margin:.3rem 0">${escapeHTML(q.word)}</div>
+      <div style="font-size:1.1rem;color:var(--neon-sakura);font-weight:700">${escapeHTML(q.reading)}</div>
+      <div style="font-size:.82rem;color:var(--text-muted);margin:.3rem 0 1rem">Chọn nghĩa tiếng Việt nhanh nhất có thể:</div>
+      <div class="quiz-options-grid" id="speedOptsGrid" style="max-width:540px;margin:0 auto">
+        ${q.options.map(opt => `
+          <button class="choice-arcade-btn" onclick="submitSpeedRaceAnswer(this, '${encodeURIComponent(opt)}')">${escapeHTML(opt)}</button>
+        `).join('')}
+      </div>
+      <div id="speedRaceFeedback" style="min-height:24px;margin-top:.75rem;font-size:.85rem;font-weight:700"></div>
+    </div>
+  `;
+
+  startBattleTimer(10);
+}
+
+function submitSpeedRaceAnswer(btn, chosenEnc) {
+  if (speedRaceAnswered || !speedRaceCurrentQ) return;
+  speedRaceAnswered = true;
+  const chosen = decodeURIComponent(chosenEnc);
+  const isCorrect = chosen === speedRaceCurrentQ.rightMeaning;
+
+  const buttons = document.querySelectorAll('#speedOptsGrid button');
+  buttons.forEach(b => b.disabled = true);
+
+  const pointsGained = isCorrect ? (20 + Math.max(0, timeLeft)) : 0;
+
+  if (isCorrect) {
+    playSfx('correct');
+    btn.classList.add('correct');
+    showToast(`⚡ Trả lời đúng! +${pointsGained} điểm tốc độ!`);
+    if (isPartyHost) partyP1Score += pointsGained; else partyP2Score += pointsGained;
+    syncPartyScores();
+    addXP(pointsGained);
+  } else {
+    playSfx('wrong');
+    btn.classList.add('wrong');
+    buttons.forEach(b => {
+      if (b.textContent.trim() === speedRaceCurrentQ.rightMeaning) b.classList.add('correct');
+    });
+    showToast(`✗ Sai rồi! Đáp án: ${speedRaceCurrentQ.rightMeaning}`);
+  }
+
+  if (partyConn) {
+    partyConn.send({
+      type: 'speed_answer',
+      qId: speedRaceCurrentQ.qId,
+      player: isPartyHost ? 'p1' : 'p2',
+      points: pointsGained,
+      isCorrect
+    });
+  }
+
+  if (isPartyHost) {
+    setTimeout(sendNextSpeedRaceQuestion, 2000);
+  }
+}
+
+function renderSpeedRaceEnd(winner) {
+  clearInterval(speedRaceTimer);
+  clearInterval(partyTurnTimer);
+  playSfx('win');
+  if (typeof submitScoreToLeaderboard === 'function') submitScoreToLeaderboard();
+
+  const p1N = escapeHTML(document.getElementById('p1Name').textContent);
+  const p2N = escapeHTML(document.getElementById('p2Name').textContent);
+
+  document.getElementById('battleStatusText').textContent = '🏁 KẾT THÚC TRẬN ĐUA TỐC ĐỘ!';
+  document.getElementById('battleContentArea').innerHTML = `
+    <div style="background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:1.5rem;text-align:center">
+      <div style="font-size:3rem">🏆</div>
+      <div style="font-size:1.3rem;font-weight:900;color:var(--neon-gold);margin:.4rem 0">
+        NGƯỜI CHIẾN THẮNG: ${escapeHTML(winner)}!
+      </div>
+      <div style="display:flex;justify-content:center;gap:2rem;margin:1.2rem 0">
+        <div>
+          <div style="font-size:.85rem;color:var(--text-muted)">${p1N}</div>
+          <div style="font-family:var(--font-arcade);font-size:1.8rem;font-weight:900;color:var(--neon-cyan)">${partyP1Score}</div>
+        </div>
+        <div style="font-size:1.5rem;align-self:center;color:var(--text-muted)">-</div>
+        <div>
+          <div style="font-size:.85rem;color:var(--text-muted)">${p2N}</div>
+          <div style="font-family:var(--font-arcade);font-size:1.8rem;font-weight:900;color:var(--neon-sakura)">${partyP2Score}</div>
+        </div>
+      </div>
+      ${isPartyHost ? `<button class="btn btn-primary" onclick="startPartySpeedRace()">Đua Lại Trận Mới 🔄</button>` : `<div style="font-size:.85rem;color:var(--text-muted)">Đang chờ chủ phòng bắt đầu trận mới...</div>`}
+    </div>
+  `;
+}
+
+// ══════════════════════════════════════════════════
 //  10. INITIALIZATION
 // ══════════════════════════════════════════════════
 window.addEventListener('DOMContentLoaded', () => {
@@ -6248,6 +7639,9 @@ window.addEventListener('DOMContentLoaded', () => {
   if (typeof initAuth === "function") initAuth();
   renderFC();
   initShiritoriFilters();
+  if (typeof updateWordOfTheDayUI === 'function') updateWordOfTheDayUI();
+  if (typeof renderKanaUI === 'function') renderKanaUI();
+  if (typeof checkAndAwardBadges === 'function') checkAndAwardBadges();
 
   if ('speechSynthesis' in window) {
     loadSpeechVoices();
@@ -6261,6 +7655,16 @@ window.addEventListener('DOMContentLoaded', () => {
       if(e.key === 'Enter') {
         e.preventDefault();
         submitPartyWord();
+      }
+    });
+  }
+
+  const dictationInp = document.getElementById('dictationInput');
+  if (dictationInp) {
+    dictationInp.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        submitDictationInput();
       }
     });
   }
