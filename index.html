@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>emi.io.vn v2 · Tokyo Neon Arcade 🌸⚡</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='85'%3E🌸%3C/text%3E%3C/svg%3E">
+<link rel="shortcut icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='85'%3E🌸%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif:ital,wght@0,600;0,700;0,900;1,400&family=Noto+Serif+JP:wght@600;700;900&family=Orbitron:wght@600;800;900&display=swap" rel="stylesheet">
@@ -65,9 +67,13 @@ html, body {
   background-color: var(--bg-deep);
   color: var(--text-primary);
   font-family: var(--font-ui);
-  font-size: 16px;
+  font-size: clamp(15px, 0.35vw + 13.8px, 17px);
   line-height: 1.5;
   min-height: 100vh;
+  min-height: 100dvh;
+  width: 100%;
+  margin: 0;
+  padding: 0;
   overflow-x: hidden;
 }
 
@@ -86,13 +92,31 @@ body::before {
   max-width: 520px;
   margin: 0 auto;
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   position: relative;
   z-index: 1;
   background: var(--bg-deep);
   box-shadow: 0 0 50px rgba(0, 0, 0, 0.8), 0 0 1px var(--border);
-  padding-bottom: 84px; /* Space for bottom nav */
+  padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px)); /* Space for bottom nav with safe-area */
+}
+
+/* Mobile Screen Flow (< 768px): Unwraps sidebar & main columns seamlessly */
+@media (max-width: 767px) {
+  .hub-desktop-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .hub-sidebar-col, .hub-main-col {
+    display: contents;
+  }
+  .hub-profile-area { order: 1; }
+  .hub-ritual-area  { order: 2; }
+  .hub-pillars-area { order: 3; }
+  .hub-review-box   { order: 4; }
+  .hub-stats-area   { order: 5; }
 }
 
 /* Browser Surfaces Craft */
@@ -174,15 +198,18 @@ input, textarea { caret-color: var(--neon-sakura); }
   background: var(--bg-card);
   border: 1px solid var(--border);
   color: var(--text-secondary);
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
   border-radius: var(--radius-full);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  font-size: 0.95rem;
+  font-size: 1.05rem;
   transition: all 0.2s;
+  padding: 0;
 }
 .sfx-btn:hover { border-color: var(--neon-cyan); color: #fff; }
 
@@ -194,31 +221,51 @@ input, textarea { caret-color: var(--neon-sakura); }
   transform: translateX(-50%);
   width: 100%;
   max-width: 520px;
-  height: 70px;
+  height: calc(64px + env(safe-area-inset-bottom, 0px));
   background: var(--bg-glass);
   backdrop-filter: blur(18px);
   border-top: 1px solid var(--border);
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   z-index: 300;
-  padding: 0 0.5rem;
+  padding: 0 4px env(safe-area-inset-bottom, 0px);
+  box-sizing: border-box;
 }
 .nav-item {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.25rem;
+  gap: 0.15rem;
   background: none;
   border: none;
   color: var(--text-muted);
   cursor: pointer;
   transition: all 0.2s;
-  min-height: 48px;
+  min-height: 44px;
+  min-width: 0;
+  padding: 4px 1px;
   position: relative;
+  text-decoration: none;
+  overflow: hidden;
 }
-.nav-item .icon { font-size: 1.35rem; transition: transform 0.2s; }
-.nav-item .label { font-size: 0.8rem; font-weight: 600; letter-spacing: 0.02em; }
+.nav-item .icon {
+  font-size: 1.25rem;
+  line-height: 1.1;
+  transition: transform 0.2s;
+  flex-shrink: 0;
+}
+.nav-item .label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  text-align: center;
+  line-height: 1.2;
+}
 .nav-item.active {
   color: var(--neon-sakura);
 }
@@ -227,10 +274,30 @@ input, textarea { caret-color: var(--neon-sakura); }
   content: '';
   position: absolute;
   top: 0;
-  width: 32px;
+  width: 28px;
   height: 3px;
   background: var(--neon-sakura);
   border-radius: var(--radius-full);
+}
+
+/* Compact 360px Mobile Screen Support */
+@media (max-width: 380px) {
+  .bottom-nav {
+    padding: 0 2px env(safe-area-inset-bottom, 0px);
+    height: calc(60px + env(safe-area-inset-bottom, 0px));
+  }
+  .nav-item {
+    min-height: 44px;
+    padding: 2px 0;
+    gap: 0.1rem;
+  }
+  .nav-item .icon {
+    font-size: 1.15rem;
+  }
+  .nav-item .label {
+    font-size: 0.65rem;
+    letter-spacing: -0.02em;
+  }
 }
 
 /* ── PLAYLIST SELECTOR ON MV LOUNGE ── */
@@ -477,10 +544,15 @@ input, textarea { caret-color: var(--neon-sakura); }
 }
 .btn-full { width: 100%; }
 .btn-sm {
-  padding: 0.45rem 0.9rem;
+  padding: 0.5rem 0.9rem;
   font-size: 0.85rem;
-  min-height: 38px;
+  min-height: 44px;
   border-radius: var(--radius-sm);
+}
+
+/* Touch Accessibility: Minimum 44px touch target */
+button, .btn, .nav-item, .quest-level-btn, .sfx-btn, [role="button"] {
+  min-height: 44px;
 }
 
 /* ── INPUT & SMART ROMAJI IME BAR ── */
@@ -893,30 +965,51 @@ input, textarea { caret-color: var(--neon-sakura); }
   width: 100%;
   text-align: center;
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
+  max-height: calc(100vh - 2rem);
+  max-height: calc(100dvh - 2rem);
+  overflow-y: auto;
 }
 .modal-icon { font-size: 3rem; margin-bottom: 0.5rem; }
 .modal-title { font-size: 1.25rem; font-weight: 800; color: #fff; font-family: var(--font-serif); }
 .modal-desc { font-size: 0.88rem; color: var(--text-secondary); margin: 0.5rem 0 1.25rem; line-height: 1.6; }
 
 /* ══════════════════════════════════════════════════
-   DESKTOP & WIDE SCREEN RESPONSIVE LAYOUT (>= 992px)
+   DESKTOP & WIDE SCREEN RESPONSIVE LAYOUT (>= 768px)
 ══════════════════════════════════════════════════ */
-@media (min-width: 992px) {
-  /* Expand shell to full width */
+@media (min-width: 768px) {
+  /* Expand shell to full width: remove ALL max-width and margins, no black side bars */
   .app-shell {
-    max-width: 1200px;
-    padding-bottom: 3rem;
-    box-shadow: none;
+    max-width: 100% !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    padding-bottom: 2rem !important;
+    box-shadow: none !important;
+    border: none !important;
   }
 
-  /* Header becomes full-width desktop bar */
+  /* Header becomes 100% edge-to-edge desktop bar */
   .app-header {
-    padding: 0.85rem 2rem;
+    width: 100% !important;
+    box-sizing: border-box;
+    padding: 0.85rem clamp(1.25rem, 2.5vw, 3rem) !important;
+    border-radius: 0 !important;
   }
   .header-inner {
-    max-width: 1200px;
-    margin: 0 auto;
-    gap: 2rem;
+    max-width: none !important;
+    width: 100% !important;
+    margin: 0 !important;
+    gap: clamp(1rem, 2vw, 2.5rem);
+  }
+
+  /* Screens span 100% width and min-height 100dvh */
+  .screen {
+    width: 100% !important;
+    max-width: none !important;
+    min-height: calc(100dvh - 72px);
+    box-sizing: border-box;
+    padding: clamp(1.25rem, 2.5vw, 2.5rem) !important;
   }
 
   /* Hide mobile bottom navigation; show desktop top nav */
@@ -924,7 +1017,7 @@ input, textarea { caret-color: var(--neon-sakura); }
     display: none !important;
   }
   .desktop-nav {
-    display: flex;
+    display: flex !important;
     align-items: center;
     gap: 0.35rem;
     background: var(--bg-surface);
@@ -937,11 +1030,11 @@ input, textarea { caret-color: var(--neon-sakura); }
     flex-direction: row;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.45rem 1.15rem;
+    padding: 0.45rem clamp(0.75rem, 1vw, 1.25rem);
     border-radius: var(--radius-full);
-    min-height: 40px;
+    min-height: 44px;
     color: var(--text-secondary);
-    font-size: 0.88rem;
+    font-size: clamp(0.85rem, 0.2vw + 0.8rem, 0.95rem);
     font-weight: 600;
     transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   }
@@ -964,28 +1057,64 @@ input, textarea { caret-color: var(--neon-sakura); }
   /* ── MULTI-COLUMN SCREEN 1: HUB ── */
   .hub-desktop-grid {
     display: grid;
-    grid-template-columns: 360px 1fr;
-    grid-template-areas:
-      "profile ritual"
-      "stats   pillars";
-    gap: 1.5rem;
+    grid-template-columns: clamp(320px, 24vw, 400px) 1fr;
+    gap: clamp(1.25rem, 2vw, 2.25rem);
     align-items: start;
+    width: 100%;
   }
-  .hub-profile-area { grid-area: profile; margin-bottom: 0 !important; }
-  .hub-ritual-area { grid-area: ritual; margin-bottom: 0 !important; }
-  .hub-stats-area { grid-area: stats; margin-bottom: 0 !important; }
-  .hub-pillars-area { grid-area: pillars; }
+
+  /* Cột trái dính trên cùng khi cuộn (position: sticky) và lấp đầy thông tin hữu ích */
+  .hub-sidebar-col {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1rem, 1.5vw, 1.35rem);
+    position: sticky;
+    top: calc(72px + 1rem);
+    max-height: calc(100dvh - 72px - 2rem);
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+
+  .hub-main-col {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    min-width: 0;
+  }
+
+  /* Lưới 5 thẻ chế độ chơi dùng repeat(auto-fit, minmax(280px, 1fr)) */
   .hub-pillars-area .grid-2 {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: clamp(0.85rem, 1.2vw, 1.35rem);
+  }
+
+  .mode-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: clamp(1rem, 1.2vw, 1.4rem);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .mode-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+  }
+  .mode-card .mode-desc {
+    flex: 1;
+    margin-bottom: 0.85rem;
+  }
+  .mode-card .mode-badge {
+    align-self: flex-start;
+    margin-top: auto;
   }
 
   /* ── MULTI-COLUMN SCREEN 2: PARTY ── */
   .party-lobby-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
+    gap: clamp(1.25rem, 2vw, 2rem);
     text-align: left;
     margin-top: 1rem;
     padding-top: 1rem;
@@ -993,20 +1122,30 @@ input, textarea { caret-color: var(--neon-sakura); }
   }
   .party-room-grid {
     display: grid;
-    grid-template-columns: 360px 1fr;
-    gap: 1.5rem;
+    grid-template-columns: clamp(320px, 24vw, 400px) 1fr;
+    gap: clamp(1.25rem, 2vw, 2rem);
     align-items: start;
+    width: 100%;
+  }
+  .party-sidebar-col {
+    position: sticky;
+    top: calc(72px + 1rem);
   }
   .party-arena-col .battlefield {
-    min-height: 440px;
+    min-height: 480px;
   }
 
   /* ── MULTI-COLUMN SCREEN 3: DOJO ── */
   .dojo-layout-grid {
     display: grid;
-    grid-template-columns: 280px 1fr;
-    gap: 1.5rem;
+    grid-template-columns: clamp(280px, 22vw, 340px) 1fr;
+    gap: clamp(1.25rem, 2vw, 2rem);
     align-items: start;
+    width: 100%;
+  }
+  .dojo-sidebar-col {
+    position: sticky;
+    top: calc(72px + 1rem);
   }
   .dojo-subtabs {
     display: flex;
@@ -1025,25 +1164,59 @@ input, textarea { caret-color: var(--neon-sakura); }
     display: block !important;
   }
   .flashcard-3d {
-    height: 280px;
-    max-width: 580px;
+    height: 320px;
+    max-width: 760px;
+    width: 100%;
     margin: 0 auto 1.5rem;
   }
 
   /* ── MULTI-COLUMN SCREEN 4: ANIME MV LOUNGE ── */
   .lounge-layout-grid {
     display: grid;
-    grid-template-columns: 1.25fr 1fr;
-    gap: 1.5rem;
+    grid-template-columns: 1.3fr 1fr;
+    gap: clamp(1.25rem, 2vw, 2rem);
     align-items: start;
+    width: 100%;
   }
 
   /* ── MULTI-COLUMN SCREEN 5: QUEST MAP ── */
   .quest-desktop-layout {
     display: grid;
-    grid-template-columns: 320px 1fr;
-    gap: 1.5rem;
+    grid-template-columns: clamp(300px, 24vw, 360px) 1fr;
+    gap: clamp(1.25rem, 2vw, 2rem);
     align-items: start;
+    width: 100%;
+  }
+  .quest-sidebar-col {
+    position: sticky;
+    top: calc(72px + 1rem);
+  }
+  .quest-roadmap {
+    max-width: none !important;
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)) !important;
+    gap: clamp(0.85rem, 1.2vw, 1.35rem) !important;
+    padding: 0 !important;
+  }
+  .quest-roadmap::before {
+    display: none !important;
+  }
+  .quest-node-item {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: clamp(0.75rem, 1vw, 1rem);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .quest-node-item:hover {
+    transform: translateY(-3px);
+    border-color: var(--neon-cyan);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  }
+  .quest-node-content {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
   }
 }
 
@@ -1431,100 +1604,120 @@ input, textarea { caret-color: var(--neon-sakura); }
   ══════════════════════════════════════════════════ -->
   <main class="screen active" id="tab-hub">
     <div class="hub-desktop-grid">
-      <!-- User Profile & Rank Banner -->
-      <div class="profile-banner hub-profile-area">
-        <div class="profile-avatar" id="avatarDisplay">🦊</div>
-        <div class="profile-meta">
-          <div class="profile-name">
-            <span id="userNameDisplay">Học viên Ninja</span>
-            <span style="font-size:.82rem;cursor:pointer;color:var(--neon-cyan)" onclick="openProfileModal()" title="Chỉnh sửa hồ sơ">✏️</span>
-            <span class="sync-badge guest" id="hubSyncBadge" onclick="handleAuthButtonClick()" style="cursor:pointer" title="Nhấn để đăng nhập / đồng bộ">💾 KHÁCH (OFFLINE)</span>
-          </div>
-          <div class="profile-rank" id="userRankDisplay">RANK: GENIN N5 (LEVEL 1)</div>
-          <div class="xp-bar-box">
-            <div class="xp-meta">
-              <span>EXP</span>
-              <span id="xpDisplay">120 / 300</span>
+      <!-- CỘT TRÁI (Sticky trên desktop: Hồ sơ Ninja, Nhiệm vụ ngày, Ôn từ sai, Thống kê) -->
+      <aside class="hub-sidebar-col">
+        <!-- User Profile & Rank Banner -->
+        <div class="profile-banner hub-profile-area">
+          <div class="profile-avatar" id="avatarDisplay">🦊</div>
+          <div class="profile-meta">
+            <div class="profile-name">
+              <span id="userNameDisplay">Học viên Ninja</span>
+              <span style="font-size:.82rem;cursor:pointer;color:var(--neon-cyan)" onclick="openProfileModal()" title="Chỉnh sửa hồ sơ">✏️</span>
+              <span class="sync-badge guest" id="hubSyncBadge" onclick="handleAuthButtonClick()" style="cursor:pointer" title="Nhấn để đăng nhập / đồng bộ">💾 KHÁCH (OFFLINE)</span>
             </div>
-            <div class="xp-track">
-              <div class="xp-fill" id="xpFill" style="width: 40%"></div>
+            <div class="profile-rank" id="userRankDisplay">RANK: GENIN N5 (LEVEL 1)</div>
+            <div class="xp-bar-box">
+              <div class="xp-meta">
+                <span>EXP</span>
+                <span id="xpDisplay">120 / 300</span>
+              </div>
+              <div class="xp-track">
+                <div class="xp-fill" id="xpFill" style="width: 40%"></div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- 10-Minute Daily Study Ritual (Guided Quest) -->
-      <div class="ritual-card hub-ritual-area">
-        <div class="ritual-tag">★ NHIỆM VỤ HÀNG NGÀY</div>
-        <div class="ritual-title">Nghi Thức 10 Phút Luyện Tập</div>
-        <div class="ritual-sub">Hoàn thành 4 chặng để giữ vững Streak và nhận +50 EXP thưởng!</div>
-        <div class="ritual-steps">
-          <div class="step-chip" id="rStep1">1. Flashcard</div>
-          <div class="step-chip" id="rStep2">2. Phát âm</div>
-          <div class="step-chip" id="rStep3">3. Nhạc Anime</div>
-          <div class="step-chip" id="rStep4">4. Shiritori</div>
+        <!-- 10-Minute Daily Study Ritual (Guided Quest) -->
+        <div class="ritual-card hub-ritual-area">
+          <div class="ritual-tag">★ NHIỆM VỤ HÀNG NGÀY</div>
+          <div class="ritual-title">Nghi Thức 10 Phút Luyện Tập</div>
+          <div class="ritual-sub">Hoàn thành 4 chặng để giữ vững Streak và nhận +50 EXP thưởng!</div>
+          <div class="ritual-steps">
+            <div class="step-chip" id="rStep1">1. Flashcard</div>
+            <div class="step-chip" id="rStep2">2. Phát âm</div>
+            <div class="step-chip" id="rStep3">3. Nhạc Anime</div>
+            <div class="step-chip" id="rStep4">4. Shiritori</div>
+          </div>
+          <button class="btn btn-primary btn-full" onclick="startDailyRitual()">Bắt Đầu Nghi Thức Hôm Nay ⚡</button>
         </div>
-        <button class="btn btn-primary btn-full" onclick="startDailyRitual()">Bắt Đầu Nghi Thức Hôm Nay ⚡</button>
-      </div>
 
-      <!-- Quick Access Pillars -->
-      <div class="hub-pillars-area">
-        <div class="card-title" style="margin-bottom:.75rem">⚔️ KHU VỰC TRẢI NGHIỆM</div>
-        <div class="grid-2">
-          <div class="mode-card" onclick="switchTab('quest')" style="border-color:var(--neon-gold);background:linear-gradient(135deg, rgba(255,190,11,0.08), rgba(255,42,109,0.05))">
-            <div class="mode-icon">🗺️</div>
-            <div class="mode-title" style="color:var(--neon-gold)">Hành Trình JLPT</div>
-            <div class="mode-desc">Bản đồ 30 màn chơi 4 bước (N5 ➔ N4 ➔ N3), tích lũy sao và EXP.</div>
-            <span class="mode-badge badge-solo" style="border-color:var(--neon-gold);color:var(--neon-gold)">Quest Game 30 Màn</span>
+        <!-- Wrong Words Review Box in Hub Sidebar -->
+        <div class="card hub-review-box">
+          <div class="card-title" style="display:flex;justify-content:space-between;align-items:center">
+            <span>🔥 Ôn Luyện Từ Vựng</span>
+            <span class="mode-badge badge-solo" id="hubWrongCountBadge">0 từ sai</span>
           </div>
-          <div class="mode-card" onclick="switchTab('party')">
-            <div class="mode-icon">🎮</div>
-            <div class="mode-title">Đấu Trường Party</div>
-            <div class="mode-desc">Chơi chung với bạn bè qua PeerJS: Shiritori, Đoán Anime, Phản xạ Kanji.</div>
-            <span class="mode-badge badge-multi">● 2P Multiplayer</span>
+          <div style="font-size:.82rem;color:var(--text-muted);margin:.4rem 0 .75rem" id="hubWrongWordsDesc">
+            Tự động tổng hợp các từ bạn từng trả lời sai trong Hành Trình & Dojo để nhắc ôn luyện mỗi ngày.
           </div>
-          <div class="mode-card" onclick="switchTab('dojo')">
-            <div class="mode-icon">📇</div>
-            <div class="mode-title">Dojo Luyện Tập</div>
-            <div class="mode-desc">Thẻ Flashcard N5 lật 3D, trắc nghiệm và chấm điểm phát âm AI.</div>
-            <span class="mode-badge badge-solo">Solo Training</span>
-          </div>
-          <div class="mode-card" onclick="switchTab('lounge')">
-            <div class="mode-icon">🎵</div>
-            <div class="mode-title">Anime Music Lounge</div>
-            <div class="mode-desc">Trình phát nhạc YouTube MV Anime, nghe lời bài hát và điền từ khuyết.</div>
-            <span class="mode-badge badge-solo">YouTube Player</span>
-          </div>
-          <div class="mode-card" onclick="startSoloShiritori()">
-            <div class="mode-icon">🌸</div>
-            <div class="mode-title">Shiritori VS AI</div>
-            <div class="mode-desc">Đấu nối từ Danh từ → Động từ → Tính từ với Sakura Bot Claude.</div>
-            <span class="mode-badge badge-solo">Bot AI</span>
-          </div>
+          <button class="btn btn-ghost btn-sm btn-full" id="hubBtnReviewWrong" onclick="switchTab('quest'); startWrongWordsReview();" disabled>
+            ⚡ Ôn Luyện Từ Hay Sai
+          </button>
         </div>
-      </div>
 
-      <!-- Overall Learning Progress & Stats -->
-      <div class="card hub-stats-area">
-        <div class="card-header">
-          <div class="card-title">📊 Tiến Độ Tích Luỹ</div>
-          <span style="font-size:.82rem;color:var(--text-muted)" id="lastActiveDate">Hôm nay</span>
+        <!-- Overall Learning Progress & Stats -->
+        <div class="card hub-stats-area">
+          <div class="card-header">
+            <div class="card-title">📊 Tiến Độ Tích Luỹ</div>
+            <span style="font-size:.82rem;color:var(--text-muted)" id="lastActiveDate">Hôm nay</span>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;text-align:center">
+            <div style="background:var(--bg-surface);padding:.6rem;border-radius:var(--radius-sm)">
+              <div style="font-family:var(--font-arcade);font-size:1.3rem;font-weight:800;color:var(--neon-cyan)" id="statFC">0</div>
+              <div style="font-size:.82rem;color:var(--text-muted)">Thẻ N5 Thuộc</div>
+            </div>
+            <div style="background:var(--bg-surface);padding:.6rem;border-radius:var(--radius-sm)">
+              <div style="font-family:var(--font-arcade);font-size:1.3rem;font-weight:800;color:var(--neon-lime)" id="statPron">0%</div>
+              <div style="font-size:.82rem;color:var(--text-muted)">Phát Âm Chuẩn</div>
+            </div>
+            <div style="background:var(--bg-surface);padding:.6rem;border-radius:var(--radius-sm)">
+              <div style="font-family:var(--font-arcade);font-size:1.3rem;font-weight:800;color:var(--neon-sakura)" id="statWins">0</div>
+              <div style="font-size:.82rem;color:var(--text-muted)">Chiến Thắng 2P</div>
+            </div>
+          </div>
         </div>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;text-align:center">
-          <div style="background:var(--bg-surface);padding:.6rem;border-radius:var(--radius-sm)">
-            <div style="font-family:var(--font-arcade);font-size:1.3rem;font-weight:800;color:var(--neon-cyan)" id="statFC">0</div>
-            <div style="font-size:.82rem;color:var(--text-muted)">Thẻ N5 Thuộc</div>
-          </div>
-          <div style="background:var(--bg-surface);padding:.6rem;border-radius:var(--radius-sm)">
-            <div style="font-family:var(--font-arcade);font-size:1.3rem;font-weight:800;color:var(--neon-lime)" id="statPron">0%</div>
-            <div style="font-size:.82rem;color:var(--text-muted)">Phát Âm Chuẩn</div>
-          </div>
-          <div style="background:var(--bg-surface);padding:.6rem;border-radius:var(--radius-sm)">
-            <div style="font-family:var(--font-arcade);font-size:1.3rem;font-weight:800;color:var(--neon-sakura)" id="statWins">0</div>
-            <div style="font-size:.82rem;color:var(--text-muted)">Chiến Thắng 2P</div>
+      </aside>
+
+      <!-- CỘT PHẢI (Khu vực chế độ chơi dàn đều) -->
+      <section class="hub-main-col">
+        <!-- Quick Access Pillars -->
+        <div class="hub-pillars-area">
+          <div class="card-title" style="margin-bottom:.75rem">⚔️ KHU VỰC TRẢI NGHIỆM</div>
+          <div class="grid-2">
+            <div class="mode-card" onclick="switchTab('quest')" style="border-color:var(--neon-gold);background:linear-gradient(135deg, rgba(255,190,11,0.08), rgba(255,42,109,0.05))">
+              <div class="mode-icon">🗺️</div>
+              <div class="mode-title" style="color:var(--neon-gold)">Hành Trình JLPT</div>
+              <div class="mode-desc">Bản đồ 30 màn chơi 4 bước (N5 ➔ N4 ➔ N3), tích lũy sao và EXP.</div>
+              <span class="mode-badge badge-solo" style="border-color:var(--neon-gold);color:var(--neon-gold)">Quest Game 30 Màn</span>
+            </div>
+            <div class="mode-card" onclick="switchTab('party')">
+              <div class="mode-icon">🎮</div>
+              <div class="mode-title">Đấu Trường Party</div>
+              <div class="mode-desc">Chơi chung với bạn bè qua PeerJS: Shiritori, Đoán Anime, Phản xạ Kanji.</div>
+              <span class="mode-badge badge-multi">● 2P Multiplayer</span>
+            </div>
+            <div class="mode-card" onclick="switchTab('dojo')">
+              <div class="mode-icon">📇</div>
+              <div class="mode-title">Dojo Luyện Tập</div>
+              <div class="mode-desc">Thẻ Flashcard N5 lật 3D, trắc nghiệm và chấm điểm phát âm AI.</div>
+              <span class="mode-badge badge-solo">Solo Training</span>
+            </div>
+            <div class="mode-card" onclick="switchTab('lounge')">
+              <div class="mode-icon">🎵</div>
+              <div class="mode-title">Anime Music Lounge</div>
+              <div class="mode-desc">Trình phát nhạc YouTube MV Anime, nghe lời bài hát và điền từ khuyết.</div>
+              <span class="mode-badge badge-solo">YouTube Player</span>
+            </div>
+            <div class="mode-card" onclick="startSoloShiritori()">
+              <div class="mode-icon">🌸</div>
+              <div class="mode-title">Shiritori VS AI</div>
+              <div class="mode-desc">Đấu nối từ Danh từ → Động từ → Tính từ với Sakura Bot Claude.</div>
+              <span class="mode-badge badge-solo">Bot AI</span>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
     </div>
   </main>
 
@@ -2089,7 +2282,7 @@ input, textarea { caret-color: var(--neon-sakura); }
 
 <!-- MODAL 3: HỒ SƠ CÁ NHÂN & CÀI ĐẶT TÀI KHOẢN -->
 <div class="modal-overlay" id="profileModalOverlay">
-  <div class="modal-box" style="max-width:520px;text-align:left;max-height:92vh;overflow-y:auto">
+  <div class="modal-box" style="max-width:520px;text-align:left;max-height:92vh;max-height:92dvh;overflow-y:auto">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;padding-bottom:.5rem;border-bottom:1px solid var(--border)">
       <div>
         <div style="font-size:1.15rem;font-weight:800;color:#fff;font-family:var(--font-serif)">Hồ Sơ Ninja & Tài Khoản</div>
@@ -2167,7 +2360,7 @@ input, textarea { caret-color: var(--neon-sakura); }
         <label style="font-size:.78rem;color:var(--text-muted);font-weight:700">ĐỊA CHỈ CLOUDFLARE WORKER AUTH:</label>
         <span style="font-size:.72rem;color:var(--neon-green)">● Hoạt động</span>
       </div>
-      <input class="inp" id="profileWorkerUrlInput" placeholder="https://auth.emi.io.vn hoặc Cloudflare Worker URL" style="width:100%;font-size:.8rem;font-family:monospace">
+      <input class="inp" id="profileWorkerUrlInput" placeholder="https://emi-worker-auth.baova10ht.workers.dev" style="width:100%;font-size:.8rem;font-family:monospace">
       <div style="font-size:.72rem;color:var(--text-muted);margin-top:.3rem">
         💡 Bạn có thể điền địa chỉ Worker riêng của mình sau khi deploy theo hướng dẫn.
       </div>
@@ -2262,7 +2455,7 @@ input, textarea { caret-color: var(--neon-sakura); }
 
 <!-- Quest Stage Play Modal (4 Steps: Learn Cards -> Meaning Quiz -> Audio Quiz -> Spelling) -->
 <div class="modal-overlay" id="questStageModal">
-  <div class="modal-box" style="max-width:540px;text-align:left;max-height:92vh;overflow-y:auto">
+  <div class="modal-box" style="max-width:540px;text-align:left;max-height:92vh;max-height:92dvh;overflow-y:auto">
     <!-- Header -->
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem;border-bottom:1px solid var(--border);padding-bottom:.5rem">
       <div>
@@ -2660,6 +2853,16 @@ function updateUserUI() {
   document.getElementById('statPron').textContent = (userData.pronBest || 0) + '%';
   document.getElementById('statWins').textContent = userData.partyWins || 0;
 
+  // Wrong words review UI on Hub Sidebar
+  const wrongList = (userData.questData && userData.questData.wrongWords) || [];
+  const hubWBadge = document.getElementById('hubWrongCountBadge');
+  if (hubWBadge) hubWBadge.textContent = `${wrongList.length} từ sai`;
+  const hubWBtn = document.getElementById('hubBtnReviewWrong');
+  if (hubWBtn) {
+    hubWBtn.disabled = wrongList.length === 0;
+    hubWBtn.textContent = wrongList.length > 0 ? `⚡ Ôn Luyện ${wrongList.length} Từ Hay Sai` : '⚡ Chưa có từ sai';
+  }
+
   // Ritual steps UI
   userData.ritualSteps.forEach((done, i) => {
     const el = document.getElementById(`rStep${i+1}`);
@@ -2685,7 +2888,12 @@ function changeUserName() {
 //  3B. ACCOUNT, AUTH & CLOUD SYNC ENGINE
 // ══════════════════════════════════════════════════
 
-let AUTH_WORKER_URL = localStorage.getItem('emi_auth_worker_url') || 'https://auth.emi.io.vn';
+let storedWorkerUrl = localStorage.getItem('emi_auth_worker_url');
+if (storedWorkerUrl && !storedWorkerUrl.includes('workers.dev')) {
+  storedWorkerUrl = 'https://emi-worker-auth.baova10ht.workers.dev';
+  localStorage.setItem('emi_auth_worker_url', storedWorkerUrl);
+}
+let AUTH_WORKER_URL = storedWorkerUrl || 'https://emi-worker-auth.baova10ht.workers.dev';
 let authSessionToken = localStorage.getItem('emi_auth_token') || '';
 let authCurrentUser = null; // null nếu là chế độ Khách (Guest)
 let isSyncingToCloud = false;
@@ -4016,6 +4224,15 @@ function renderQuestRoadmap() {
   if (wrongBtn) {
     wrongBtn.disabled = wrongList.length === 0;
     wrongBtn.textContent = wrongList.length > 0 ? `⚡ Ôn Luyện ${wrongList.length} Từ Hay Sai` : '⚡ Chưa có từ sai để ôn';
+  }
+
+  // Also sync Hub wrong words box
+  const hubWBadge = document.getElementById('hubWrongCountBadge');
+  if (hubWBadge) hubWBadge.textContent = `${wrongList.length} từ sai`;
+  const hubWBtn = document.getElementById('hubBtnReviewWrong');
+  if (hubWBtn) {
+    hubWBtn.disabled = wrongList.length === 0;
+    hubWBtn.textContent = wrongList.length > 0 ? `⚡ Ôn Luyện ${wrongList.length} Từ Hay Sai` : '⚡ Chưa có từ sai';
   }
 
   // Update Level Tabs UI
