@@ -21,7 +21,16 @@
 /* ══════════════════════════════════════════════════
    TOKYO NEON ARCADE THEME (Responsive Design System)
 ══════════════════════════════════════════════════ */
-:root {
+/* ══════════════════════════════════════════════════
+   THEME SYSTEM: 3 DISTINCT STYLES + DUAL LIGHT/DARK MODES
+   Theme 1: Tokyo Neon Arcade (Default)
+   Theme 2: Sakura Elegance (Tao nhã lịch thiệp chuẩn Nhật)
+   Theme 3: Kawaii Anime Neko (Anime cute kẹo ngọt & tai mèo)
+   ══════════════════════════════════════════════════ */
+:root,
+body[data-theme-style="arcade"][data-theme-mode="dark"],
+[data-theme-style="arcade"][data-theme-mode="dark"],
+body:not([data-theme-style]) {
   --bg-deep: #07080e;
   --bg-surface: #0f121d;
   --bg-card: #151a2a;
@@ -60,7 +69,228 @@
   --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.35);
   --shadow-neon-pink: 0 2px 8px rgba(255, 42, 109, 0.2);
   --shadow-neon-cyan: 0 2px 8px rgba(5, 217, 232, 0.2);
+  --theme-transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
 }
+
+/* ARCADE LIGHT MODE */
+body[data-theme-style="arcade"][data-theme-mode="light"],
+[data-theme-style="arcade"][data-theme-mode="light"] {
+  --bg-deep: #f0f4f9;
+  --bg-surface: #ffffff;
+  --bg-card: #e4ebf5;
+  --bg-card-hover: #d7e2f0;
+  --bg-glass: rgba(255, 255, 255, 0.94);
+  --border: #c4d1e2;
+  --border-light: #94a3b8;
+  --border-glow: rgba(2, 132, 199, 0.45);
+  --neon-sakura: #e11d48;
+  --neon-sakura-glow: rgba(225, 29, 72, 0.2);
+  --neon-cyan: #0284c7;
+  --neon-cyan-glow: rgba(2, 132, 199, 0.2);
+  --neon-gold: #d97706;
+  --neon-gold-glow: rgba(217, 119, 6, 0.2);
+  --neon-lime: #16a34a;
+  --neon-purple: #7c3aed;
+  --neon-crimson: #dc2626;
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  --shadow-card: 0 4px 16px rgba(15, 23, 42, 0.08);
+}
+
+/* ══════════════════════════════════════════════════
+   PHONG CÁCH 1: SAKURA ELEGANCE (Tao Nhã Lịch Thiệp Chuẩn Nhật)
+   ══════════════════════════════════════════════════ */
+/* SAKURA LIGHT (Washi Paper, Cherry Blossom, Moss & Wood) */
+body[data-theme-style="sakura"][data-theme-mode="light"],
+[data-theme-style="sakura"][data-theme-mode="light"] {
+  --bg-deep: #faf5ee;
+  --bg-surface: #ffffff;
+  --bg-card: #f4ece4;
+  --bg-card-hover: #eae0d6;
+  --bg-glass: rgba(255, 255, 255, 0.95);
+  --border: #dfcfc4;
+  --border-light: #caa89b;
+  --border-glow: rgba(216, 74, 117, 0.35);
+  --neon-sakura: #d84a75;
+  --neon-sakura-glow: rgba(216, 74, 117, 0.2);
+  --neon-cyan: #2a8382;
+  --neon-cyan-glow: rgba(42, 131, 130, 0.2);
+  --neon-gold: #b38222;
+  --neon-gold-glow: rgba(179, 130, 34, 0.2);
+  --neon-lime: #52794c;
+  --neon-purple: #704d7e;
+  --neon-crimson: #c93a40;
+  --text-primary: #2b2220;
+  --text-secondary: #5a4b47;
+  --text-muted: #88746f;
+  --font-ui: 'Noto Serif JP', 'Be Vietnam Pro', serif;
+  --font-serif: 'Noto Serif JP', 'Be Vietnam Pro', serif;
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --shadow-card: 0 4px 14px rgba(78, 52, 46, 0.08);
+}
+
+/* SAKURA DARK (Yozakura Dạ Nguyệt - Đêm Hoa Anh Đào Lung Linh) */
+body[data-theme-style="sakura"][data-theme-mode="dark"],
+[data-theme-style="sakura"][data-theme-mode="dark"] {
+  --bg-deep: #161217;
+  --bg-surface: #221a24;
+  --bg-card: #2e2330;
+  --bg-card-hover: #3b2c3d;
+  --bg-glass: rgba(34, 26, 36, 0.92);
+  --border: #4a384d;
+  --border-light: #614a65;
+  --border-glow: rgba(255, 112, 150, 0.35);
+  --neon-sakura: #ff7096;
+  --neon-sakura-glow: rgba(255, 112, 150, 0.25);
+  --neon-cyan: #4ecdc4;
+  --neon-cyan-glow: rgba(78, 205, 196, 0.25);
+  --neon-gold: #f4c430;
+  --neon-gold-glow: rgba(244, 196, 48, 0.25);
+  --neon-lime: #88d49e;
+  --neon-purple: #b589d6;
+  --neon-crimson: #ff5376;
+  --text-primary: #fcf6f8;
+  --text-secondary: #d6cad1;
+  --text-muted: #9e8e98;
+  --font-ui: 'Noto Serif JP', 'Be Vietnam Pro', serif;
+  --font-serif: 'Noto Serif JP', 'Be Vietnam Pro', serif;
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.45);
+}
+
+/* ══════════════════════════════════════════════════
+   PHONG CÁCH 2: KAWAII ANIME NEKO (Chuẩn Kiểu Anime Cute Mèo)
+   ══════════════════════════════════════════════════ */
+/* NEKO LIGHT (Dâu Sữa Pastel, Neko Ears & Paws) */
+body[data-theme-style="neko"][data-theme-mode="light"],
+[data-theme-style="neko"][data-theme-mode="light"] {
+  --bg-deep: #fff5f8;
+  --bg-surface: #ffffff;
+  --bg-card: #ffe8f0;
+  --bg-card-hover: #ffd9e6;
+  --bg-glass: rgba(255, 255, 255, 0.95);
+  --border: #fbc2d8;
+  --border-light: #f79fc2;
+  --border-glow: rgba(255, 107, 153, 0.4);
+  --neon-sakura: #ff4d85;
+  --neon-sakura-glow: rgba(255, 77, 133, 0.25);
+  --neon-cyan: #38bdf8;
+  --neon-cyan-glow: rgba(56, 189, 248, 0.25);
+  --neon-gold: #f59e0b;
+  --neon-gold-glow: rgba(245, 158, 11, 0.25);
+  --neon-lime: #10b981;
+  --neon-purple: #a855f7;
+  --neon-crimson: #f43f5e;
+  --text-primary: #3d2232;
+  --text-secondary: #6e465e;
+  --text-muted: #9c738c;
+  --radius-sm: 10px;
+  --radius-md: 18px;
+  --radius-lg: 26px;
+  --shadow-card: 0 6px 18px rgba(255, 107, 153, 0.12);
+}
+
+/* NEKO DARK (Mèo Đêm Vũ Trụ - Midnight Galaxy Neko) */
+body[data-theme-style="neko"][data-theme-mode="dark"],
+[data-theme-style="neko"][data-theme-mode="dark"] {
+  --bg-deep: #131122;
+  --bg-surface: #1e1933;
+  --bg-card: #282142;
+  --bg-card-hover: #352b57;
+  --bg-glass: rgba(30, 25, 51, 0.92);
+  --border: #42366b;
+  --border-light: #5d4d94;
+  --border-glow: rgba(255, 117, 182, 0.4);
+  --neon-sakura: #ff75b6;
+  --neon-sakura-glow: rgba(255, 117, 182, 0.3);
+  --neon-cyan: #67e8f9;
+  --neon-cyan-glow: rgba(103, 232, 249, 0.25);
+  --neon-gold: #fde047;
+  --neon-gold-glow: rgba(253, 224, 71, 0.25);
+  --neon-lime: #4ade80;
+  --neon-purple: #c084fc;
+  --neon-crimson: #fb7185;
+  --text-primary: #fdfaff;
+  --text-secondary: #d1c7e6;
+  --text-muted: #9b8eb8;
+  --radius-sm: 10px;
+  --radius-md: 18px;
+  --radius-lg: 26px;
+  --shadow-card: 0 6px 20px rgba(0, 0, 0, 0.45);
+}
+
+/* THEME SPECIFIC OVERRIDES & DECORATIVE ACCENTS */
+[data-theme-style="sakura"] .app-header,
+[data-theme-style="sakura"] .bottom-nav {
+  background: var(--bg-surface);
+  border-color: var(--border);
+}
+[data-theme-style="sakura"] .brand-logo span {
+  color: var(--neon-sakura);
+}
+[data-theme-style="neko"] .app-header,
+[data-theme-style="neko"] .bottom-nav {
+  background: var(--bg-surface);
+  border-color: var(--border);
+}
+[data-theme-style="neko"] .card {
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+}
+[data-theme-style="neko"] .card:hover {
+  transform: translateY(-2px);
+}
+[data-theme-style="neko"] .btn {
+  border-radius: var(--radius-full);
+}
+[data-theme-style="neko"] .hub-featured-card::before {
+  content: '🐾';
+  position: absolute;
+  top: -12px;
+  right: 20px;
+  font-size: 1.25rem;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+}
+
+/* Chibi Avatar Mascot Animations */
+@keyframes chibiFloat {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-3px) rotate(0.5deg); }
+}
+@keyframes chibiBounce {
+  0% { transform: scale(1) translateY(0); }
+  35% { transform: scale(1.15) translateY(-8px); }
+  65% { transform: scale(0.95) translateY(2px); }
+  100% { transform: scale(1) translateY(0); }
+}
+.chibi-avatar-svg {
+  animation: chibiFloat 3.2s ease-in-out infinite;
+  transform-origin: center bottom;
+  display: block;
+}
+.chibi-bounce-active .chibi-avatar-svg {
+  animation: chibiBounce 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+
+/* Falling Sakura Petals Canvas */
+#sakuraPetalsCanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 1;
+  display: none;
+}
+body[data-theme-style="sakura"] #sakuraPetalsCanvas {
+  display: block;
+}
+
 
 *, *::before, *::after {
   box-sizing: border-box;
@@ -2027,6 +2257,7 @@ small, .text-xs, .nav-item .label, [style*="font-size:.7"], [style*="font-size: 
 
 <div class="app-shell">
   <!-- Toast -->
+  <canvas id="sakuraPetalsCanvas"></canvas>
   <div id="toast" class="toast-msg"></div>
 
   <!-- Overlays for Game Juice Feedback -->
@@ -2082,6 +2313,7 @@ small, .text-xs, .nav-item .label, [style*="font-size:.7"], [style*="font-size: 
         <button class="sfx-btn" id="sfxToggle" onclick="toggleSfx()" title="Bật/Tắt âm thanh điện tử">🔊</button>
         <button class="sfx-btn" id="vfxToggle" onclick="toggleVfx()" title="Bật/Tắt hiệu ứng rung & nổ (VFX)">✨</button>
         <button class="sfx-btn" id="headerLeaderboardBtn" onclick="openLeaderboardModal()" title="Bảng xếp hạng tuần">🏆</button>
+        <button class="sfx-btn" id="themeQuickToggleBtn" onclick="openThemePickerModal()" title="Đổi phong cách giao diện & Sáng/Tối">🎨</button>
         <button class="sfx-btn" id="settingsBtn" onclick="openSettingsModal()" title="Cài đặt giọng đọc tiếng Nhật & hệ thống">⚙️</button>
         <button class="user-auth-btn" id="headerAuthBtn" onclick="handleAuthButtonClick()" title="Tài khoản cá nhân & Đồng bộ đám mây">
           <span class="user-avatar" id="headerUserAvatar">🦊</span>
@@ -2139,9 +2371,10 @@ small, .text-xs, .nav-item .label, [style*="font-size:.7"], [style*="font-size: 
           </div>
 
           <div style="display:flex;align-items:center;gap:.75rem">
-            <div id="sakuraPetAvatarBox" onclick="interactWithSakuraPet()" style="cursor:pointer;position:relative;width:58px;height:58px;background:rgba(255,42,109,0.18);border:2px solid var(--neon-sakura);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2rem;flex-shrink:0" title="Chạm để xoa đầu Sakura Bot!">
-              <span id="sakuraPetEmoji">🌸</span>
-              <span id="sakuraPetMoodIcon" style="position:absolute;bottom:-2px;right:-2px;font-size:.9rem">✨</span>
+            <div id="sakuraPetAvatarBox" onclick="interactWithSakuraPet()" style="cursor:pointer;position:relative;width:72px;height:72px;background:rgba(255,42,109,0.14);border:2px solid var(--neon-sakura);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden" title="Chạm để tương tác cùng bé Chibi!">
+              <div id="chibiMascotSvgContainer" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center"></div>
+              <span id="sakuraPetEmoji" style="display:none">🌸</span>
+              <span id="sakuraPetMoodIcon" style="position:absolute;bottom:0px;right:0px;font-size:.95rem;background:var(--bg-surface);border-radius:50%;padding:1px;line-height:1">✨</span>
             </div>
             <div style="flex:1;min-width:0">
               <div style="display:flex;justify-content:space-between;align-items:center">
@@ -2240,6 +2473,22 @@ small, .text-xs, .nav-item .label, [style*="font-size:.7"], [style*="font-size: 
 
       <!-- CỘT PHẢI (Khu vực chế độ chơi dàn đều) -->
       <section class="hub-main-col">
+        <!-- Hero Quick Action Banner -->
+        <div class="hub-hero-banner" style="background:linear-gradient(135deg, rgba(5,217,232,0.12), rgba(255,42,109,0.1));border:1.5px solid var(--border-glow);border-radius:var(--radius-lg);padding:1.1rem 1.25rem;margin-bottom:1.1rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.75rem">
+          <div style="display:flex;align-items:center;gap:.75rem">
+            <div style="font-size:2.2rem;line-height:1">🌸</div>
+            <div>
+              <div style="font-size:1.1rem;font-weight:800;color:var(--text-primary);letter-spacing:.02em">Chào mừng trở lại, <span id="hubGreetingName" style="color:var(--neon-cyan)">Học viên Ninja</span>!</div>
+              <div style="font-size:.78rem;color:var(--text-muted);margin-top:.15rem" id="hubHeroSubtext">Bạn đã sẵn sàng chinh phục mục tiêu tiếng Nhật hôm nay chưa?</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:.5rem">
+            <button class="btn btn-primary" onclick="switchTab('quest')" style="padding:.5rem 1.15rem;font-size:.85rem;font-weight:800;border-radius:var(--radius-full);box-shadow:0 4px 14px var(--neon-sakura-glow)">
+              ⚡ Tiếp Tục Hành Trình
+            </button>
+          </div>
+        </div>
+
         <!-- Quick Access Pillars -->
         <div class="hub-pillars-area">
           <div class="card-title" style="margin-bottom:.85rem;display:flex;align-items:center;justify-content:space-between">
@@ -2713,13 +2962,16 @@ small, .text-xs, .nav-item .label, [style*="font-size:.7"], [style*="font-size: 
       <div class="dojo-sidebar-col">
         <!-- Mode Subtabs -->
         <div class="dojo-subtabs">
-          <button class="btn btn-sm btn-cyan dojo-tab-btn" id="dojoSubFC" onclick="switchDojoMode('fc')">📇 Flashcard</button>
-          <button class="btn btn-sm btn-ghost dojo-tab-btn" id="dojoSubQuiz" onclick="switchDojoMode('quiz')">📝 Trắc Nghiệm</button>
-          <button class="btn btn-sm btn-ghost dojo-tab-btn" id="dojoSubPron" onclick="switchDojoMode('pron')">🎤 Phát Âm AI</button>
+          <button class="btn btn-sm btn-cyan dojo-tab-btn" id="dojoSubFC" onclick="switchDojoMode('fc')">📇 Luyện Thẻ & Trắc Nghiệm</button>
+          <button class="btn btn-sm btn-ghost dojo-tab-btn" id="dojoSubPron" onclick="switchDojoMode('pron')">🎧 Luyện Nghe & Nói</button>
+          <button class="btn btn-sm btn-ghost dojo-tab-btn" id="dojoSubBlitz" onclick="switchDojoMode('blitz')">⚡ Phản Xạ 60 Giây</button>
           <button class="btn btn-sm btn-ghost dojo-tab-btn" id="dojoSubKana" onclick="switchDojoMode('kana')">🔤 Bảng Chữ Kana</button>
-          <button class="btn btn-sm btn-ghost dojo-tab-btn" id="dojoSubDictation" onclick="switchDojoMode('dictation')">🎧 Nghe Chép Chính Tả</button>
           <button class="btn btn-sm btn-ghost dojo-tab-btn" id="dojoSubScenario" onclick="switchDojoMode('scenario')">🏪 Tình Huống N5</button>
-          <button class="btn btn-sm btn-ghost dojo-tab-btn" id="dojoSubAnime" onclick="switchDojoMode('anime')">🎭 Đoán Anime</button>
+          <button class="btn btn-sm btn-ghost dojo-tab-btn" id="dojoSubAnime" onclick="switchDojoMode('anime')">🎭 Đố Vui Anime</button>
+
+          <!-- Backwards-compatibility hidden elements for dojoSubQuiz & dojoSubDictation so element lookups never fail -->
+          <button id="dojoSubQuiz" onclick="switchDojoMode('quiz')" style="display:none"></button>
+          <button id="dojoSubDictation" onclick="switchDojoMode('dictation')" style="display:none"></button>
         </div>
 
         <!-- Level Selector for Dojo -->
@@ -2746,6 +2998,10 @@ small, .text-xs, .nav-item .label, [style*="font-size:.7"], [style*="font-size: 
       <div class="dojo-main-col">
         <!-- FLASHCARD VIEW -->
         <div id="dojoFCView">
+          <div class="vocab-toggle-bar" style="display:flex;justify-content:center;gap:.4rem;margin-bottom:1rem;background:var(--bg-surface);padding:4px;border-radius:var(--radius-full);border:1px solid var(--border);max-width:380px;margin-left:auto;margin-right:auto">
+            <button class="btn btn-sm btn-cyan" id="btnSubToggleFC" onclick="switchDojoMode('fc')" style="flex:1;border-radius:var(--radius-full);font-size:.78rem">🔄 Thẻ Lật 3D</button>
+            <button class="btn btn-sm btn-ghost" id="btnSubToggleQuiz" onclick="switchDojoMode('quiz')" style="flex:1;border-radius:var(--radius-full);font-size:.78rem">📝 Trắc Nghiệm</button>
+          </div>
           <div class="card-header">
             <div style="display:flex;align-items:center;gap:.5rem">
               <span id="fcLevelBadge" style="background:rgba(5,217,232,0.15);color:var(--neon-cyan);border:1px solid var(--neon-cyan);font-weight:800;font-size:.75rem;padding:.15rem .55rem;border-radius:var(--radius-full)">ALL</span>
@@ -2778,6 +3034,10 @@ small, .text-xs, .nav-item .label, [style*="font-size:.7"], [style*="font-size: 
 
         <!-- FLASHCARD QUIZ VIEW -->
         <div id="dojoQuizView" style="display:none">
+          <div class="vocab-toggle-bar" style="display:flex;justify-content:center;gap:.4rem;margin-bottom:1rem;background:var(--bg-surface);padding:4px;border-radius:var(--radius-full);border:1px solid var(--border);max-width:380px;margin-left:auto;margin-right:auto">
+            <button class="btn btn-sm btn-ghost" onclick="switchDojoMode('fc')" style="flex:1;border-radius:var(--radius-full);font-size:.78rem">🔄 Thẻ Lật 3D</button>
+            <button class="btn btn-sm btn-cyan" onclick="switchDojoMode('quiz')" style="flex:1;border-radius:var(--radius-full);font-size:.78rem">📝 Trắc Nghiệm</button>
+          </div>
           <div class="card" style="text-align:center;padding:1.5rem">
             <div style="font-size:.85rem;color:var(--text-muted)">CHỌN NGHĨA ĐÚNG CỦA TỪ:</div>
             <div class="fc-word-kanji" id="quizKanji" style="margin:.5rem 0">食べる</div>
@@ -2791,6 +3051,10 @@ small, .text-xs, .nav-item .label, [style*="font-size:.7"], [style*="font-size: 
 
         <!-- PRONUNCIATION TRAINER VIEW -->
         <div id="dojoPronView" style="display:none">
+          <div class="audio-toggle-bar" style="display:flex;justify-content:center;gap:.4rem;margin-bottom:1rem;background:var(--bg-surface);padding:4px;border-radius:var(--radius-full);border:1px solid var(--border);max-width:400px;margin-left:auto;margin-right:auto">
+            <button class="btn btn-sm btn-cyan" id="btnSubTogglePron" onclick="switchDojoMode('pron')" style="flex:1;border-radius:var(--radius-full);font-size:.78rem">🎤 Luyện Nói Qua Mic</button>
+            <button class="btn btn-sm btn-ghost" id="btnSubToggleDictation" onclick="switchDojoMode('dictation')" style="flex:1;border-radius:var(--radius-full);font-size:.78rem">🎧 Nghe Chép SRS</button>
+          </div>
           <div class="card" style="text-align:center;padding:1.5rem">
             <div style="font-size:.85rem;color:var(--text-muted)">NGHE TỪ MẪU RỒI ĐỌC LẠI:</div>
             <div class="fc-word-kanji" id="pronWord" style="margin:.5rem 0">さくら</div>
@@ -2852,6 +3116,10 @@ small, .text-xs, .nav-item .label, [style*="font-size:.7"], [style*="font-size: 
 
         <!-- DICTATION VIEW (NGHE CHÉP CHÍNH TẢ) -->
         <div id="dojoDictationView" style="display:none">
+          <div class="audio-toggle-bar" style="display:flex;justify-content:center;gap:.4rem;margin-bottom:1rem;background:var(--bg-surface);padding:4px;border-radius:var(--radius-full);border:1px solid var(--border);max-width:400px;margin-left:auto;margin-right:auto">
+            <button class="btn btn-sm btn-ghost" onclick="switchDojoMode('pron')" style="flex:1;border-radius:var(--radius-full);font-size:.78rem">🎤 Luyện Nói Qua Mic</button>
+            <button class="btn btn-sm btn-cyan" onclick="switchDojoMode('dictation')" style="flex:1;border-radius:var(--radius-full);font-size:.78rem">🎧 Nghe Chép SRS</button>
+          </div>
           <div class="card" style="text-align:center;padding:1.5rem">
             <div style="font-size:.82rem;font-weight:700;color:var(--neon-sakura);letter-spacing:.05em">🎧 NGHE CHÉP CHÍNH TẢ (DICTATION ARENA)</div>
             <div style="font-size:.82rem;color:var(--text-muted);margin:.2rem 0 1rem">
@@ -2911,6 +3179,89 @@ small, .text-xs, .nav-item .label, [style*="font-size:.7"], [style*="font-size: 
         </div>
 
         <!-- SOLO ANIME QUIZ VIEW -->
+        
+        <!-- SPEED BLITZ 60S VIEW (TÍNH NĂNG MỚI ĐỘT PHÁ) -->
+        <div id="dojoBlitzView" style="display:none">
+          <div class="card" style="padding:1.4rem;text-align:center">
+            <!-- Header bar with Timer, Score, Streak -->
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem;padding-bottom:.75rem;border-bottom:1px solid var(--border)">
+              <div style="display:flex;align-items:center;gap:.4rem">
+                <span style="font-size:1.3rem">⚡</span>
+                <span style="font-size:.95rem;font-weight:800;color:var(--neon-gold)">PHẢN XẠ CHỚP NHOÁNG 60S</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:.6rem">
+                <div style="font-size:.82rem;color:var(--text-muted)">Kỷ lục: <strong style="color:var(--neon-gold)" id="blitzHighScoreVal">0</strong></div>
+                <div class="timer-pill" id="blitzTimerDisplay" style="font-size:1.05rem;min-width:65px;padding:.25rem .75rem;border-color:var(--neon-gold);color:var(--neon-gold)">60s</div>
+              </div>
+            </div>
+
+            <!-- Start screen (before playing) -->
+            <div id="blitzIntroScreen" style="padding:1.5rem 1rem">
+              <div style="font-size:3rem;margin-bottom:.5rem">⏱️⚡</div>
+              <div style="font-size:1.2rem;font-weight:800;color:var(--text-primary);margin-bottom:.4rem">Thử Thách Phản Xạ 60 Giây</div>
+              <div style="font-size:.85rem;color:var(--text-secondary);max-width:440px;margin:0 auto 1.25rem;line-height:1.5">
+                Trả lời nhanh nhất có thể trong 60 giây! Mỗi chuỗi đúng liên tiếp (streak) sẽ tăng hệ số nhân thưởng lên tới <strong>x3.0</strong>!
+              </div>
+              <button class="btn btn-primary" onclick="startBlitzGame()" style="min-width:180px;font-size:1.05rem;padding:.75rem 1.75rem;border-radius:var(--radius-full)">
+                Bắt Đầu Ngay ⚡
+              </button>
+            </div>
+
+            <!-- Active Gameplay Arena -->
+            <div id="blitzArenaScreen" style="display:none">
+              <!-- Live HUD: Score & Streak Multiplier -->
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;background:var(--bg-surface);padding:.6rem 1rem;border-radius:var(--radius-md);border:1px solid var(--border)">
+                <div style="font-size:.85rem;font-weight:700">Điểm: <strong style="color:var(--neon-gold);font-size:1.2rem" id="blitzLiveScore">0</strong></div>
+                <div id="blitzMultiplierBadge" style="font-size:.8rem;font-weight:800;padding:.2rem .6rem;border-radius:var(--radius-full);background:rgba(255,190,11,0.15);color:var(--neon-gold);border:1px solid var(--neon-gold)">COMBO x1.0</div>
+                <div style="font-size:.85rem;color:var(--text-muted)">Chuỗi: <span id="blitzLiveStreak" style="color:var(--neon-lime);font-weight:700">0 🔥</span></div>
+              </div>
+
+              <!-- Question Kanji Card -->
+              <div style="background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem 1rem;margin-bottom:1.2rem">
+                <div style="font-size:.78rem;color:var(--text-muted);margin-bottom:.25rem">TỪ NÀY CÓ NGHĨA LÀ GÌ?</div>
+                <div style="font-family:var(--font-kanji);font-size:2.4rem;font-weight:900;color:var(--neon-cyan);margin:.2rem 0" id="blitzKanji">桜</div>
+                <div style="font-size:1.05rem;color:var(--neon-sakura);font-weight:700" id="blitzReading">さくら</div>
+              </div>
+
+              <!-- 4 Choice Options -->
+              <div class="quiz-options-grid" id="blitzOptionsGrid" style="max-width:560px;margin:0 auto"></div>
+              
+              <div id="blitzFeedbackPopup" style="min-height:26px;margin-top:.75rem;font-size:.9rem;font-weight:800"></div>
+            </div>
+
+            <!-- Game Over Summary Screen -->
+            <div id="blitzResultScreen" style="display:none;padding:1rem 0">
+              <div style="font-size:2.8rem;margin-bottom:.4rem">🏆</div>
+              <div style="font-size:1.25rem;font-weight:800;color:var(--neon-gold);margin-bottom:.3rem">HẾT GIỜ! HOÀN THÀNH THỬ THÁCH</div>
+              <div id="blitzNewRecordBadge" style="display:none;margin-bottom:.75rem;font-size:.82rem;font-weight:800;color:var(--neon-sakura);background:rgba(255,42,109,0.15);padding:.25rem .75rem;border-radius:var(--radius-full);display:inline-block">🎉 KỶ LỤC CÁ NHÂN MỚI!</div>
+
+              <div style="display:grid;grid-template-columns:repeat(3, 1fr);gap:.6rem;max-width:440px;margin:1rem auto;text-align:center">
+                <div style="background:var(--bg-surface);padding:.75rem .4rem;border-radius:var(--radius-md);border:1px solid var(--border)">
+                  <div style="font-size:.75rem;color:var(--text-muted)">TỔNG ĐIỂM</div>
+                  <div style="font-size:1.4rem;font-weight:800;color:var(--neon-gold)" id="blitzFinalScore">0</div>
+                </div>
+                <div style="background:var(--bg-surface);padding:.75rem .4rem;border-radius:var(--radius-md);border:1px solid var(--border)">
+                  <div style="font-size:.75rem;color:var(--text-muted)">CHÍNH XÁC</div>
+                  <div style="font-size:1.4rem;font-weight:800;color:var(--neon-lime)" id="blitzFinalAccuracy">0%</div>
+                </div>
+                <div style="background:var(--bg-surface);padding:.75rem .4rem;border-radius:var(--radius-md);border:1px solid var(--border)">
+                  <div style="font-size:.75rem;color:var(--text-muted)">MAX COMBO</div>
+                  <div style="font-size:1.4rem;font-weight:800;color:var(--neon-sakura)" id="blitzFinalMaxStreak">0 🔥</div>
+                </div>
+              </div>
+
+              <div style="font-size:.9rem;color:var(--text-secondary);margin-bottom:1.25rem">
+                Danh hiệu phản xạ: <strong style="color:var(--neon-cyan)" id="blitzRankTitle">Ninja Tốc Độ</strong>
+              </div>
+
+              <div style="display:flex;gap:.5rem;justify-content:center;max-width:380px;margin:0 auto">
+                <button class="btn btn-primary" onclick="startBlitzGame()" style="flex:1">Chơi Lại Ván Mới ⚡</button>
+                <button class="btn btn-ghost" onclick="switchDojoMode('fc')" style="flex:1">Về Thẻ Từ 📇</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div id="dojoAnimeView" style="display:none">
           <div class="card" style="padding:1.4rem">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem">
@@ -2993,6 +3344,22 @@ small, .text-xs, .nav-item .label, [style*="font-size:.7"], [style*="font-size: 
             </div>
           </div>
 
+          <!-- Song Key Vocabulary Breakdown Card -->
+          <div style="background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:.75rem;margin:.75rem 0" id="songKeyVocabBox">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem">
+              <div style="font-size:.78rem;font-weight:800;color:var(--neon-cyan);display:flex;align-items:center;gap:.3rem">
+                <span>📚</span>
+                <span>TỪ VỰNG TIÊU BIỂU TRONG BÀI:</span>
+              </div>
+              <button class="btn btn-ghost btn-sm" onclick="openKaraokeModal()" style="font-size:.72rem;padding:.15rem .5rem;color:var(--neon-gold)" title="Mở phòng hát toàn màn hình">
+                🎤 Chế Độ Karaoke
+              </button>
+            </div>
+            <div id="songKeyVocabList" style="display:flex;flex-direction:column;gap:.35rem">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+
           <div style="display:flex;gap:.5rem;flex-wrap:wrap">
             <button class="btn btn-ghost btn-sm" style="flex:1;min-height:42px" onclick="navMusicTrack(-1)" title="Bài trước">⏮ Trước</button>
             <button class="btn btn-cyan btn-sm" style="flex:1;min-height:42px" onclick="navMusicTrack(1)" title="Bài kế tiếp">Tiếp ⏭</button>
@@ -3065,6 +3432,14 @@ small, .text-xs, .nav-item .label, [style*="font-size:.7"], [style*="font-size: 
             </select>
           </div>
 
+          <!-- Category Pills for Anime MV -->
+          <div style="display:flex;gap:.35rem;overflow-x:auto;padding-bottom:.4rem;margin-bottom:.65rem;scrollbar-width:none">
+            <button class="btn btn-sm btn-cyan mv-cat-pill" id="mvCatAll" onclick="setMvCategory('ALL')" style="font-size:.72rem;padding:.2rem .6rem;flex-shrink:0;border-radius:var(--radius-full)">🌸 Tất Cả (50)</button>
+            <button class="btn btn-sm btn-ghost mv-cat-pill" id="mvCatHot" onclick="setMvCategory('HOT')" style="font-size:.72rem;padding:.2rem .6rem;flex-shrink:0;border-radius:var(--radius-full)">🔥 Hot Mới 2023-2026</button>
+            <button class="btn btn-sm btn-ghost mv-cat-pill" id="mvCatShonen" onclick="setMvCategory('SHONEN')" style="font-size:.72rem;padding:.2rem .6rem;flex-shrink:0;border-radius:var(--radius-full)">⚔️ Shonen Sôi Động</button>
+            <button class="btn btn-sm btn-ghost mv-cat-pill" id="mvCatBallad" onclick="setMvCategory('BALLAD')" style="font-size:.72rem;padding:.2rem .6rem;flex-shrink:0;border-radius:var(--radius-full)">🍃 Nhẹ Nhàng & Cảm Xúc</button>
+            <button class="btn btn-sm btn-ghost mv-cat-pill" id="mvCatClassic" onclick="setMvCategory('CLASSIC')" style="font-size:.72rem;padding:.2rem .6rem;flex-shrink:0;border-radius:var(--radius-full)">👑 Huyền Thoại</button>
+          </div>
           <div class="playlist-cards" id="playlistDeck" style="max-height:360px;overflow-y:auto">
             <!-- Rendered by JS -->
           </div>
@@ -3379,67 +3754,276 @@ small, .text-xs, .nav-item .label, [style*="font-size:.7"], [style*="font-size: 
   </div>
 </div>
 
-<!-- Settings Modal Dialog: Cài Đặt Giọng Đọc Tiếng Nhật -->
+<!-- Settings Modal Dialog: Cài Đặt Hệ Thống & Giọng Đọc -->
+
+<!-- Theme Picker Modal: Chuyển Đổi Phong Cách Giao Diện & Sáng/Tối -->
+
+<!-- Karaoke Focus Modal: Lời Bài Hát Lớn Song Ngữ -->
+<div class="modal-overlay" id="karaokeModalOverlay">
+  <div class="modal-box" style="max-width:640px;text-align:center;max-height:90vh;max-height:90dvh;overflow-y:auto;padding:1.5rem">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;border-bottom:1px solid var(--border);padding-bottom:.65rem">
+      <div style="display:flex;align-items:center;gap:.5rem">
+        <span style="font-size:1.5rem">🎤</span>
+        <div style="text-align:left">
+          <div style="font-size:1.1rem;font-weight:800;color:var(--neon-gold)" id="karaokeSongTitle">Tên bài hát</div>
+          <div style="font-size:.78rem;color:var(--text-muted)" id="karaokeAnimeTitle">Anime title</div>
+        </div>
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="closeKaraokeModal()" style="padding:.2rem .6rem;font-size:1rem;line-height:1" title="Đóng">✕</button>
+    </div>
+
+    <div style="padding:1.5rem 1rem;background:var(--bg-surface);border-radius:var(--radius-lg);border:1px solid var(--border);margin-bottom:1.25rem">
+      <div style="font-size:.78rem;letter-spacing:.05em;color:var(--neon-cyan);margin-bottom:.5rem">LỜI BÀI HÁT TIẾNG NHẬT:</div>
+      <div style="font-family:var(--font-kanji);font-size:1.6rem;font-weight:900;line-height:1.7;color:#fff;margin-bottom:.75rem" id="karaokeLyricKanji">
+        ...
+      </div>
+      <div style="font-size:1.05rem;color:var(--neon-sakura);font-weight:700;margin-bottom:.5rem" id="karaokeLyricRomaji">
+        ...
+      </div>
+      <div style="font-size:.95rem;color:var(--text-secondary);font-style:italic" id="karaokeLyricViet">
+        ...
+      </div>
+    </div>
+
+    <div style="display:flex;gap:.5rem;justify-content:center">
+      <button class="btn btn-ghost" onclick="speakCurrentLyricTTS()">🔊 Nghe Đọc Lời</button>
+      <button class="btn btn-primary" onclick="closeKaraokeModal()">Tiếp Tục Thưởng Thức 🎵</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="themePickerModalOverlay">
+  <div class="modal-box" style="max-width:500px;text-align:left;max-height:90vh;max-height:90dvh;overflow-y:auto">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;border-bottom:1px solid var(--border);padding-bottom:.65rem">
+      <div style="display:flex;align-items:center;gap:.5rem">
+        <span style="font-size:1.4rem">🎨</span>
+        <div>
+          <div style="font-size:1.15rem;font-weight:800;color:var(--text-primary);font-family:var(--font-serif)">Phong Cách Giao Diện</div>
+          <div style="font-size:.75rem;color:var(--text-muted)">Tùy biến không gian học tiếng Nhật theo sở thích của bạn</div>
+        </div>
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="closeThemePickerModal()" style="padding:.2rem .6rem;font-size:1rem;line-height:1" title="Đóng">✕</button>
+    </div>
+
+    <!-- Theme Mode Switcher (Sáng / Tối) -->
+    <div style="background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:.75rem;margin-bottom:1rem">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div style="font-size:.85rem;font-weight:700;color:var(--text-primary)">Ánh Sáng & Tương Phản:</div>
+          <div style="font-size:.72rem;color:var(--text-muted)">Chuyển đổi giữa chế độ Ngày & Đêm</div>
+        </div>
+        <div style="display:flex;gap:.35rem;background:var(--bg-card);padding:3px;border-radius:var(--radius-full);border:1px solid var(--border)">
+          <button class="btn btn-sm btn-ghost theme-mode-btn" id="themeModeDarkBtn" onclick="setThemeMode('dark')" style="font-size:.75rem;padding:.2rem .65rem;border-radius:var(--radius-full)">🌙 Tối</button>
+          <button class="btn btn-sm btn-ghost theme-mode-btn" id="themeModeLightBtn" onclick="setThemeMode('light')" style="font-size:.75rem;padding:.2rem .65rem;border-radius:var(--radius-full)">☀️ Sáng</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 Theme Style Cards -->
+    <div style="display:flex;flex-direction:column;gap:.75rem">
+      <!-- Style 1: Tokyo Neon Arcade -->
+      <div class="theme-style-card" id="themeCard_arcade" onclick="setThemeStyle('arcade')" style="cursor:pointer;background:var(--bg-surface);border:2px solid var(--border);border-radius:var(--radius-md);padding:.9rem;transition:all .2s ease">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div style="display:flex;gap:.6rem;align-items:center">
+            <span style="font-size:1.6rem">⚡</span>
+            <div>
+              <div style="font-weight:800;font-size:.95rem;color:var(--text-primary)">Tokyo Neon Arcade</div>
+              <div style="font-size:.75rem;color:var(--text-muted)">Cyberpunk tương lai, rực rỡ phong cách game thùng Akihabara</div>
+            </div>
+          </div>
+          <span class="theme-check-badge" id="check_arcade" style="font-size:.85rem;color:var(--neon-cyan)">●</span>
+        </div>
+        <div style="display:flex;gap:.4rem;margin-top:.6rem">
+          <span style="display:inline-block;width:18px;height:18px;border-radius:50%;background:#07080e;border:1px solid #334"></span>
+          <span style="display:inline-block;width:18px;height:18px;border-radius:50%;background:#05d9e8"></span>
+          <span style="display:inline-block;width:18px;height:18px;border-radius:50%;background:#ff2a6d"></span>
+          <span style="display:inline-block;width:18px;height:18px;border-radius:50%;background:#ffbe0b"></span>
+        </div>
+      </div>
+
+      <!-- Style 2: Sakura Elegance (Tao nhã chuẩn Nhật) -->
+      <div class="theme-style-card" id="themeCard_sakura" onclick="setThemeStyle('sakura')" style="cursor:pointer;background:var(--bg-surface);border:2px solid var(--border);border-radius:var(--radius-md);padding:.9rem;transition:all .2s ease">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div style="display:flex;gap:.6rem;align-items:center">
+            <span style="font-size:1.6rem">🌸</span>
+            <div>
+              <div style="font-weight:800;font-size:.95rem;color:var(--text-primary)">Sakura Elegance (Tao Nhã Chuẩn Nhật)</div>
+              <div style="font-size:.75rem;color:var(--text-muted)">Phong cách truyền thống Nhật Bản wabi-sabi, cánh hoa đào bay thanh tịnh</div>
+            </div>
+          </div>
+          <span class="theme-check-badge" id="check_sakura" style="font-size:.85rem;color:var(--neon-sakura)">●</span>
+        </div>
+        <div style="display:flex;gap:.4rem;margin-top:.6rem">
+          <span style="display:inline-block;width:18px;height:18px;border-radius:50%;background:#fcf8f5;border:1px solid #dcd0c8"></span>
+          <span style="display:inline-block;width:18px;height:18px;border-radius:50%;background:#d84a75"></span>
+          <span style="display:inline-block;width:18px;height:18px;border-radius:50%;background:#52794c"></span>
+          <span style="display:inline-block;width:18px;height:18px;border-radius:50%;background:#b38222"></span>
+        </div>
+      </div>
+
+      <!-- Style 3: Kawaii Anime Neko (Cute kẹo ngọt & tai mèo) -->
+      <div class="theme-style-card" id="themeCard_neko" onclick="setThemeStyle('neko')" style="cursor:pointer;background:var(--bg-surface);border:2px solid var(--border);border-radius:var(--radius-md);padding:.9rem;transition:all .2s ease">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div style="display:flex;gap:.6rem;align-items:center">
+            <span style="font-size:1.6rem">🐾</span>
+            <div>
+              <div style="font-weight:800;font-size:.95rem;color:var(--text-primary)">Kawaii Anime Neko (Anime Cute Mèo)</div>
+              <div style="font-size:.75rem;color:var(--text-muted)">Kẹo ngọt dâu sữa pastel, tai mèo ngộ nghĩnh và trợ lý Anime Chibi dễ thương</div>
+            </div>
+          </div>
+          <span class="theme-check-badge" id="check_neko" style="font-size:.85rem;color:var(--neon-pink)">●</span>
+        </div>
+        <div style="display:flex;gap:.4rem;margin-top:.6rem">
+          <span style="display:inline-block;width:18px;height:18px;border-radius:50%;background:#fff5f8;border:1px solid #fed1e6"></span>
+          <span style="display:inline-block;width:18px;height:18px;border-radius:50%;background:#ff4d85"></span>
+          <span style="display:inline-block;width:18px;height:18px;border-radius:50%;background:#a855f7"></span>
+          <span style="display:inline-block;width:18px;height:18px;border-radius:50%;background:#38bdf8"></span>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:1.25rem;text-align:right">
+      <button class="btn btn-primary btn-sm" onclick="closeThemePickerModal()" style="padding:.4rem 1.2rem">Hoàn Tất ✓</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="settingsModalOverlay">
-  <div class="modal-box" style="max-width:460px;text-align:left">
+  <div class="modal-box" style="max-width:520px;text-align:left;max-height:90vh;max-height:90dvh;overflow-y:auto">
+    <!-- Header -->
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;border-bottom:1px solid var(--border);padding-bottom:.65rem">
       <div style="display:flex;align-items:center;gap:.5rem">
         <span style="font-size:1.35rem">⚙️</span>
-        <div style="font-size:1.15rem;font-weight:800;color:#fff;font-family:var(--font-serif)">Cài Đặt Giọng Đọc Tiếng Nhật</div>
+        <div>
+          <div style="font-size:1.15rem;font-weight:800;color:#fff;font-family:var(--font-serif)">Cài Đặt Hệ Thống & Âm Thanh</div>
+          <div style="font-size:.75rem;color:var(--text-muted)">Quản lý nguồn âm thanh, giọng đọc tiếng Nhật & cảm giác chơi</div>
+        </div>
       </div>
-      <button class="btn btn-ghost btn-sm" onclick="closeSettingsModal()" style="padding:.2rem .6rem;font-size:1rem;line-height:1">✕</button>
+      <button class="btn btn-ghost btn-sm" onclick="closeSettingsModal()" style="padding:.2rem .6rem;font-size:1rem;line-height:1" title="Đóng">✕</button>
     </div>
 
-    <!-- Voice Selector Form -->
-    <div style="display:flex;flex-direction:column;gap:.85rem">
-      <div>
-        <label style="font-size:.8rem;font-weight:700;color:var(--text-muted);display:block;margin-bottom:.4rem">
-          🔊 CHỌN GIỌNG ĐỌC TIẾNG NHẬT (JA-JP):
-        </label>
-        <select id="settingVoiceSelect" class="inp" style="width:100%;font-size:.82rem;padding:.5rem;background:var(--bg-surface);color:var(--text-primary);border:1px solid var(--border);border-radius:var(--radius-sm)" onchange="onVoiceSelectionChange(this.value)">
-          <option value="">Đang nạp danh sách giọng ja-JP...</option>
-        </select>
-      </div>
-
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:.4rem 0">
-        <div style="font-size:.8rem;color:var(--text-muted)">
-          Tốc độ phát âm: <strong style="color:var(--neon-gold)">0.85x</strong> (Chuẩn tự nhiên)
+    <div style="display:flex;flex-direction:column;gap:1rem">
+      <!-- Section 0: Phong Cách Giao Diện & Sáng/Tối -->
+      <div style="background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:.9rem">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem">
+          <div style="display:flex;align-items:center;gap:.4rem">
+            <span style="font-size:1.1rem">🎨</span>
+            <span style="font-size:.82rem;font-weight:800;color:var(--neon-sakura);letter-spacing:.03em">PHONG CÁCH GIAO DIỆN & MÀU SẮC:</span>
+          </div>
+          <span id="settingsCurrentThemeBadge" style="font-size:.72rem;padding:.15rem .5rem;border-radius:var(--radius-full);background:rgba(255,42,109,0.15);color:var(--neon-sakura);border:1px solid var(--neon-sakura);font-weight:700">Tokyo Arcade</span>
         </div>
-        <button class="btn btn-ghost btn-sm" onclick="testCurrentJapaneseVoice()" style="font-size:.8rem">
-          🔊 Nghe thử giọng
+        <div style="font-size:.8rem;color:var(--text-secondary);line-height:1.45;margin-bottom:.75rem">
+          Chọn giữa 3 phong cách độc đáo: <strong>Tokyo Arcade</strong> (Cyberpunk), <strong>Sakura Elegance</strong> (Tao nhã chuẩn Nhật), và <strong>Kawaii Anime Neko</strong> (Cute tai mèo & Chibi), cùng chế độ Sáng / Tối.
+        </div>
+        <button class="btn btn-primary btn-sm btn-full" onclick="openThemePickerModal()" style="font-size:.8rem">
+          🎨 Tùy Chỉnh Phong Cách & Sáng Tối
         </button>
       </div>
 
-      <!-- Warning Banner if only basic voices available -->
-      <div id="voiceQualityWarningBanner" style="display:none;padding:.75rem;background:rgba(255,190,11,0.12);border:1px solid var(--neon-gold);border-radius:var(--radius-sm);font-size:.78rem;line-height:1.5;color:var(--text-primary)">
-        ⚠️ <strong>Gợi ý trải nghiệm âm thanh tốt nhất:</strong><br>
-        Thiết bị của bạn hiện chỉ có giọng đọc tiếng Nhật cơ bản. Hãy mở trang web trên <strong>Microsoft Edge</strong> hoặc <strong>Google Chrome</strong> để tự động kích hoạt giọng đọc trí tuệ nhân tạo (Natural / Neural / Online) trong trẻo, tự nhiên nhất hoàn toàn miễn phí!
+      <!-- Section 1: Nguồn Âm Thanh Từ Vựng (VOICEVOX Studio) -->
+      <div style="background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:.9rem">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem">
+          <div style="display:flex;align-items:center;gap:.4rem">
+            <span style="font-size:1.1rem">🎙️</span>
+            <span style="font-size:.82rem;font-weight:800;color:var(--neon-cyan);letter-spacing:.03em">NGUỒN PHÁT ÂM TỪ VỰNG:</span>
+          </div>
+          <span style="font-size:.72rem;padding:.15rem .5rem;border-radius:var(--radius-full);background:rgba(5,217,232,0.15);color:var(--neon-cyan);border:1px solid var(--neon-cyan);font-weight:700">VOICEVOX Studio</span>
+        </div>
+
+        <div style="font-size:.8rem;color:var(--text-secondary);line-height:1.45;margin-bottom:.75rem">
+          Phát âm bởi nhân vật <strong>もち子さん (cv 明日葉よもぎ)</strong>. Bộ dữ liệu âm thanh phòng thu chất lượng cao, chuẩn ngữ điệu bản xứ và tự nhiên nhất.
+        </div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:.5rem .75rem;background:rgba(0,0,0,0.25);border-radius:var(--radius-sm);border:1px solid rgba(255,255,255,0.06);margin-bottom:.65rem">
+          <div style="display:flex;flex-direction:column">
+            <span style="font-size:.8rem;font-weight:700;color:#fff">Ưu tiên file âm thanh phòng thu (audio/)</span>
+            <span style="font-size:.72rem;color:var(--text-muted)">Tự động rơi về giọng đọc trình duyệt nếu không có file</span>
+          </div>
+          <button class="btn btn-sm btn-cyan" id="settingVoicevoxToggleBtn" onclick="toggleVoicevoxAudioPref()" style="font-size:.75rem;padding:.25rem .7rem">BẬT</button>
+        </div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:.5rem;flex-wrap:wrap">
+          <div style="font-size:.75rem;color:var(--neon-gold);display:flex;align-items:center;gap:.3rem" id="settingAudioStatusText">
+            <span>✨ Kho âm thanh: 2,126 từ vựng N5-N3</span>
+          </div>
+          <button class="btn btn-ghost btn-sm" onclick="testVoicevoxSampleAudio()" style="font-size:.78rem;padding:.25rem .6rem">
+            🔊 Nghe thử giọng VOICEVOX
+          </button>
+        </div>
       </div>
 
-      <!-- High Quality Voice Active Banner -->
-      <div id="voiceQualitySuccessBanner" style="display:none;padding:.65rem .75rem;background:rgba(5,217,232,0.1);border:1px solid var(--neon-cyan);border-radius:var(--radius-sm);font-size:.78rem;line-height:1.4;color:var(--text-primary)">
-        🌟 <strong>Giọng đọc cao cấp đang kích hoạt:</strong><br>
-        <span id="activeVoiceQualityText" style="color:var(--neon-cyan)">Giọng Natural / Neural mượt mà, chuẩn bản xứ.</span>
+      <!-- Section 2: Tốc Độ Phát Âm (Speech Rate) -->
+      <div style="background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:.9rem">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.55rem">
+          <div style="font-size:.82rem;font-weight:800;color:var(--neon-gold);display:flex;align-items:center;gap:.4rem">
+            <span>⚡</span>
+            <span>TỐC ĐỘ PHÁT ÂM:</span>
+          </div>
+          <span id="settingSpeechRateLabel" style="font-size:.78rem;font-weight:800;color:var(--neon-gold)">0.85x (Chuẩn tự nhiên)</span>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(4, 1fr);gap:.4rem;margin-top:.4rem">
+          <button class="btn btn-sm btn-ghost rate-choice-btn" id="rateBtn_075" onclick="setSettingSpeechRate(0.75)" style="font-size:.75rem">0.75x<br><span style="color:var(--text-muted);font-size:12px;display:block">Chậm</span></button>
+          <button class="btn btn-sm btn-cyan rate-choice-btn" id="rateBtn_085" onclick="setSettingSpeechRate(0.85)" style="font-size:.75rem">0.85x<br><span style="font-size:12px;display:block">Tự nhiên</span></button>
+          <button class="btn btn-sm btn-ghost rate-choice-btn" id="rateBtn_100" onclick="setSettingSpeechRate(1.00)" style="font-size:.75rem">1.0x<br><span style="color:var(--text-muted);font-size:12px;display:block">Bản xứ</span></button>
+          <button class="btn btn-sm btn-ghost rate-choice-btn" id="rateBtn_125" onclick="setSettingSpeechRate(1.25)" style="font-size:.75rem">1.25x<br><span style="color:var(--text-muted);font-size:12px;display:block">Nhanh</span></button>
+        </div>
       </div>
 
-      <!-- Sound & VFX toggles (Game Juice) -->
-      <div style="padding:.75rem;background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-sm);display:flex;flex-direction:column;gap:.6rem">
-        <div style="font-size:.8rem;font-weight:700;color:var(--text-muted)">CẢM GIÁC CHƠI & HIỆU ỨNG (GAME JUICE):</div>
+      <!-- Section 3: Giọng Đọc Dự Phòng Trình Duyệt (Web Speech API) -->
+      <div style="background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:.9rem">
+        <label style="font-size:.82rem;font-weight:800;color:var(--text-muted);display:block;margin-bottom:.4rem">
+          🌐 GIỌNG ĐỌC DỰ PHÒNG TRÌNH DUYỆT (JA-JP):
+        </label>
+        <select id="settingVoiceSelect" class="inp" style="width:100%;font-size:.82rem;padding:.5rem;background:rgba(0,0,0,0.3);color:var(--text-primary);border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:.55rem" onchange="onVoiceSelectionChange(this.value)">
+          <option value="">Đang nạp danh sách giọng ja-JP...</option>
+        </select>
+
+        <div style="display:flex;justify-content:flex-end">
+          <button class="btn btn-ghost btn-sm" onclick="testCurrentJapaneseVoice()" style="font-size:.75rem">
+            🔊 Nghe thử giọng trình duyệt
+          </button>
+        </div>
+
+        <!-- Warning Banner if only basic voices available -->
+        <div id="voiceQualityWarningBanner" style="display:none;margin-top:.6rem;padding:.65rem;background:rgba(255,190,11,0.12);border:1px solid var(--neon-gold);border-radius:var(--radius-sm);font-size:.75rem;line-height:1.45;color:var(--text-primary)">
+          ⚠️ Thiết bị của bạn chỉ có giọng ja-JP cơ bản. Dùng <strong>Microsoft Edge</strong> hoặc <strong>Google Chrome</strong> để có thêm giọng Natural / Neural cao cấp!
+        </div>
+
+        <!-- High Quality Voice Active Banner -->
+        <div id="voiceQualitySuccessBanner" style="display:none;margin-top:.6rem;padding:.55rem .7rem;background:rgba(5,217,232,0.1);border:1px solid var(--neon-cyan);border-radius:var(--radius-sm);font-size:.75rem;line-height:1.4;color:var(--text-primary)">
+          🌟 <span id="activeVoiceQualityText" style="color:var(--neon-cyan)">Giọng Natural / Neural mượt mà, chuẩn bản xứ.</span>
+        </div>
+      </div>
+
+      <!-- Section 4: Âm Thanh Trò Chơi & Hiệu Ứng (Game Juice) -->
+      <div style="padding:.9rem;background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-md);display:flex;flex-direction:column;gap:.75rem">
+        <div style="font-size:.82rem;font-weight:800;color:var(--text-muted)">🎮 HIỆU ỨNG TRÒ CHƠI & CẢM GIÁC (GAME JUICE):</div>
+        
         <div style="display:flex;justify-content:space-between;align-items:center">
-          <span style="font-size:.82rem">🔊 Âm thanh điện tử (Web Audio Synth)</span>
+          <div style="display:flex;flex-direction:column">
+            <span style="font-size:.82rem;font-weight:700">🔊 Âm thanh điện tử (Web Audio Synth)</span>
+            <span style="font-size:.72rem;color:var(--text-muted)">Tiếng click, trả lời đúng, combo, level up</span>
+          </div>
           <button class="btn btn-ghost btn-sm" id="modalSfxToggleBtn" onclick="toggleSfx()">BẬT</button>
         </div>
+
         <div style="display:flex;justify-content:space-between;align-items:center">
-          <span style="font-size:.82rem">✨ Hiệu ứng rung màn hình & nổ hạt (VFX)</span>
+          <div style="display:flex;flex-direction:column">
+            <span style="font-size:.82rem;font-weight:700">✨ Hiệu ứng rung màn hình & nổ hạt (VFX)</span>
+            <span style="font-size:.72rem;color:var(--text-muted)">Rung haptic phản hồi và hiệu ứng hạt neon</span>
+          </div>
           <button class="btn btn-ghost btn-sm" id="modalVfxToggleBtn" onclick="toggleVfx()">BẬT</button>
         </div>
       </div>
 
-      <div style="font-size:.75rem;color:var(--text-muted);line-height:1.4">
-        💾 Lựa chọn giọng đọc và hiệu ứng được tự động lưu vào <code>localStorage</code> và đồng bộ theo tài khoản của bạn.
+      <!-- Credit Banner -->
+      <div style="font-size:.75rem;color:var(--text-muted);line-height:1.45;text-align:center;padding:.2rem 0">
+        🌸 Âm thanh phòng thu: <strong>VOICEVOX:もち子(cv 明日葉よもぎ)</strong><br>
+        Tất cả cài đặt được tự động ghi nhớ vào <code>localStorage</code> trên thiết bị của bạn.
       </div>
 
-      <button class="btn btn-primary btn-full" style="margin-top:.4rem" onclick="closeSettingsModal()">Lưu & Đóng</button>
+      <button class="btn btn-primary btn-full" style="padding:.75rem;font-weight:800" onclick="closeSettingsModal()">✓ Lưu Cài Đặt & Đóng</button>
     </div>
   </div>
 </div>
@@ -3594,10 +4178,7 @@ small, .text-xs, .nav-item .label, [style*="font-size:.7"], [style*="font-size: 
       <button class="btn btn-ghost btn-sm" onclick="closeMysteryBoxModal()" style="padding:.2rem .6rem;font-size:1rem;line-height:1" title="Đóng">✕</button>
     </div>
     <div id="mysteryBoxPreOpen">
-      <div style="font-size:.78rem;font-weight:800;color:var(--neon-gold);letter-spacing:1px;text-transform:uppercase;margin-bottom:.4rem">
-        ✨ PHẦN THƯỞNG NGHI THỨC NGÀY ✨
-      </div>
-      <h3 style="font-size:1.4rem;font-weight:900;margin:0 0 .5rem;color:#fff">Hộp Quà May Mắn Sakura</h3>
+      <h3 style="font-size:1.4rem;font-weight:900;margin:0 0 .5rem;color:var(--neon-gold)">🎁 Hộp Quà May Mắn Sakura</h3>
       <p style="font-size:.85rem;color:var(--text-secondary);margin:0 auto 1.4rem;max-width:340px">
         Bạn đã hoàn thành trọn vẹn nhiệm vụ ngày! Hãy mở hộp quà ngẫu nhiên để nhận thẻ sưu tầm, khung viền hoặc avatar mới.
       </p>
@@ -3614,12 +4195,10 @@ small, .text-xs, .nav-item .label, [style*="font-size:.7"], [style*="font-size: 
     </div>
 
     <div id="mysteryBoxPostOpen" style="display:none">
-      <div style="font-size:.78rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:.4rem" id="mysteryItemRarityBadge">
-        [ HUYỀN THOẠI ]
+      <div style="display:flex;align-items:center;justify-content:center;gap:.5rem;margin-bottom:.5rem">
+        <h3 style="font-size:1.35rem;font-weight:900;margin:0;color:#fff" id="mysteryItemName">Vật Phẩm Mới</h3>
+        <span class="mode-badge" style="font-size:12px;padding:.15rem .5rem;color:var(--neon-gold);border-color:var(--neon-gold)" id="mysteryItemRarityBadge">Huyền Thoại</span>
       </div>
-      <h3 style="font-size:1.4rem;font-weight:900;margin:0 0 .2rem;color:#fff" id="mysteryItemName">
-        Vật Phẩm Mới
-      </h3>
       <div style="font-size:.8rem;color:var(--neon-cyan);margin-bottom:1rem" id="mysteryItemType">
         Thẻ Sưu Tầm Đặc Biệt
       </div>
@@ -3854,7 +4433,7 @@ function buildVocabLookupCache() {
   return vocabLookupCache;
 }
 
-function speakJapaneseTTS(target, rate = 0.85, explicitId = null) {
+function speakJapaneseTTS(target, rate = null, explicitId = null) {
   if (target == null) return;
 
   let targetId = explicitId != null ? Number(explicitId) : null;
@@ -3887,6 +4466,8 @@ function speakJapaneseTTS(target, rate = 0.85, explicitId = null) {
     }
   }
 
+  const effectiveRate = (rate != null) ? rate : ((typeof userData !== 'undefined' && userData && userData.speechRate) ? userData.speechRate : 0.85);
+
   // Fallback về Web Speech API như hiện tại khi không có file audio hoặc lỗi
   const executeSpeechSynthesisFallback = () => {
     if (!('speechSynthesis' in window)) {
@@ -3899,7 +4480,7 @@ function speakJapaneseTTS(target, rate = 0.85, explicitId = null) {
       window.speechSynthesis.cancel();
       const u = new SpeechSynthesisUtterance(textToSpeak);
       u.lang = 'ja-JP';
-      u.rate = rate || 0.85;
+      u.rate = effectiveRate;
 
       if (typeof currentJapaneseVoice !== 'undefined' && currentJapaneseVoice) {
         u.voice = currentJapaneseVoice;
@@ -3910,8 +4491,10 @@ function speakJapaneseTTS(target, rate = 0.85, explicitId = null) {
     }
   };
 
+  const preferAudio = (typeof userData !== 'undefined' && userData && userData.preferVoicevoxAudio !== undefined) ? userData.preferVoicevoxAudio : true;
+
   // Thử phát file audio/ tương ứng trước (tải theo nhu cầu, không tải trước)
-  if (targetId != null && !isNaN(targetId) && typeof Audio !== 'undefined') {
+  if (preferAudio && targetId != null && !isNaN(targetId) && typeof Audio !== 'undefined') {
     if (currentVocabAudio) {
       try {
         currentVocabAudio.pause();
@@ -3928,11 +4511,25 @@ function speakJapaneseTTS(target, rate = 0.85, explicitId = null) {
     const audio = new Audio();
     audio.preload = 'none'; // Tải theo nhu cầu chứ không tải trước
     audio.src = audioPath;
+    audio.playbackRate = effectiveRate;
     currentVocabAudio = audio;
 
     let fallbackTriggered = false;
     const triggerFallbackOnce = () => {
       if (fallbackTriggered) return;
+      if (audio.src.endsWith('.mp3')) {
+        audio.src = `audio/${targetId}.ogg`;
+        audio.playbackRate = effectiveRate;
+        const p2 = audio.play();
+        if (p2 !== undefined) {
+          p2.catch(() => {
+            fallbackTriggered = true;
+            if (currentVocabAudio === audio) currentVocabAudio = null;
+            executeSpeechSynthesisFallback();
+          });
+        }
+        return;
+      }
       fallbackTriggered = true;
       if (currentVocabAudio === audio) {
         currentVocabAudio = null;
@@ -3967,8 +4564,85 @@ function openSettingsModal() {
   playSfx('click');
   loadSpeechVoices();
   updateSettingsVoiceUI();
+  updateSettingsAudioUI();
   const overlay = document.getElementById('settingsModalOverlay');
   if (overlay) overlay.classList.add('show');
+}
+
+function toggleVoicevoxAudioPref() {
+  playSfx('click');
+  const current = (typeof userData !== 'undefined' && userData && userData.preferVoicevoxAudio !== undefined) ? userData.preferVoicevoxAudio : true;
+  userData.preferVoicevoxAudio = !current;
+  saveUserData();
+  updateSettingsAudioUI();
+  showToast(userData.preferVoicevoxAudio ? '✓ Đã BẬT ưu tiên âm thanh phòng thu VOICEVOX' : '⚠️ Đã TẮT ưu tiên audio, sử dụng giọng đọc trình duyệt');
+}
+
+function testVoicevoxSampleAudio() {
+  playSfx('click');
+  speakJapaneseTTS(1, null, 1);
+  showToast('🎙️ Đang phát âm VOICEVOX (もち子さん): "おはよう"');
+}
+
+function setSettingSpeechRate(rate) {
+  playSfx('click');
+  if (typeof userData !== 'undefined' && userData) {
+    userData.speechRate = rate;
+    saveUserData();
+  }
+  updateSettingsAudioUI();
+  speakJapaneseTTS('ありがとうございます！', rate, 9);
+  showToast(`⚡ Tốc độ phát âm: ${rate}x`);
+}
+
+function updateSettingsAudioUI() {
+  const prefBtn = document.getElementById('settingVoicevoxToggleBtn');
+  const isPref = (typeof userData !== 'undefined' && userData && userData.preferVoicevoxAudio !== undefined) ? userData.preferVoicevoxAudio : true;
+  if (prefBtn) {
+    if (isPref) {
+      prefBtn.textContent = 'BẬT';
+      prefBtn.className = 'btn btn-sm btn-cyan';
+    } else {
+      prefBtn.textContent = 'TẮT';
+      prefBtn.className = 'btn btn-sm btn-ghost';
+    }
+  }
+
+  const currentRate = (typeof userData !== 'undefined' && userData && userData.speechRate) ? userData.speechRate : 0.85;
+  const rateLabel = document.getElementById('settingSpeechRateLabel');
+  if (rateLabel) {
+    let desc = 'Chuẩn tự nhiên';
+    if (currentRate === 0.75) desc = 'Chậm rãi';
+    else if (currentRate === 1.0) desc = 'Bản xứ';
+    else if (currentRate === 1.25) desc = 'Nhanh';
+    rateLabel.textContent = `${currentRate}x (${desc})`;
+  }
+
+  [0.75, 0.85, 1.00, 1.25].forEach(r => {
+    const rKey = r === 1.0 ? '100' : String(r).replace('.', '');
+    const btn = document.getElementById(`rateBtn_${rKey}`);
+    if (btn) {
+      if (Math.abs(currentRate - r) < 0.01) {
+        btn.classList.add('btn-cyan');
+        btn.classList.remove('btn-ghost');
+      } else {
+        btn.classList.remove('btn-cyan');
+        btn.classList.add('btn-ghost');
+      }
+    }
+  });
+
+  const sfxBtn = document.getElementById('modalSfxToggleBtn');
+  if (sfxBtn && typeof userData !== 'undefined') {
+    sfxBtn.textContent = userData.sfxEnabled ? 'BẬT' : 'TẮT';
+    sfxBtn.className = userData.sfxEnabled ? 'btn btn-ghost btn-sm active' : 'btn btn-ghost btn-sm';
+  }
+
+  const vfxBtn = document.getElementById('modalVfxToggleBtn');
+  if (vfxBtn && typeof userData !== 'undefined') {
+    vfxBtn.textContent = userData.vfxEnabled ? 'BẬT' : 'TẮT';
+    vfxBtn.className = userData.vfxEnabled ? 'btn btn-ghost btn-sm active' : 'btn btn-ghost btn-sm';
+  }
 }
 
 function closeSettingsModal() {
@@ -4737,12 +5411,22 @@ function updateSakuraPetUI() {
   
   const emojiEl = document.getElementById('sakuraPetEmoji');
   if (emojiEl) emojiEl.textContent = curOutfitId === 'default' ? evo.currentStage.emoji : outfit.icon;
+
+  // Render SVG Anime Chibi Character into container
+  const chibiContainer = document.getElementById('chibiMascotSvgContainer');
+  if (chibiContainer) {
+    const isNeko = (userData.themeStyle === 'neko');
+    chibiContainer.innerHTML = generateChibiSvg('normal', isNeko);
+  }
   
   const moodIconEl = document.getElementById('sakuraPetMoodIcon');
   if (moodIconEl) moodIconEl.textContent = mood.icon;
   
   const stageNameEl = document.getElementById('sakuraPetStageName');
-  if (stageNameEl) stageNameEl.textContent = evo.currentStage.name;
+  if (stageNameEl) {
+    const isNeko = (userData.themeStyle === 'neko');
+    stageNameEl.textContent = isNeko ? 'Mimi-chan (Bé Mèo Chibi)' : evo.currentStage.name;
+  }
   
   const badgeEl = document.getElementById('sakuraPetOutfitBadge');
   if (badgeEl) badgeEl.textContent = outfit.name;
@@ -4767,7 +5451,14 @@ function updateSakuraPetUI() {
 function interactWithSakuraPet() {
   playSfx('click');
   const evo = getSakuraEvolutionStage();
-  const patPhrases = [
+  const isNeko = (userData.themeStyle === 'neko');
+  
+  const patPhrases = isNeko ? [
+    'Nya~! Cảm ơn bạn đã xoa đầu bé mèo Mimi! (⁠≧⁠▽⁠≦⁠)🐾',
+    'Gakushuu ganbarou nya! (Cùng cố gắng học tập nhé!) ✨',
+    'Mimi nạp đủ năng lượng rồi, cùng nối từ thôi Nya~! 💕',
+    'Arigatou nya! Bạn là người bạn học tuyệt vời nhất! 🌸'
+  ] : [
     'Ehe~ Cảm ơn bạn đã xoa đầu Sakura! (⁠≧⁠▽⁠≦⁠)',
     'Bạn xoa đầu làm Sakura ấm áp ghê! Mình yêu bạn nhiều! 💕',
     'Sakura đã được nạp 100% năng lượng học tập cùng bạn nè! ⚡',
@@ -4778,11 +5469,25 @@ function interactWithSakuraPet() {
   if (bubble) {
     bubble.textContent = `"${chosen}"`;
   }
+
+  // Trigger Chibi bounce animation & expressions
+  const avatarBox = document.getElementById('sakuraPetAvatarBox');
+  const chibiContainer = document.getElementById('chibiMascotSvgContainer');
+  if (avatarBox) {
+    avatarBox.classList.add('chibi-bounce-active');
+    setTimeout(() => avatarBox.classList.remove('chibi-bounce-active'), 600);
+  }
+  if (chibiContainer) {
+    chibiContainer.innerHTML = generateChibiSvg(Math.random() > 0.5 ? 'happy' : 'wink', isNeko);
+    setTimeout(() => {
+      chibiContainer.innerHTML = generateChibiSvg('normal', isNeko);
+    }, 2400);
+  }
   
   if (typeof GameJuice !== 'undefined') {
     GameJuice.onCorrect();
   }
-  showToast(`🌸 Sakura Bot cười tít mắt: "${chosen}"`);
+  showToast(`${isNeko ? '🐾 Mimi-chan' : '🌸 Sakura Bot'} cười tít mắt: "${chosen}"`);
 }
 
 function openSakuraWardrobeModal() {
@@ -6606,6 +7311,454 @@ const ANIME_LIST = [
       "hint": "まもりたい = muốn bảo vệ"
     },
     "clue": "Cuộc chiến Chén Thánh tại thành phố Fuyuki, Shirou cùng Servant Saber chiến đấu. Từ khóa: 聖杯戦争 (cuộc chiến Chén Thánh)"
+  },
+  {
+    "ytId": "bMXeS_G4XnQ",
+    "title": "Bocchi the Rock! (ぼっち・ざ・ろっく!)",
+    "song": "Seishun Complex (青春コンプレックス) · 結束バンド",
+    "lyric": "暗闇を照らす光はないけれど 息を吸い込んで歌い続ける",
+    "romaji": "Kurayami wo terasu hikari wa nai keredo iki wo suikonde utaitsuzukeru",
+    "viet": "Dù chẳng có ánh sáng nào soi rọi màn đêm u tối, tôi vẫn hít sâu một hơi và tiếp tục cất tiếng hát",
+    "blank": {
+      "q": "暗闇を照らす _____ はないけれど",
+      "a": "光",
+      "hint": "ひかり = ánh sáng"
+    },
+    "clue": "Cô bé Hitori Gotoh hướng nội lập ban nhạc Kessoku Band. Từ khóa: 青春 (thanh xuân), 結束 (gắn kết)",
+    "category": "Hot Mới 2023-2026",
+    "vocab": [
+      {
+        "kanji": "暗闇",
+        "kana": "くらやみ",
+        "mean": "bóng tối, màn đêm"
+      },
+      {
+        "kanji": "光",
+        "kana": "ひかり",
+        "mean": "ánh sáng"
+      },
+      {
+        "kanji": "歌う",
+        "kana": "うたう",
+        "mean": "hát, ca hát"
+      }
+    ]
+  },
+  {
+    "ytId": "60YQ2gVj5c4",
+    "title": "Frieren: Beyond Journey's End (葬送のフリーレン)",
+    "song": "Anytime Anywhere · milet",
+    "lyric": "涙も言葉も溢れ出してしまうから 私はここで歌う",
+    "romaji": "Namida mo kotoba mo afuredashite shimau kara watashi wa koko de utau",
+    "viet": "Bởi nước mắt và những lời nghẹn ngào chực trào tuôn rơi, nên tôi sẽ đứng tại nơi này và hát",
+    "blank": {
+      "q": "_____ も言葉も溢れ出してしまうから",
+      "a": "涙",
+      "hint": "なみだ = giọt nước mắt"
+    },
+    "clue": "Pháp sư elf Frieren du hành ngàn năm hồi tưởng lại người bạn Himmel. Từ khóa: 魔法 (phép thuật), 旅 (hành trình)",
+    "category": "Hot Mới 2023-2026",
+    "vocab": [
+      {
+        "kanji": "涙",
+        "kana": "なみだ",
+        "mean": "nước mắt"
+      },
+      {
+        "kanji": "言葉",
+        "kana": "ことば",
+        "mean": "lời nói, từ ngữ"
+      },
+      {
+        "kanji": "溢れる",
+        "kana": "あふれる",
+        "mean": "tràn ngập, tuôn trào"
+      }
+    ]
+  },
+  {
+    "ytId": "CgkZ7MvWUAA",
+    "title": "Demon Slayer: Kimetsu no Yaiba (鬼滅の刃)",
+    "song": "Gurenge (紅蓮華) · LiSA",
+    "lyric": "強くなれる理由を知った 僕を連れて進め",
+    "romaji": "Tsuyoku nareru riyuu wo shitta boku wo tsurete susume",
+    "viet": "Tôi đã thấu hiểu lý do để trở nên mạnh mẽ hơn, hãy dẫn lối và cùng tôi tiến về phía trước",
+    "blank": {
+      "q": "_____ なれる理由を知った",
+      "a": "強く",
+      "hint": "つよく = mạnh mẽ"
+    },
+    "clue": "Tanjiro mang theo em gái Nezuko gia nhập Sát Quỷ Đội. Từ khóa: 鬼 (quỷ), 刀 (kiếm), 家族 (gia đình)",
+    "category": "Shonen Chiến Đấu",
+    "vocab": [
+      {
+        "kanji": "強い",
+        "kana": "つよい",
+        "mean": "mạnh mẽ, kiên cường"
+      },
+      {
+        "kanji": "理由",
+        "kana": "りゆう",
+        "mean": "lý do, nguyên nhân"
+      },
+      {
+        "kanji": "進む",
+        "kana": "すすむ",
+        "mean": "tiến lên, phát triển"
+      }
+    ]
+  },
+  {
+    "ytId": "_mA_t_6fV5E",
+    "title": "Dan Da Dan (ダンダダン)",
+    "song": "Otonoke (オトノケ) · Creepy Nuts",
+    "lyric": "怪奇現象 跳ね回る鼓動が止まらない",
+    "romaji": "Kaiki genshou hanemawaru kodou ga tomaranai",
+    "viet": "Hiện tượng siêu nhiên kỳ bí, nhịp đập con tim dồn dập nhảy múa chẳng thể nào dừng lại",
+    "blank": {
+      "q": "_____ 跳ね回る鼓動が止まらない",
+      "a": "怪奇現象",
+      "hint": "かいきげんしょう = hiện tượng kỳ bí"
+    },
+    "clue": "Cô gái tin vào ma quỷ gặp chàng trai tin vào người ngoài hành tinh. Từ khóa: 宇宙人 (người ngoài hành tinh), 幽霊 (hồn ma)",
+    "category": "Hot Mới 2023-2026",
+    "vocab": [
+      {
+        "kanji": "現象",
+        "kana": "げんしょう",
+        "mean": "hiện tượng"
+      },
+      {
+        "kanji": "鼓動",
+        "kana": "こどう",
+        "mean": "nhịp tim, nhịp đập"
+      },
+      {
+        "kanji": "止まる",
+        "kana": "とまる",
+        "mean": "dừng lại"
+      }
+    ]
+  },
+  {
+    "ytId": "2S4qGKmzBJE",
+    "title": "Attack on Titan (進撃の巨人 The Final)",
+    "song": "The Rumbling · SiM",
+    "lyric": "Rumbling, Rumbling, it's coming! 自由のために戦い続ける",
+    "romaji": "Rumbling, Rumbling, it's coming! Jiyuu no tame ni tatakaitsuzukeru",
+    "viet": "Rung chuyển trời đất, nó đang ùa tới! Vì tự do, chúng ta sẽ không ngừng chiến đấu",
+    "blank": {
+      "q": "_____ のために戦い続ける",
+      "a": "自由",
+      "hint": "じゆう = tự do"
+    },
+    "clue": "Eren Jaeger giải phóng hàng triệu Titan kích hoạt Rung Chấn. Từ khóa: 自由 (tự do), 巨人 (khổng lồ)",
+    "category": "Shonen Chiến Đấu",
+    "vocab": [
+      {
+        "kanji": "自由",
+        "kana": "じゆう",
+        "mean": "tự do"
+      },
+      {
+        "kanji": "戦う",
+        "kana": "たたかう",
+        "mean": "chiến đấu"
+      },
+      {
+        "kanji": "壁",
+        "kana": "かべ",
+        "mean": "bức tường, tường thành"
+      }
+    ]
+  },
+  {
+    "ytId": "faqmNf_fZlE",
+    "title": "Hunter x Hunter (ハンター×ハンター)",
+    "song": "departure! · 小野正利",
+    "lyric": "大地を踏みしめて 君は目覚めていく 新しい世界へ",
+    "romaji": "Daichi wo fumishimete kimi wa mezamete iku atarashii sekai he",
+    "viet": "Vững bước đạp trên mặt đất bao la, bạn dần thức tỉnh và hướng tới một thế giới hoàn toàn mới",
+    "blank": {
+      "q": "大地を踏みしめて 君は _____ いく",
+      "a": "目覚めて",
+      "hint": "めざめて = thức tỉnh"
+    },
+    "clue": "Cậu bé Gon Freecss rời đảo Cá Voi thi Hunter tìm cha. Từ khóa: 冒険 (phiêu lưu), 仲間 (đồng đội)",
+    "category": "Huyền Thoại Bất Hủ",
+    "vocab": [
+      {
+        "kanji": "大地",
+        "kana": "だいち",
+        "mean": "mặt đất, đất liền"
+      },
+      {
+        "kanji": "世界",
+        "kana": "せかい",
+        "mean": "thế giới"
+      },
+      {
+        "kanji": "新しい",
+        "kana": "あたらしい",
+        "mean": "mới mẻ"
+      }
+    ]
+  },
+  {
+    "ytId": "o6wtDPVkKqI",
+    "title": "Neon Genesis Evangelion (新世紀エヴァンゲリオン)",
+    "song": "A Cruel Angel's Thesis (残酷な天使のテーゼ) · 高橋洋子",
+    "lyric": "残酷な天使のテーゼ 少年よ 神話になれ",
+    "romaji": "Zankoku na tenshi no teeze shounen yo shinwa ni nare",
+    "viet": "Bản luận cương của thiên sứ tàn nhẫn, hỡi chàng trai trẻ hãy trở thành một huyền thoại",
+    "blank": {
+      "q": "少年よ _____ になれ",
+      "a": "神話",
+      "hint": "しんわ = thần thoại / huyền thoại"
+    },
+    "clue": "Shinji lái Eva Unit-01 chiến đấu chống Thiên Thần bảo vệ Tokyo-3. Từ khóa: 天使 (thiên thần), 未来 (tương lai)",
+    "category": "Huyền Thoại Bất Hủ",
+    "vocab": [
+      {
+        "kanji": "天使",
+        "kana": "てんし",
+        "mean": "thiên thần, thiên sứ"
+      },
+      {
+        "kanji": "少年",
+        "kana": "しょうねん",
+        "mean": "chàng trai, thiếu niên"
+      },
+      {
+        "kanji": "神話",
+        "kana": "しんわ",
+        "mean": "thần thoại"
+      }
+    ]
+  },
+  {
+    "ytId": "p9fyw73c8z0",
+    "title": "Kaiju No. 8 (怪獣8号)",
+    "song": "Abyss · YUNGBLUD",
+    "lyric": "深淵の中で叫ぶ声 決して諦めはしない",
+    "romaji": "Shin'en no naka de sakebu koe kesshite akirame wa shinai",
+    "viet": "Tiếng thét vang lên từ tận đáy sâu vực thẳm, quyết tâm không bao giờ từ bỏ ước mơ",
+    "blank": {
+      "q": "決して _____ はしない",
+      "a": "諦め",
+      "hint": "あきらめ = từ bỏ, bỏ cuộc"
+    },
+    "clue": "Kafka Hibino nuốt phải ký sinh trùng biến thành Kaiju Số 8. Từ khóa: 怪獣 (quái thú)",
+    "category": "Hot Mới 2023-2026",
+    "vocab": [
+      {
+        "kanji": "深淵",
+        "kana": "しんえん",
+        "mean": "vực sâu, vực thẳm"
+      },
+      {
+        "kanji": "声",
+        "kana": "こえ",
+        "mean": "tiếng nói, giọng nói"
+      },
+      {
+        "kanji": "諦める",
+        "kana": "あきらめる",
+        "mean": "từ bỏ"
+      }
+    ]
+  },
+  {
+    "ytId": "yq7E1uRkQvo",
+    "title": "Spy x Family S2 (SPY×FAMILY)",
+    "song": "Kura Kura (クラクラ) · Ado",
+    "lyric": "秘密だらけの日常 クラクラするほど愛おしい",
+    "romaji": "Himitsu darake no nichijou kurakura suru hodo itooshii",
+    "viet": "Cuộc sống thường nhật tràn ngập những bí mật giấu kín, đáng yêu đến mức khiến ta chóng mặt say đắm",
+    "blank": {
+      "q": "_____ だらけの日常 クラクラする",
+      "a": "秘密",
+      "hint": "ひみつ = bí mật"
+    },
+    "clue": "Gia đình Forger gồm điệp viên Loid, sát thủ Yor và bé Anya. Từ khóa: 秘密 (bí mật), 家族 (gia đình)",
+    "category": "Hot Mới 2023-2026",
+    "vocab": [
+      {
+        "kanji": "秘密",
+        "kana": "ひみつ",
+        "mean": "bí mật"
+      },
+      {
+        "kanji": "日常",
+        "kana": "にちじょう",
+        "mean": "ngày thường, thường nhật"
+      },
+      {
+        "kanji": "愛しい",
+        "kana": "いとしい",
+        "mean": "đáng yêu, yêu dấu"
+      }
+    ]
+  },
+  {
+    "ytId": "a-eXpBq4b2Q",
+    "title": "Solo Leveling (俺だけレベルアップな件)",
+    "song": "LEveL · SawanoHiroyuki[nZk]:TXT",
+    "lyric": "限界を超えて目指す場所へ 覚醒の瞬間が今始まる",
+    "romaji": "Genkai wo koete mezasu basho he kakusei no shunkan ga ima hajimaru",
+    "viet": "Vượt qua mọi giới hạn để vươn tới đỉnh cao, khoảnh khắc thức tỉnh bắt đầu ngay lúc này",
+    "blank": {
+      "q": "_____ を超えて目指す場所へ",
+      "a": "限界",
+      "hint": "げんかい = giới hạn"
+    },
+    "clue": "Thợ săn Sung Jin-woo nhận bảng nhiệm vụ thăng cấp vô hạn. Từ khóa: 覚醒 (thức tỉnh), 限界 (giới hạn)",
+    "category": "Hot Mới 2023-2026",
+    "vocab": [
+      {
+        "kanji": "限界",
+        "kana": "げんかい",
+        "mean": "giới hạn"
+      },
+      {
+        "kanji": "覚醒",
+        "kana": "かくせい",
+        "mean": "thức tỉnh"
+      },
+      {
+        "kanji": "瞬間",
+        "kana": "しゅんかん",
+        "mean": "khoảnh khắc"
+      }
+    ]
+  },
+  {
+    "ytId": "p9L3ZgN5VHQ",
+    "title": "【推しの子】 S2 (Oshi no Ko)",
+    "song": "Fatal (ファタール) · GEMN",
+    "lyric": "運命の鎖に縛られて 狂おしい愛を演じきる",
+    "romaji": "Unmei no kusari ni shibararete kuruoshii ai wo enjikiru",
+    "viet": "Bị trói buộc bởi xiềng xích định mệnh nghiệt ngã, diễn trọn vẹn vở kịch tình yêu cuồng si",
+    "blank": {
+      "q": "_____ の鎖に縛られて",
+      "a": "運命",
+      "hint": "うんめい = vận mệnh / định mệnh"
+    },
+    "clue": "Vở kịch Tokyo Blade hé lộ mưu đồ trả thù của Aqua. Từ khóa: 運命 (định mệnh), 芝居 (kịch)",
+    "category": "Hot Mới 2023-2026",
+    "vocab": [
+      {
+        "kanji": "運命",
+        "kana": "うんめい",
+        "mean": "vận mệnh, số phận"
+      },
+      {
+        "kanji": "鎖",
+        "kana": "くさり",
+        "mean": "dây xích, xiềng xích"
+      },
+      {
+        "kanji": "愛",
+        "kana": "あい",
+        "mean": "tình yêu"
+      }
+    ]
+  },
+  {
+    "ytId": "a2GujJZfXpg",
+    "title": "Your Name (君の名は。)",
+    "song": "Nandemonaiya (なんでもないや) · RADWIMPS",
+    "lyric": "もう少しだけでいい あと少しだけでいい もう少しだけくっついていようか",
+    "romaji": "Mou sukoshi dake de ii ato sukoshi dake de ii mou sukoshi dake kuttsuite iyou ka",
+    "viet": "Chỉ cần thêm một chút nữa thôi, xin hãy để ta được ở bên cạnh nhau thêm chút nữa",
+    "blank": {
+      "q": "もう _____ だけでいい あと少しだけでいい",
+      "a": "少し",
+      "hint": "すこし = một chút / một ít"
+    },
+    "clue": "Taki và Mitsuha hoán đổi thân xác vượt qua không gian và thời gian. Từ khóa: 夢 (giấc mơ), 約束 (lời hứa)",
+    "category": "Nhẹ Nhàng & Ballad",
+    "vocab": [
+      {
+        "kanji": "少し",
+        "kana": "すこし",
+        "mean": "một chút, ít"
+      },
+      {
+        "kanji": "時間",
+        "kana": "じかん",
+        "mean": "thời gian"
+      },
+      {
+        "kanji": "名前",
+        "kana": "なまえ",
+        "mean": "tên gọi"
+      }
+    ]
+  },
+  {
+    "ytId": "7cPrnZ5-kE0",
+    "title": "Digimon Adventure (デジモン)",
+    "song": "Butter-Fly · 和田光司 (Kouji Wada)",
+    "lyric": "無限大な夢のあとの 何もない世の中じゃ",
+    "romaji": "Mugendai na yume no ato no nanimo nai yononaka ja",
+    "viet": "Sau những giấc mơ vô hạn bao la, trong một thế giới dường như chẳng còn lại gì",
+    "blank": {
+      "q": "_____ な夢のあとの 何もない世の中じゃ",
+      "a": "無限大",
+      "hint": "むげんだい = vô hạn"
+    },
+    "clue": "Những đứa trẻ được chọn lạc vào Digital World cùng Digimon. Từ khóa: 夢 (ước mơ), 冒険 (phiêu lưu)",
+    "category": "Huyền Thoại Bất Hủ",
+    "vocab": [
+      {
+        "kanji": "夢",
+        "kana": "ゆめ",
+        "mean": "giấc mơ, ước mơ"
+      },
+      {
+        "kanji": "無限",
+        "kana": "むげん",
+        "mean": "vô hạn, vô tận"
+      },
+      {
+        "kanji": "飛ぶ",
+        "kana": "とぶ",
+        "mean": "bay lượn"
+      }
+    ]
+  },
+  {
+    "ytId": "a_9-Hk_Cg1k",
+    "title": "Chainsaw Man (チェンソーマン ED4)",
+    "song": "Chu, Tayousei. (ちゅ、多様性。) · あの (ano)",
+    "lyric": "Get on Chu! ゲロチュー 多様性 恋する乙女は無敵",
+    "romaji": "Get on Chu! Gerochuu tayousei koi suru otome wa muteki",
+    "viet": "Get on Chu! Đa dạng muôn màu, cô gái khi đang yêu là bất khả chiến bại",
+    "blank": {
+      "q": "恋する乙女は _____ だ",
+      "a": "無敵",
+      "hint": "むてき = vô địch, không có đối thủ"
+    },
+    "clue": "Himeno và nụ hôn quán nhậu với Denji. Từ khóa: 多様性 (tính đa dạng), 悪魔 (quỷ)",
+    "category": "Hot Mới 2023-2026",
+    "vocab": [
+      {
+        "kanji": "多様性",
+        "kana": "たようせい",
+        "mean": "tính đa dạng"
+      },
+      {
+        "kanji": "無敵",
+        "kana": "むてき",
+        "mean": "vô địch, bất bại"
+      },
+      {
+        "kanji": "乙女",
+        "kana": "おとめ",
+        "mean": "thiếu nữ, cô gái"
+      }
+    ]
   }
 ];
 
@@ -8021,15 +9174,563 @@ let quizScore = 0;
 let quizStreak = 0;
 let pronIdx = 0;
 
+
+// ══════════════════════════════════════════════════
+// THEME ENGINE: 3 STYLES & DUAL LIGHT/DARK MODES
+// ══════════════════════════════════════════════════
+function initThemeEngine() {
+  if (!userData.themeStyle) userData.themeStyle = 'arcade';
+  if (!userData.themeMode) userData.themeMode = 'dark';
+  applyTheme(userData.themeStyle, userData.themeMode, false);
+}
+
+function setThemeStyle(style) {
+  playSfx('click');
+  userData.themeStyle = style;
+  saveUserData();
+  applyTheme(style, userData.themeMode, true);
+}
+
+function setThemeMode(mode) {
+  playSfx('click');
+  userData.themeMode = mode;
+  saveUserData();
+  applyTheme(userData.themeStyle, mode, true);
+}
+
+function applyTheme(style, mode, notify = false) {
+  const root = document.documentElement;
+  const body = document.body;
+  
+  root.setAttribute('data-theme-style', style);
+  root.setAttribute('data-theme-mode', mode);
+  if (body) {
+    body.setAttribute('data-theme-style', style);
+    body.setAttribute('data-theme-mode', mode);
+  }
+
+  // Update modal cards & indicators
+  updateThemePickerUI();
+
+  // Control falling sakura petals canvas
+  if (style === 'sakura') {
+    startSakuraPetalsCanvas();
+  } else {
+    stopSakuraPetalsCanvas();
+  }
+
+  // Re-render mascot to match theme (Neko / Sakura / Arcade)
+  if (typeof updateSakuraPetUI === 'function') {
+    updateSakuraPetUI();
+  }
+
+  if (notify && typeof showToast === 'function') {
+    const styleNames = {
+      arcade: '⚡ Tokyo Neon Arcade',
+      sakura: '🌸 Sakura Elegance (Tao Nhã Chuẩn Nhật)',
+      neko: '🐾 Kawaii Anime Neko (Cute Mèo)'
+    };
+    const modeName = mode === 'light' ? '☀️ Sáng' : '🌙 Tối';
+    showToast(`Đã đổi phong cách: ${styleNames[style] || style} (${modeName})`);
+  }
+}
+
+function openThemePickerModal() {
+  playSfx('click');
+  updateThemePickerUI();
+  const modal = document.getElementById('themePickerModalOverlay');
+  if (modal) modal.classList.add('show');
+}
+
+function closeThemePickerModal() {
+  playSfx('click');
+  const modal = document.getElementById('themePickerModalOverlay');
+  if (modal) modal.classList.remove('show');
+}
+
+function updateThemePickerUI() {
+  const curStyle = (userData && userData.themeStyle) || 'arcade';
+  const curMode = (userData && userData.themeMode) || 'dark';
+
+  // Update style cards border/glow
+  ['arcade', 'sakura', 'neko'].forEach(s => {
+    const card = document.getElementById('themeCard_' + s);
+    const check = document.getElementById('check_' + s);
+    if (card) {
+      if (s === curStyle) {
+        card.style.borderColor = 'var(--neon-cyan)';
+        card.style.background = 'rgba(5, 217, 232, 0.08)';
+      } else {
+        card.style.borderColor = 'var(--border)';
+        card.style.background = 'var(--bg-surface)';
+      }
+    }
+    if (check) {
+      check.textContent = s === curStyle ? '✓ Đang dùng' : '●';
+      check.style.fontWeight = s === curStyle ? '800' : 'normal';
+    }
+  });
+
+  // Update Dark / Light buttons
+  const darkBtn = document.getElementById('themeModeDarkBtn');
+  const lightBtn = document.getElementById('themeModeLightBtn');
+  if (darkBtn && lightBtn) {
+    if (curMode === 'dark') {
+      darkBtn.className = 'btn btn-sm btn-cyan theme-mode-btn';
+      lightBtn.className = 'btn btn-sm btn-ghost theme-mode-btn';
+    } else {
+      darkBtn.className = 'btn btn-sm btn-ghost theme-mode-btn';
+      lightBtn.className = 'btn btn-sm btn-cyan theme-mode-btn';
+    }
+  }
+
+  // Update Settings badge if present
+  const stBadge = document.getElementById('settingsCurrentThemeBadge');
+  if (stBadge) {
+    const names = { arcade: 'Tokyo Arcade', sakura: 'Sakura Elegance', neko: 'Anime Neko' };
+    stBadge.textContent = (names[curStyle] || curStyle) + (curMode === 'light' ? ' (Sáng)' : ' (Tối)');
+  }
+}
+
+// ══════════════════════════════════════════════════
+// FALLING SAKURA PETALS CANVAS ENGINE
+// ══════════════════════════════════════════════════
+let sakuraCanvasAnim = null;
+let sakuraPetalsList = [];
+
+function startSakuraPetalsCanvas() {
+  const canvas = document.getElementById('sakuraPetalsCanvas');
+  if (!canvas) return;
+  canvas.style.display = 'block';
+  const ctx = canvas.getContext('2d');
+  
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize, { passive: true });
+
+  if (sakuraPetalsList.length === 0) {
+    const count = window.innerWidth < 768 ? 16 : 28;
+    for (let i = 0; i < count; i++) {
+      sakuraPetalsList.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 5 + 4,
+        d: Math.random() * 2 + 1,
+        angle: Math.random() * 360,
+        spin: (Math.random() - 0.5) * 2,
+        opacity: Math.random() * 0.4 + 0.35
+      });
+    }
+  }
+
+  if (sakuraCanvasAnim) cancelAnimationFrame(sakuraCanvasAnim);
+
+  function render() {
+    if (userData.themeStyle !== 'sakura') return;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    sakuraPetalsList.forEach(p => {
+      p.angle += p.spin;
+      p.y += p.d * 0.8;
+      p.x += Math.sin(p.angle * Math.PI / 180) * 0.7;
+
+      if (p.y > canvas.height + 20) {
+        p.y = -20;
+        p.x = Math.random() * canvas.width;
+      }
+      if (p.x > canvas.width + 20) p.x = -20;
+      if (p.x < -20) p.x = canvas.width + 20;
+
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.angle * Math.PI / 180);
+      ctx.beginPath();
+      ctx.ellipse(0, 0, p.r, p.r * 1.5, 0, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255, 183, 197, ${p.opacity})`;
+      ctx.fill();
+      ctx.restore();
+    });
+
+    sakuraCanvasAnim = requestAnimationFrame(render);
+  }
+  sakuraCanvasAnim = requestAnimationFrame(render);
+}
+
+function stopSakuraPetalsCanvas() {
+  if (sakuraCanvasAnim) {
+    cancelAnimationFrame(sakuraCanvasAnim);
+    sakuraCanvasAnim = null;
+  }
+  const canvas = document.getElementById('sakuraPetalsCanvas');
+  if (canvas) canvas.style.display = 'none';
+}
+
+// ══════════════════════════════════════════════════
+// ANIME CHIBI MASCOT GENERATOR (SVG ART)
+// ══════════════════════════════════════════════════
+function generateChibiSvg(mood = 'normal', isNeko = true) {
+  const catEars = isNeko ? `
+    <path d="M 18 24 Q 10 2 28 10 Z" fill="#ff75b6" stroke="#422838" stroke-width="2"/>
+    <path d="M 19 22 Q 13 8 26 12 Z" fill="#ffb3d9"/>
+    <path d="M 62 24 Q 70 2 52 10 Z" fill="#ff75b6" stroke="#422838" stroke-width="2"/>
+    <path d="M 61 22 Q 67 8 54 12 Z" fill="#ffb3d9"/>
+  ` : `
+    <g transform="translate(14, 12) scale(0.6)">
+      <circle cx="10" cy="10" r="6" fill="#ff4d85"/>
+      <circle cx="5" cy="5" r="4" fill="#ffb3d9"/>
+      <circle cx="15" cy="5" r="4" fill="#ffb3d9"/>
+      <circle cx="5" cy="15" r="4" fill="#ffb3d9"/>
+      <circle cx="15" cy="15" r="4" fill="#ffb3d9"/>
+      <circle cx="10" cy="10" r="3" fill="#ffbe0b"/>
+    </g>
+    <g transform="translate(54, 12) scale(0.6)">
+      <circle cx="10" cy="10" r="6" fill="#ff4d85"/>
+      <circle cx="5" cy="5" r="4" fill="#ffb3d9"/>
+      <circle cx="15" cy="5" r="4" fill="#ffb3d9"/>
+      <circle cx="5" cy="15" r="4" fill="#ffb3d9"/>
+      <circle cx="15" cy="15" r="4" fill="#ffb3d9"/>
+      <circle cx="10" cy="10" r="3" fill="#ffbe0b"/>
+    </g>
+  `;
+
+  const eyes = mood === 'happy' ? `
+    <path d="M 26 44 Q 32 38 38 44" fill="none" stroke="#2d1d29" stroke-width="3" stroke-linecap="round"/>
+    <path d="M 42 44 Q 48 38 54 44" fill="none" stroke="#2d1d29" stroke-width="3" stroke-linecap="round"/>
+  ` : mood === 'wink' ? `
+    <path d="M 26 44 Q 32 38 38 44" fill="none" stroke="#2d1d29" stroke-width="3" stroke-linecap="round"/>
+    <ellipse cx="48" cy="43" rx="6.5" ry="8" fill="#1e152a"/>
+    <ellipse cx="48" cy="45" rx="5.5" ry="6" fill="#d946ef"/>
+    <circle cx="46" cy="40" r="2.8" fill="#ffffff"/>
+    <circle cx="50" cy="46" r="1.5" fill="#ffffff"/>
+  ` : `
+    <ellipse cx="32" cy="43" rx="6.5" ry="8" fill="#1e152a"/>
+    <ellipse cx="32" cy="45" rx="5.5" ry="6" fill="#ec4899"/>
+    <circle cx="30" cy="40" r="2.8" fill="#ffffff"/>
+    <circle cx="34" cy="46" r="1.5" fill="#ffffff"/>
+    <ellipse cx="48" cy="43" rx="6.5" ry="8" fill="#1e152a"/>
+    <ellipse cx="48" cy="45" rx="5.5" ry="6" fill="#ec4899"/>
+    <circle cx="46" cy="40" r="2.8" fill="#ffffff"/>
+    <circle cx="50" cy="46" r="1.5" fill="#ffffff"/>
+  `;
+
+  const mouth = mood === 'happy' ? `
+    <path d="M 37 53 Q 40 58 43 53 Z" fill="#ff3366"/>
+  ` : `
+    <path d="M 36 52 Q 38.5 54 40 52 Q 41.5 54 44 52" fill="none" stroke="#3d2232" stroke-width="1.8" stroke-linecap="round"/>
+  `;
+
+  return `
+  <svg class="chibi-avatar-svg" viewBox="0 0 80 80" width="70" height="70" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="chibiHairGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#ff75a0"/>
+        <stop offset="100%" stop-color="#f43f5e"/>
+      </linearGradient>
+      <radialGradient id="chibiBlushGrad" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#ff4d85" stop-opacity="0.5"/>
+        <stop offset="100%" stop-color="#ff4d85" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+    <circle cx="40" cy="40" r="38" fill="rgba(255, 117, 160, 0.15)"/>
+    ${catEars}
+    <path d="M 18 36 Q 12 55 20 68 Q 28 58 26 45 Z" fill="url(#chibiHairGrad)"/>
+    <path d="M 62 36 Q 68 55 60 68 Q 52 58 54 45 Z" fill="url(#chibiHairGrad)"/>
+    <ellipse cx="40" cy="44" rx="23" ry="21" fill="#fff5ea" stroke="#f0d5c0" stroke-width="1"/>
+    <circle cx="24" cy="49" r="6" fill="url(#chibiBlushGrad)"/>
+    <circle cx="56" cy="49" r="6" fill="url(#chibiBlushGrad)"/>
+    ${eyes}
+    <circle cx="40" cy="49.5" r="0.9" fill="#ff758f"/>
+    ${mouth}
+    <path d="M 18 34 Q 40 18 62 34 Q 54 28 40 31 Q 26 28 18 34 Z" fill="url(#chibiHairGrad)"/>
+    <path d="M 33 28 Q 36 38 31 38 Z" fill="url(#chibiHairGrad)"/>
+    <path d="M 47 28 Q 44 38 49 38 Z" fill="url(#chibiHairGrad)"/>
+    <path d="M 30 63 Q 40 68 50 63" stroke="#f43f5e" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <circle cx="40" cy="65.5" r="3.5" fill="#fbbf24" stroke="#d97706" stroke-width="1"/>
+  </svg>
+  `;
+}
+
+// ══════════════════════════════════════════════════
+// DOJO SPEED BLITZ 60S LOGIC
+// ══════════════════════════════════════════════════
+let blitzTimer = null;
+let blitzTimeLeft = 60;
+let blitzScore = 0;
+let blitzStreak = 0;
+let blitzMaxStreak = 0;
+let blitzCorrectCount = 0;
+let blitzTotalCount = 0;
+let blitzActive = false;
+let currentBlitzQuestion = null;
+
+function startBlitzGame() {
+  playSfx('click');
+  blitzActive = true;
+  blitzTimeLeft = 60;
+  blitzScore = 0;
+  blitzStreak = 0;
+  blitzMaxStreak = 0;
+  blitzCorrectCount = 0;
+  blitzTotalCount = 0;
+
+  const intro = document.getElementById('blitzIntroScreen');
+  const arena = document.getElementById('blitzArenaScreen');
+  const result = document.getElementById('blitzResultScreen');
+  if (intro) intro.style.display = 'none';
+  if (result) result.style.display = 'none';
+  if (arena) arena.style.display = 'block';
+
+  // Load High Score
+  const hsVal = (userData && userData.blitzHighScore) || 0;
+  const hsEl = document.getElementById('blitzHighScoreVal');
+  if (hsEl) hsEl.textContent = hsVal;
+
+  updateBlitzHud();
+  renderBlitzQ();
+
+  if (blitzTimer) clearInterval(blitzTimer);
+  blitzTimer = setInterval(() => {
+    blitzTimeLeft--;
+    const tEl = document.getElementById('blitzTimerDisplay');
+    if (tEl) {
+      tEl.textContent = blitzTimeLeft + 's';
+      if (blitzTimeLeft <= 10) {
+        tEl.style.color = 'var(--neon-crimson)';
+        tEl.style.borderColor = 'var(--neon-crimson)';
+      } else {
+        tEl.style.color = 'var(--neon-gold)';
+        tEl.style.borderColor = 'var(--neon-gold)';
+      }
+    }
+    if (blitzTimeLeft <= 0) {
+      endBlitzGame();
+    }
+  }, 1000);
+}
+
+function updateBlitzHud() {
+  const sEl = document.getElementById('blitzLiveScore');
+  const stEl = document.getElementById('blitzLiveStreak');
+  const mEl = document.getElementById('blitzMultiplierBadge');
+
+  if (sEl) sEl.textContent = blitzScore;
+  if (stEl) stEl.textContent = blitzStreak + ' 🔥';
+
+  let mult = 1.0;
+  if (blitzStreak >= 15) mult = 3.0;
+  else if (blitzStreak >= 10) mult = 2.5;
+  else if (blitzStreak >= 5) mult = 2.0;
+  else if (blitzStreak >= 3) mult = 1.5;
+
+  if (mEl) mEl.textContent = 'COMBO x' + mult.toFixed(1);
+}
+
+function renderBlitzQ() {
+  if (!blitzActive) return;
+  const list = typeof getDojoVocabList === 'function' ? getDojoVocabList() : (window.ALL_VOCAB || []);
+  if (!list || list.length === 0) return;
+
+  const qItem = list[Math.floor(Math.random() * list.length)];
+  currentBlitzQuestion = qItem;
+
+  const kEl = document.getElementById('blitzKanji');
+  const rEl = document.getElementById('blitzReading');
+  if (kEl) kEl.textContent = qItem.kanji || qItem.hiragana;
+  if (rEl) rEl.textContent = (qItem.hiragana ? qItem.hiragana : '') + (qItem.romaji ? ' (' + qItem.romaji + ')' : '');
+
+  // 1 correct, 3 wrong
+  const wrongPool = list.filter(w => w.id !== qItem.id && w.vietnamese !== qItem.vietnamese);
+  const shuffledWrong = wrongPool.sort(() => Math.random() - 0.5).slice(0, 3);
+  const options = [qItem, ...shuffledWrong].sort(() => Math.random() - 0.5);
+
+  const grid = document.getElementById('blitzOptionsGrid');
+  if (!grid) return;
+  grid.innerHTML = options.map((opt, i) => `
+    <button class="btn btn-ghost quiz-opt-btn" onclick="answerBlitz('${escapeHTML(opt.vietnamese)}')" style="min-height:50px;font-size:.9rem;padding:.5rem .75rem;border-radius:var(--radius-md)">
+      ${escapeHTML(opt.vietnamese)}
+    </button>
+  `).join('');
+}
+
+function answerBlitz(chosenViet) {
+  if (!blitzActive || !currentBlitzQuestion) return;
+  blitzTotalCount++;
+  const isCorrect = (chosenViet === currentBlitzQuestion.vietnamese);
+  const popup = document.getElementById('blitzFeedbackPopup');
+
+  if (isCorrect) {
+    blitzCorrectCount++;
+    blitzStreak++;
+    if (blitzStreak > blitzMaxStreak) blitzMaxStreak = blitzStreak;
+
+    let mult = 1.0;
+    if (blitzStreak >= 15) mult = 3.0;
+    else if (blitzStreak >= 10) mult = 2.5;
+    else if (blitzStreak >= 5) mult = 2.0;
+    else if (blitzStreak >= 3) mult = 1.5;
+
+    const gained = Math.round(10 * mult);
+    blitzScore += gained;
+    playSfx('correct');
+
+    if (popup) {
+      popup.innerHTML = `<span style="color:var(--neon-lime)">✓ +${gained} (x${mult.toFixed(1)})</span>`;
+    }
+    if (typeof GameJuice !== 'undefined') GameJuice.onCorrect();
+  } else {
+    blitzStreak = 0;
+    playSfx('wrong');
+    if (popup) {
+      popup.innerHTML = `<span style="color:var(--neon-crimson)">✗ Đáp án: ${escapeHTML(currentBlitzQuestion.vietnamese)}</span>`;
+    }
+    if (typeof GameJuice !== 'undefined') GameJuice.shakeScreen();
+  }
+
+  updateBlitzHud();
+  renderBlitzQ();
+}
+
+function endBlitzGame() {
+  blitzActive = false;
+  if (blitzTimer) {
+    clearInterval(blitzTimer);
+    blitzTimer = null;
+  }
+  playSfx('levelUp');
+
+  const arena = document.getElementById('blitzArenaScreen');
+  const result = document.getElementById('blitzResultScreen');
+  if (arena) arena.style.display = 'none';
+  if (result) result.style.display = 'block';
+
+  // Check High Score
+  const curHs = (userData && userData.blitzHighScore) || 0;
+  const isNew = blitzScore > curHs;
+  if (isNew) {
+    userData.blitzHighScore = blitzScore;
+    saveUserData();
+  }
+
+  const recBadge = document.getElementById('blitzNewRecordBadge');
+  if (recBadge) recBadge.style.display = isNew ? 'inline-block' : 'none';
+
+  const fScore = document.getElementById('blitzFinalScore');
+  const fAcc = document.getElementById('blitzFinalAccuracy');
+  const fMax = document.getElementById('blitzFinalMaxStreak');
+  const fRank = document.getElementById('blitzRankTitle');
+
+  if (fScore) fScore.textContent = blitzScore;
+  const accPct = blitzTotalCount > 0 ? Math.round((blitzCorrectCount / blitzTotalCount) * 100) : 0;
+  if (fAcc) fAcc.textContent = accPct + '%';
+  if (fMax) fMax.textContent = blitzMaxStreak + ' 🔥';
+
+  let rankName = '🌸 Ninja Tập Sự';
+  if (blitzScore >= 300) rankName = '👑 Thần Tốc Sấm Sét (Godlike)';
+  else if (blitzScore >= 180) rankName = '🔥 Cao Thủ Phản Xạ';
+  else if (blitzScore >= 80) rankName = '⚡ Ninja Tốc Độ';
+  if (fRank) fRank.textContent = rankName;
+
+  // Reward EXP
+  if (typeof addExp === 'function') {
+    const expBonus = Math.min(60, Math.max(15, Math.round(blitzScore / 4)));
+    addExp(expBonus);
+  }
+}
+
+// ══════════════════════════════════════════════════
+// ANIME MV EXTENSIONS (CATEGORY, VOCAB & KARAOKE)
+// ══════════════════════════════════════════════════
+let mvActiveCategory = 'ALL';
+
+function setMvCategory(cat) {
+  playSfx('click');
+  mvActiveCategory = cat;
+  
+  ['All', 'Hot', 'Shonen', 'Ballad', 'Classic'].forEach(k => {
+    const btn = document.getElementById('mvCat' + k);
+    if (btn) {
+      if (k.toUpperCase() === cat.toUpperCase() || (cat === 'ALL' && k === 'All')) {
+        btn.className = 'btn btn-sm btn-cyan mv-cat-pill';
+      } else {
+        btn.className = 'btn btn-sm btn-ghost mv-cat-pill';
+      }
+    }
+  });
+
+  renderPlaylistDeck();
+}
+
+function openKaraokeModal() {
+  playSfx('click');
+  const item = ANIME_LIST[currentTrackIdx];
+  if (!item) return;
+
+  const tEl = document.getElementById('karaokeSongTitle');
+  const aEl = document.getElementById('karaokeAnimeTitle');
+  const kEl = document.getElementById('karaokeLyricKanji');
+  const rEl = document.getElementById('karaokeLyricRomaji');
+  const vEl = document.getElementById('karaokeLyricViet');
+
+  if (tEl) tEl.textContent = item.song;
+  if (aEl) aEl.textContent = item.title;
+  if (kEl) kEl.textContent = item.lyric;
+  if (rEl) rEl.textContent = item.romaji;
+  if (vEl) vEl.textContent = item.viet;
+
+  const modal = document.getElementById('karaokeModalOverlay');
+  if (modal) modal.classList.add('show');
+}
+
+function closeKaraokeModal() {
+  playSfx('click');
+  const modal = document.getElementById('karaokeModalOverlay');
+  if (modal) modal.classList.remove('show');
+}
+
+function renderSongKeyVocab(item) {
+  const container = document.getElementById('songKeyVocabList');
+  if (!container || !item) return;
+
+  const vocabs = item.vocab || [
+    { kanji: item.blank.a, kana: item.blank.hint.split('=')[0].trim(), mean: item.blank.hint.split('=')[1] ? item.blank.hint.split('=')[1].trim() : 'Từ khóa chính' }
+  ];
+
+  container.innerHTML = vocabs.map(v => `
+    <div style="display:flex;justify-content:space-between;align-items:center;background:rgba(0,0,0,0.2);padding:.4rem .65rem;border-radius:var(--radius-sm);border:1px solid rgba(255,255,255,0.06)">
+      <div style="display:flex;align-items:baseline;gap:.5rem">
+        <strong style="font-family:var(--font-kanji);color:var(--neon-gold);font-size:.95rem">${escapeHTML(v.kanji)}</strong>
+        <span style="font-size:.78rem;color:var(--neon-cyan)">(${escapeHTML(v.kana)})</span>
+        <span style="font-size:.78rem;color:var(--text-secondary)">: ${escapeHTML(v.mean)}</span>
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="speakJapaneseTTS('${escapeHTML(v.kana || v.kanji)}')" style="font-size:.75rem;padding:.15rem .45rem" title="Phát âm từ vựng này">
+        🔊
+      </button>
+    </div>
+  `).join('');
+}
+
+
 function switchDojoMode(mode) {
   playSfx('click');
   if (mode !== 'anime' && typeof soloAnimeTimer !== 'undefined' && soloAnimeTimer) {
     clearInterval(soloAnimeTimer);
     soloAnimeTimer = null;
   }
-  document.getElementById('dojoFCView').style.display = mode === 'fc' ? 'block' : 'none';
-  document.getElementById('dojoQuizView').style.display = mode === 'quiz' ? 'block' : 'none';
-  document.getElementById('dojoPronView').style.display = mode === 'pron' ? 'block' : 'none';
+  if (mode !== 'blitz' && typeof blitzTimer !== 'undefined' && blitzTimer) {
+    clearInterval(blitzTimer);
+    blitzTimer = null;
+    blitzActive = false;
+  }
+
+  const fcView = document.getElementById('dojoFCView');
+  if (fcView) fcView.style.display = mode === 'fc' ? 'block' : 'none';
+  const quizView = document.getElementById('dojoQuizView');
+  if (quizView) quizView.style.display = mode === 'quiz' ? 'block' : 'none';
+  const pronView = document.getElementById('dojoPronView');
+  if (pronView) pronView.style.display = mode === 'pron' ? 'block' : 'none';
   const kanaView = document.getElementById('dojoKanaView');
   if (kanaView) kanaView.style.display = mode === 'kana' ? 'block' : 'none';
   const dictationView = document.getElementById('dojoDictationView');
@@ -8038,10 +9739,17 @@ function switchDojoMode(mode) {
   if (scenarioView) scenarioView.style.display = mode === 'scenario' ? 'block' : 'none';
   const animeView = document.getElementById('dojoAnimeView');
   if (animeView) animeView.style.display = mode === 'anime' ? 'block' : 'none';
+  const blitzView = document.getElementById('dojoBlitzView');
+  if (blitzView) blitzView.style.display = mode === 'blitz' ? 'block' : 'none';
   
-  document.getElementById('dojoSubFC').className = 'btn btn-sm ' + (mode === 'fc' ? 'btn-cyan' : 'btn-ghost');
-  document.getElementById('dojoSubQuiz').className = 'btn btn-sm ' + (mode === 'quiz' ? 'btn-cyan' : 'btn-ghost');
-  document.getElementById('dojoSubPron').className = 'btn btn-sm ' + (mode === 'pron' ? 'btn-cyan' : 'btn-ghost');
+  const subFC = document.getElementById('dojoSubFC');
+  if (subFC) subFC.className = 'btn btn-sm ' + ((mode === 'fc' || mode === 'quiz') ? 'btn-cyan' : 'btn-ghost');
+  const subQuiz = document.getElementById('dojoSubQuiz');
+  if (subQuiz) subQuiz.className = 'btn btn-sm ' + (mode === 'quiz' ? 'btn-cyan' : 'btn-ghost');
+  const subPron = document.getElementById('dojoSubPron');
+  if (subPron) subPron.className = 'btn btn-sm ' + ((mode === 'pron' || mode === 'dictation') ? 'btn-cyan' : 'btn-ghost');
+  const subBlitz = document.getElementById('dojoSubBlitz');
+  if (subBlitz) subBlitz.className = 'btn btn-sm ' + (mode === 'blitz' ? 'btn-cyan' : 'btn-ghost');
   const subKana = document.getElementById('dojoSubKana');
   if (subKana) subKana.className = 'btn btn-sm ' + (mode === 'kana' ? 'btn-cyan' : 'btn-ghost');
   const subDic = document.getElementById('dojoSubDictation');
@@ -8051,8 +9759,33 @@ function switchDojoMode(mode) {
   const subAnime = document.getElementById('dojoSubAnime');
   if (subAnime) subAnime.className = 'btn btn-sm ' + (mode === 'anime' ? 'btn-cyan' : 'btn-ghost');
 
+  // In-view toggle button states
+  const togFC = document.getElementById('btnSubToggleFC');
+  const togQuiz = document.getElementById('btnSubToggleQuiz');
+  if (togFC && togQuiz) {
+    togFC.className = 'btn btn-sm ' + (mode === 'fc' ? 'btn-cyan' : 'btn-ghost');
+    togQuiz.className = 'btn btn-sm ' + (mode === 'quiz' ? 'btn-cyan' : 'btn-ghost');
+  }
+  const togPron = document.getElementById('btnSubTogglePron');
+  const togDic = document.getElementById('btnSubToggleDictation');
+  if (togPron && togDic) {
+    togPron.className = 'btn btn-sm ' + (mode === 'pron' ? 'btn-cyan' : 'btn-ghost');
+    togDic.className = 'btn btn-sm ' + (mode === 'dictation' ? 'btn-cyan' : 'btn-ghost');
+  }
+
   if(mode === 'quiz') renderQuizQ();
   if(mode === 'pron') renderPronQ();
+  if(mode === 'blitz') {
+    const intro = document.getElementById('blitzIntroScreen');
+    const arena = document.getElementById('blitzArenaScreen');
+    const result = document.getElementById('blitzResultScreen');
+    if (intro) intro.style.display = 'block';
+    if (arena) arena.style.display = 'none';
+    if (result) result.style.display = 'none';
+    const hsVal = (userData && userData.blitzHighScore) || 0;
+    const hsEl = document.getElementById('blitzHighScoreVal');
+    if (hsEl) hsEl.textContent = hsVal;
+  }
   if(mode === 'kana' && typeof renderKanaUI === 'function') renderKanaUI();
   if(mode === 'dictation' && typeof renderDictationQ === 'function') renderDictationQ();
   if(mode === 'scenario' && typeof renderScenarioUI === 'function') renderScenarioUI();
@@ -8328,9 +10061,44 @@ let mvLyricsCollapsed = false;
 
 function getFilteredAnimeList() {
   let list = ANIME_LIST.map((item, originalIndex) => ({ ...item, originalIndex }));
+
+  // Filter by category pills
+  if (typeof mvActiveCategory !== 'undefined' && mvActiveCategory !== 'ALL') {
+    if (mvActiveCategory === 'HOT') {
+      const hotKeywords = ['oshi no ko', '推しの子', 'chainsaw', 'jujutsu', 'mashle', 'frieren', 'bocchi', 'dan da dan', 'kaiju', 'solo leveling', 'spy x family'];
+      list = list.filter(item => {
+        if (item.category === 'Hot Mới 2023-2026') return true;
+        const str = (item.title + ' ' + item.song).toLowerCase();
+        return hotKeywords.some(k => str.includes(k));
+      });
+    } else if (mvActiveCategory === 'SHONEN') {
+      const shonenKeywords = ['demon slayer', 'naruto', 'one piece', 'my hero', 'jujutsu', 'chainsaw', 'tokyo ghoul', 'attack on titan', 'hunter', 'fire force', 'noragami', 'bleach', 'kaiju'];
+      list = list.filter(item => {
+        if (item.category === 'Shonen Chiến Đấu') return true;
+        const str = (item.title + ' ' + item.song).toLowerCase();
+        return shonenKeywords.some(k => str.includes(k));
+      });
+    } else if (mvActiveCategory === 'BALLAD') {
+      const balladKeywords = ['your name', 'suzume', 'your lie in april', 'frieren', 'lemon', 'sparkle', 'homura', 'yorushika', 'anytime anywhere', 'nandemonaiya'];
+      list = list.filter(item => {
+        if (item.category === 'Nhẹ Nhàng & Ballad') return true;
+        const str = (item.title + ' ' + item.song).toLowerCase();
+        return balladKeywords.some(k => str.includes(k));
+      });
+    } else if (mvActiveCategory === 'CLASSIC') {
+      const classicKeywords = ['naruto', 'fullmetal', 'evangelion', 'digimon', 'hunter x hunter', 'haruka kanata', 'blue bird', 'go!!!', 'again'];
+      list = list.filter(item => {
+        if (item.category === 'Huyền Thoại Bất Hủ') return true;
+        const str = (item.title + ' ' + item.song).toLowerCase();
+        return classicKeywords.some(k => str.includes(k));
+      });
+    }
+  }
+
+  // Filter by dropdown
   if (mvActiveFilter && mvActiveFilter !== 'ALL') {
     if (mvActiveFilter === 'OTHER') {
-      const mainKeywords = ['demon slayer', 'jujutsu kaisen', 'naruto', 'your name', 'suzume', '推しの子', 'oshi no ko', 'one piece', 'my hero academia', 'tokyo ghoul', 'frieren'];
+      const mainKeywords = ['demon slayer', 'jujutsu kaisen', 'naruto', 'your name', 'suzume', '推しの子', 'oshi no ko', 'one piece', 'my hero academia', 'tokyo ghoul', 'frieren', 'bocchi', 'evangelion'];
       list = list.filter(item => {
         const t = (item.title + ' ' + item.song).toLowerCase();
         return !mainKeywords.some(k => t.includes(k));
@@ -8340,6 +10108,8 @@ function getFilteredAnimeList() {
       list = list.filter(item => (item.title + ' ' + item.song).toLowerCase().includes(q));
     }
   }
+
+  // Filter by search query
   if (mvSearchQuery && mvSearchQuery.trim()) {
     const q = mvSearchQuery.trim().toLowerCase();
     list = list.filter(item => (item.song + ' ' + item.title + ' ' + (item.romaji || '')).toLowerCase().includes(q));
@@ -8432,6 +10202,7 @@ function initYouTubePlayer() {
   if (blankFeedbackEl) blankFeedbackEl.textContent = '';
   
   updateMvPlayModeUI();
+  if (typeof renderSongKeyVocab === 'function') renderSongKeyVocab(item);
   renderPlaylistDeck();
 }
 
