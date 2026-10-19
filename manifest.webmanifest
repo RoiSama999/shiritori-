@@ -1,0 +1,19 @@
+{
+  "name": "Emi Nihongo - Nối Từ Shiritori & JLPT",
+  "short_name": "Emi Nihongo",
+  "description": "Game nối từ Shiritori tiếng Nhật, Flashcard thông minh và Hành trình JLPT N5-N3",
+  "start_url": "./index.v2.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0a0e14",
+  "theme_color": "#0d1117",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

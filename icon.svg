@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a0e17"/>
+      <stop offset="50%" stop-color="#121826"/>
+      <stop offset="100%" stop-color="#1b122c"/>
+    </linearGradient>
+    <linearGradient id="strokeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff2a6d"/>
+      <stop offset="50%" stop-color="#05d9e2"/>
+      <stop offset="100%" stop-color="#d800ff"/>
+    </linearGradient>
+    <linearGradient id="sakuraGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff7597"/>
+      <stop offset="100%" stop-color="#ff2a6d"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffe600"/>
+      <stop offset="100%" stop-color="#ff9100"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background Squircle -->
+  <rect x="16" y="16" width="480" height="480" rx="110" fill="url(#bgGrad)" stroke="url(#strokeGrad)" stroke-width="8"/>
+
+  <!-- Sakura Petals (5 petals around center) -->
+  <g transform="translate(256, 256)" filter="url(#glow)">
+    <!-- Petal 1 (Top) -->
+    <path d="M 0,-30 C -35,-85 -70,-150 0,-185 C 70,-150 35,-85 0,-30 Z" fill="url(#sakuraGrad)" opacity="0.95"/>
+    <!-- Petal 2 (Top Right) -->
+    <g transform="rotate(72)">
+      <path d="M 0,-30 C -35,-85 -70,-150 0,-185 C 70,-150 35,-85 0,-30 Z" fill="url(#sakuraGrad)" opacity="0.95"/>
+    </g>
+    <!-- Petal 3 (Bottom Right) -->
+    <g transform="rotate(144)">
+      <path d="M 0,-30 C -35,-85 -70,-150 0,-185 C 70,-150 35,-85 0,-30 Z" fill="url(#sakuraGrad)" opacity="0.95"/>
+    </g>
+    <!-- Petal 4 (Bottom Left) -->
+    <g transform="rotate(216)">
+      <path d="M 0,-30 C -35,-85 -70,-150 0,-185 C 70,-150 35,-85 0,-30 Z" fill="url(#sakuraGrad)" opacity="0.95"/>
+    </g>
+    <!-- Petal 5 (Top Left) -->
+    <g transform="rotate(288)">
+      <path d="M 0,-30 C -35,-85 -70,-150 0,-185 C 70,-150 35,-85 0,-30 Z" fill="url(#sakuraGrad)" opacity="0.95"/>
+    </g>
+
+    <!-- Center Core Glow -->
+    <circle cx="0" cy="0" r="42" fill="#0d1117" stroke="#05d9e2" stroke-width="4"/>
+    <circle cx="0" cy="0" r="26" fill="url(#goldGrad)"/>
+
+    <!-- Central Katakana / Kanji Stroke (Emi / E) -->
+    <path d="M -10,-12 L 10,-12 M -6,-12 L -6,14 M -10,14 L 10,14 M -8,1 L 6,1" stroke="#0a0e17" stroke-width="3.5" stroke-linecap="round"/>
+  </g>
+
+  <!-- Accent Lightning Badge -->
+  <polygon points="410,75 425,75 415,95 432,95 400,130 408,105 394,105" fill="#05d9e2" filter="url(#glow)"/>
+</svg>
