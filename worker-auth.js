@@ -42,6 +42,16 @@ const RESET_WINDOW_SECONDS = 15 * 60; // 15 phút
 const MAX_BODY_BYTES = 20480; // 20KB
 const USERNAME_REGEX = /^[a-z0-9_]{3,20}$/;
 
+// Cấu hình Hệ thống Bạn bè & Quyền riêng tư
+const MAX_FRIENDS = 50;
+const MAX_PENDING_REQUESTS = 20;
+const MAX_FRIEND_REQ_PER_USER = 10;
+const FRIEND_REQ_USER_WINDOW_SECONDS = 15 * 60; // 15 phút
+const MAX_FRIEND_REQ_PER_IP = 20;
+const FRIEND_REQ_IP_WINDOW_SECONDS = 15 * 60; // 15 phút
+const MAX_ACTIVE_ROOM_INVITES = 5;
+const ROOM_INVITE_TTL_MS = 15 * 60 * 1000; // 15 phút (900,000ms)
+
 /**
  * Xử lý CORS headers
  */
@@ -329,6 +339,93 @@ async function authenticateToken(request, kv) {
 }
 
 /**
+ * Lọc liên kết và chuẩn hóa nội dung Bio nhằm ngăn chặn mã độc & URL lừa đảo
+ */
+function sanitizeBio(text) {
+  if (typeof text !== 'string') return '';
+  // Vô hiệu hóa URL, link web hoặc domain có thể bấm được
+  const urlPattern = /(https?:\/\/[^\s]+|www\.[^\s]+|[a-zA-Z0-9-]+\.(?:com|net|org|io|vn|edu|gov|xyz|app|dev|me|info|biz|cc|tv)[^\s]*)/gi;
+  let clean = text.replace(urlPattern, '[liên kết đã bị ẩn]');
+  // Lọc sạch thẻ HTML
+  clean = clean.replace(/<[^>]*>/g, '');
+  return clean.slice(0, 150).trim();
+}
+
+/**
+ * Đọc dữ liệu Bạn bè an toàn từ KV
+ */
+async function getFriendsData(kv, username) {
+  const raw = await kv.get(`friends:${username}`);
+  if (!raw) {
+    return { friends: [], incoming: [], outgoing: [], blocked: [], invites: [] };
+  }
+  try {
+    const data = JSON.parse(raw);
+    return {
+      friends: Array.isArray(data.friends) ? data.friends : [],
+      incoming: Array.isArray(data.incoming) ? data.incoming : [],
+      outgoing: Array.isArray(data.outgoing) ? data.outgoing : [],
+      blocked: Array.isArray(data.blocked) ? data.blocked : [],
+      invites: Array.isArray(data.invites) ? data.invites : []
+    };
+  } catch (e) {
+    return { friends: [], incoming: [], outgoing: [], blocked: [], invites: [] };
+  }
+}
+
+/**
+ * Trích xuất hồ sơ công khai an toàn, tôn trọng cài đặt quyền riêng tư:
+ * - Ba mức: 'public', 'friends', 'private' (Mặc định: 'friends')
+ * - TUYỆT ĐỐI không bao giờ trả về mật khẩu, salt, mã khôi phục, token hay raw game data
+ */
+function getPublicProfile(targetUser, viewerUsername = null, isFriend = false) {
+  const privacy = (targetUser.profile && targetUser.profile.privacy) ? targetUser.profile.privacy : 'friends';
+  const isOwner = viewerUsername && viewerUsername.toLowerCase() === targetUser.username.toLowerCase();
+
+  const base = {
+    username: targetUser.username,
+    displayName: (targetUser.profile && targetUser.profile.displayName) || targetUser.username,
+    avatar: (targetUser.profile && targetUser.profile.avatar) || '🦊',
+    privacy: privacy,
+    isFriend: isFriend
+  };
+
+  // Nếu người xem không phải là chủ sở hữu, áp dụng chính sách quyền riêng tư
+  if (!isOwner) {
+    if (privacy === 'private') {
+      return {
+        ...base,
+        isRestricted: true,
+        message: 'Hồ sơ người dùng này đang ở chế độ riêng tư.'
+      };
+    }
+    if (privacy === 'friends' && !isFriend) {
+      return {
+        ...base,
+        isRestricted: true,
+        message: 'Chỉ bạn bè mới có thể xem thông tin chi tiết hồ sơ này.'
+      };
+    }
+  }
+
+  // Chỉ trả về các trường công khai hợp lệ
+  const p = targetUser.profile || {};
+  const g = targetUser.gameData || {};
+  return {
+    ...base,
+    isRestricted: false,
+    bio: sanitizeBio(p.bio || ''),
+    jlptTarget: p.jlptTarget || 'N5',
+    rank: g.rank || 'Tập Sự',
+    streak: (typeof g.streak === 'number' && Number.isFinite(g.streak)) ? g.streak : 0,
+    xp: (typeof g.xp === 'number' && Number.isFinite(g.xp)) ? g.xp : 0,
+    badges: Array.isArray(g.badges) ? g.badges : (Array.isArray(targetUser.badges) ? targetUser.badges : []),
+    collectiblesCount: Array.isArray(g.collectibles) ? g.collectibles.length : 0,
+    equippedFrame: g.equippedFrame || ''
+  };
+}
+
+/**
  * Router chính cho Cloudflare Worker
  */
 export default {
@@ -402,12 +499,13 @@ export default {
         const recoveryCode = generateRecoveryCode();
         const recoveryHashHex = await sha256Hex(recoveryCode.replace(/-/g, '').toUpperCase());
 
-        // Chuẩn bị dữ liệu ban đầu
+        // Chuẩn bị dữ liệu ban đầu (Quyền riêng tư mặc định là 'friends')
         const profile = {
           displayName: (initialData && initialData.name) ? String(initialData.name).slice(0, 30) : username,
           avatar: (initialData && initialData.avatar) ? String(initialData.avatar).slice(0, 100) : '🦊',
-          bio: (initialData && initialData.bio) ? String(initialData.bio).slice(0, 150) : 'Người học tiếng Nhật tại Emi.io.vn',
-          jlptTarget: (initialData && ['N5','N4','N3','N2','N1'].includes(initialData.target)) ? initialData.target : 'N5'
+          bio: (initialData && initialData.bio) ? sanitizeBio(String(initialData.bio)) : 'Người học tiếng Nhật tại Emi.io.vn',
+          jlptTarget: (initialData && ['N5','N4','N3','N2','N1'].includes(initialData.target)) ? initialData.target : 'N5',
+          privacy: (initialData && ['public','friends','private'].includes(initialData.privacy)) ? initialData.privacy : 'friends'
         };
 
         const initialWrongWords = (initialData && initialData.questData && Array.isArray(initialData.questData.wrongWords))
@@ -611,6 +709,7 @@ export default {
 
         const userData = JSON.parse(userRaw);
 
+        if (!userData.profile) userData.profile = {};
         if (body.displayName !== undefined) {
           userData.profile.displayName = String(body.displayName).trim().slice(0, 30);
         }
@@ -618,10 +717,13 @@ export default {
           userData.profile.avatar = String(body.avatar).trim().slice(0, 100);
         }
         if (body.bio !== undefined) {
-          userData.profile.bio = String(body.bio).trim().slice(0, 150);
+          userData.profile.bio = sanitizeBio(String(body.bio));
         }
         if (body.jlptTarget !== undefined && ['N5','N4','N3','N2','N1'].includes(body.jlptTarget)) {
           userData.profile.jlptTarget = body.jlptTarget;
+        }
+        if (body.privacy !== undefined && ['public', 'friends', 'private'].includes(body.privacy)) {
+          userData.profile.privacy = body.privacy;
         }
 
         await kv.put(`user:${auth.username}`, JSON.stringify(userData));
@@ -918,9 +1020,10 @@ export default {
           return jsonResponse({ error: 'Mật khẩu xác nhận không chính xác' }, 400, request);
         }
 
-        // Xóa session và tài khoản trong KV
+        // Xóa session, tài khoản và dữ liệu bạn bè trong KV
         await kv.delete(`session:${auth.token}`);
         await kv.delete(`user:${auth.username}`);
+        await kv.delete(`friends:${auth.username}`);
 
         return jsonResponse({
           success: true,
@@ -1015,6 +1118,545 @@ export default {
           success: true,
           myRank: userRank,
           leaderboard: list
+        }, 200, request);
+      }
+
+      // ══════════════════════════════════════════════════
+      // API: GET /api/profile/:username hoặc GET /api/profile?username=...
+      // Xem hồ sơ công khai của người khác theo cài đặt quyền riêng tư
+      // Không bao giờ trả về mật khẩu, salt, token, hay dữ liệu thô
+      // ══════════════════════════════════════════════════
+      if (method === 'GET' && (path === '/api/profile' || path.startsWith('/api/profile/'))) {
+        const auth = await authenticateToken(request, kv);
+        if (!auth) {
+          return jsonResponse({ error: 'Chưa đăng nhập' }, 401, request);
+        }
+
+        let targetUsername = '';
+        if (path.startsWith('/api/profile/')) {
+          targetUsername = path.substring('/api/profile/'.length).trim().toLowerCase();
+        } else if (url.searchParams.has('username')) {
+          targetUsername = url.searchParams.get('username').trim().toLowerCase();
+        } else {
+          // Trả về hồ sơ của chính mình
+          return jsonResponse({
+            success: true,
+            profile: getPublicProfile(auth.userData, auth.username, false),
+            isSelf: true
+          }, 200, request);
+        }
+
+        if (!USERNAME_REGEX.test(targetUsername)) {
+          return jsonResponse({ error: 'Tên người dùng không hợp lệ' }, 400, request);
+        }
+
+        const targetRaw = await kv.get(`user:${targetUsername}`);
+        if (!targetRaw) {
+          return jsonResponse({ error: 'Không tìm thấy người dùng' }, 404, request);
+        }
+
+        const targetData = JSON.parse(targetRaw);
+        const targetFriends = await getFriendsData(kv, targetUsername);
+        const viewerFriends = await getFriendsData(kv, auth.username);
+
+        // Kiểm tra chặn giữa hai bên
+        if (targetFriends.blocked.includes(auth.username) || viewerFriends.blocked.includes(targetUsername)) {
+          return jsonResponse({ error: 'Không tìm thấy người dùng' }, 404, request);
+        }
+
+        const isFriend = viewerFriends.friends.some(f => (typeof f === 'string' ? f : f.username) === targetUsername);
+        return jsonResponse({
+          success: true,
+          profile: getPublicProfile(targetData, auth.username, isFriend),
+          isSelf: targetUsername === auth.username
+        }, 200, request);
+      }
+
+      // ══════════════════════════════════════════════════
+      // API: GET /api/friends
+      // Lấy danh sách bạn bè, lời mời đang chờ và lời mời vào phòng
+      // ══════════════════════════════════════════════════
+      if (path === '/api/friends' && method === 'GET') {
+        const auth = await authenticateToken(request, kv);
+        if (!auth) {
+          return jsonResponse({ error: 'Chưa đăng nhập' }, 401, request);
+        }
+
+        const fData = await getFriendsData(kv, auth.username);
+        const now = Date.now();
+
+        // Dọn dẹp lời mời vào phòng hết hạn (> 15 phút)
+        const validInvites = fData.invites.filter(inv => (now - inv.time) < ROOM_INVITE_TTL_MS);
+        if (validInvites.length !== fData.invites.length) {
+          fData.invites = validInvites;
+          await kv.put(`friends:${auth.username}`, JSON.stringify(fData));
+        }
+
+        return jsonResponse({
+          success: true,
+          friends: fData.friends,
+          incoming: fData.incoming,
+          outgoing: fData.outgoing,
+          blocked: fData.blocked,
+          invites: fData.invites
+        }, 200, request);
+      }
+
+      // ══════════════════════════════════════════════════
+      // API: GET /api/friends/search
+      // Tìm kiếm bạn bè CHỈ bằng tên đăng nhập chính xác (Không duyệt / Không liệt kê)
+      // ══════════════════════════════════════════════════
+      if (path === '/api/friends/search' && method === 'GET') {
+        const auth = await authenticateToken(request, kv);
+        if (!auth) {
+          return jsonResponse({ error: 'Chưa đăng nhập' }, 401, request);
+        }
+
+        const target = (url.searchParams.get('username') || '').trim().toLowerCase();
+        if (!target || !USERNAME_REGEX.test(target)) {
+          return jsonResponse({ error: 'Tên đăng nhập không đúng định dạng (3-20 ký tự thường, số hoặc _)' }, 400, request);
+        }
+
+        if (target === auth.username) {
+          return jsonResponse({ error: 'Đây là tên đăng nhập của chính bạn' }, 400, request);
+        }
+
+        // Tra cứu CHÍNH XÁC khóa user:target, KHÔNG dùng list()
+        const targetRaw = await kv.get(`user:${target}`);
+        if (!targetRaw) {
+          return jsonResponse({ error: 'Không tìm thấy người dùng với tên đăng nhập này' }, 404, request);
+        }
+
+        const targetData = JSON.parse(targetRaw);
+        const targetFriends = await getFriendsData(kv, target);
+        const viewerFriends = await getFriendsData(kv, auth.username);
+
+        // Nếu một trong hai đã chặn nhau -> Giấu hoàn toàn
+        if (targetFriends.blocked.includes(auth.username) || viewerFriends.blocked.includes(target)) {
+          return jsonResponse({ error: 'Không tìm thấy người dùng với tên đăng nhập này' }, 404, request);
+        }
+
+        const isFriend = viewerFriends.friends.some(f => (typeof f === 'string' ? f : f.username) === target);
+        const hasOutgoing = viewerFriends.outgoing.some(req => (typeof req === 'string' ? req : req.to) === target);
+        const hasIncoming = viewerFriends.incoming.some(req => (typeof req === 'string' ? req : req.from) === target);
+
+        return jsonResponse({
+          success: true,
+          user: getPublicProfile(targetData, auth.username, isFriend),
+          relation: {
+            isFriend,
+            hasOutgoing,
+            hasIncoming,
+            isBlocked: false
+          }
+        }, 200, request);
+      }
+
+      // ══════════════════════════════════════════════════
+      // API: POST /api/friends/request
+      // Gửi lời mời kết bạn (giới hạn tốc độ theo User và IP, max 50 bạn, max 20 pending)
+      // ══════════════════════════════════════════════════
+      if (path === '/api/friends/request' && method === 'POST') {
+        const auth = await authenticateToken(request, kv);
+        if (!auth) {
+          return jsonResponse({ error: 'Chưa đăng nhập' }, 401, request);
+        }
+
+        // 1. Rate Limiting theo User
+        const userLimit = await checkRateLimit(kv, `friend_req:user:${auth.username}`, MAX_FRIEND_REQ_PER_USER);
+        if (!userLimit.allowed) {
+          return jsonResponse({
+            error: `Bạn đã gửi quá nhiều lời mời kết bạn (${MAX_FRIEND_REQ_PER_USER} lời mời / 15 phút). Vui lòng chờ ${userLimit.waitMinutes} phút!`
+          }, 429, request);
+        }
+
+        // 2. Rate Limiting theo IP
+        const ipLimit = await checkRateLimit(kv, `friend_req:ip:${clientIp}`, MAX_FRIEND_REQ_PER_IP);
+        if (!ipLimit.allowed) {
+          return jsonResponse({
+            error: `IP của bạn đã gửi quá nhiều lời mời kết bạn. Vui lòng chờ ${ipLimit.waitMinutes} phút!`
+          }, 429, request);
+        }
+
+        const parsed = await readJsonBody(request);
+        if (parsed.error) return jsonResponse({ error: parsed.error }, parsed.status, request);
+        const targetUsername = String(parsed.data.targetUsername || '').trim().toLowerCase();
+
+        if (!targetUsername || !USERNAME_REGEX.test(targetUsername)) {
+          return jsonResponse({ error: 'Tên người dùng không hợp lệ' }, 400, request);
+        }
+        if (targetUsername === auth.username) {
+          return jsonResponse({ error: 'Không thể tự gửi lời mời kết bạn cho chính mình' }, 400, request);
+        }
+
+        const targetRaw = await kv.get(`user:${targetUsername}`);
+        if (!targetRaw) {
+          return jsonResponse({ error: 'Không tìm thấy người dùng này' }, 404, request);
+        }
+        const targetData = JSON.parse(targetRaw);
+
+        const senderFData = await getFriendsData(kv, auth.username);
+        const targetFData = await getFriendsData(kv, targetUsername);
+
+        // Kiểm tra danh sách chặn
+        if (senderFData.blocked.includes(targetUsername)) {
+          return jsonResponse({ error: 'Bạn đã chặn người dùng này. Vui lòng bỏ chặn trước khi kết bạn.' }, 400, request);
+        }
+        if (targetFData.blocked.includes(auth.username)) {
+          return jsonResponse({ error: 'Không thể gửi lời mời đến người dùng này' }, 400, request);
+        }
+
+        // Kiểm tra đã là bạn bè chưa
+        const alreadyFriend = senderFData.friends.some(f => (typeof f === 'string' ? f : f.username) === targetUsername);
+        if (alreadyFriend) {
+          return jsonResponse({ error: 'Hai bạn đã là bạn bè rồi' }, 400, request);
+        }
+
+        // Kiểm tra đã gửi lời mời trước đó chưa
+        const alreadySent = senderFData.outgoing.some(r => (typeof r === 'string' ? r : r.to) === targetUsername);
+        if (alreadySent) {
+          return jsonResponse({ error: 'Bạn đã gửi lời mời kết bạn trước đó, đang chờ phản hồi' }, 400, request);
+        }
+
+        // Tự động chấp nhận nếu đối phương đã gửi lời mời cho mình trước đó
+        const mutualPendingIdx = senderFData.incoming.findIndex(r => (typeof r === 'string' ? r : r.from) === targetUsername);
+        if (mutualPendingIdx >= 0) {
+          if (senderFData.friends.length >= MAX_FRIENDS) {
+            return jsonResponse({ error: `Bạn đã đạt tối đa ${MAX_FRIENDS} bạn bè` }, 400, request);
+          }
+          if (targetFData.friends.length >= MAX_FRIENDS) {
+            return jsonResponse({ error: `Đối phương đã đạt tối đa ${MAX_FRIENDS} bạn bè` }, 400, request);
+          }
+
+          senderFData.incoming.splice(mutualPendingIdx, 1);
+          targetFData.outgoing = targetFData.outgoing.filter(r => (typeof r === 'string' ? r : r.to) !== auth.username);
+
+          senderFData.friends.push({
+            username: targetUsername,
+            displayName: targetData.profile?.displayName || targetUsername,
+            avatar: targetData.profile?.avatar || '🦊',
+            rank: targetData.gameData?.rank || 'Tập Sự',
+            streak: targetData.gameData?.streak || 0,
+            addedAt: Date.now()
+          });
+
+          targetFData.friends.push({
+            username: auth.username,
+            displayName: auth.userData.profile?.displayName || auth.username,
+            avatar: auth.userData.profile?.avatar || '🦊',
+            rank: auth.userData.gameData?.rank || 'Tập Sự',
+            streak: auth.userData.gameData?.streak || 0,
+            addedAt: Date.now()
+          });
+
+          await kv.put(`friends:${auth.username}`, JSON.stringify(senderFData));
+          await kv.put(`friends:${targetUsername}`, JSON.stringify(targetFData));
+
+          return jsonResponse({
+            success: true,
+            message: 'Đối phương đã gửi lời mời trước đó! Hai bạn đã chính thức trở thành bạn bè!',
+            autoAccepted: true
+          }, 200, request);
+        }
+
+        // Giới hạn số lượng bạn bè tối đa 50
+        if (senderFData.friends.length >= MAX_FRIENDS) {
+          return jsonResponse({ error: `Bạn đã đạt giới hạn tối đa ${MAX_FRIENDS} bạn bè. Hãy xóa bớt trước khi thêm mới!` }, 400, request);
+        }
+        if (targetFData.friends.length >= MAX_FRIENDS) {
+          return jsonResponse({ error: `Người dùng này đã đạt giới hạn tối đa ${MAX_FRIENDS} bạn bè` }, 400, request);
+        }
+
+        // Giới hạn lời mời chờ tối đa 20
+        if (senderFData.outgoing.length >= MAX_PENDING_REQUESTS) {
+          return jsonResponse({ error: `Bạn đang có tối đa ${MAX_PENDING_REQUESTS} lời mời đang chờ phản hồi. Vui lòng hủy bớt lời mời cũ!` }, 400, request);
+        }
+        if (targetFData.incoming.length >= MAX_PENDING_REQUESTS) {
+          return jsonResponse({ error: `Hộp thư của người dùng này đang có quá nhiều lời mời chờ xử lý (tối đa ${MAX_PENDING_REQUESTS})` }, 400, request);
+        }
+
+        // Thêm vào danh sách chờ
+        senderFData.outgoing.push({
+          to: targetUsername,
+          displayName: targetData.profile?.displayName || targetUsername,
+          avatar: targetData.profile?.avatar || '🦊',
+          time: Date.now()
+        });
+
+        targetFData.incoming.push({
+          from: auth.username,
+          displayName: auth.userData.profile?.displayName || auth.username,
+          avatar: auth.userData.profile?.avatar || '🦊',
+          time: Date.now()
+        });
+
+        await kv.put(`friends:${auth.username}`, JSON.stringify(senderFData));
+        await kv.put(`friends:${targetUsername}`, JSON.stringify(targetFData));
+
+        // Ghi nhận Rate Limit
+        await recordRateLimit(kv, `friend_req:user:${auth.username}`, MAX_FRIEND_REQ_PER_USER, FRIEND_REQ_USER_WINDOW_SECONDS);
+        await recordRateLimit(kv, `friend_req:ip:${clientIp}`, MAX_FRIEND_REQ_PER_IP, FRIEND_REQ_IP_WINDOW_SECONDS);
+
+        return jsonResponse({
+          success: true,
+          message: 'Đã gửi lời mời kết bạn thành công!'
+        }, 200, request);
+      }
+
+      // ══════════════════════════════════════════════════
+      // API: POST /api/friends/accept
+      // Chấp nhận lời mời kết bạn
+      // ══════════════════════════════════════════════════
+      if (path === '/api/friends/accept' && method === 'POST') {
+        const auth = await authenticateToken(request, kv);
+        if (!auth) return jsonResponse({ error: 'Chưa đăng nhập' }, 401, request);
+
+        const parsed = await readJsonBody(request);
+        if (parsed.error) return jsonResponse({ error: parsed.error }, parsed.status, request);
+        const targetUsername = String(parsed.data.targetUsername || '').trim().toLowerCase();
+
+        const senderFData = await getFriendsData(kv, auth.username);
+        const incIdx = senderFData.incoming.findIndex(r => (typeof r === 'string' ? r : r.from) === targetUsername);
+        if (incIdx === -1) {
+          return jsonResponse({ error: 'Không tìm thấy lời mời kết bạn từ người dùng này' }, 400, request);
+        }
+
+        const targetFData = await getFriendsData(kv, targetUsername);
+        const targetRaw = await kv.get(`user:${targetUsername}`);
+        if (!targetRaw) {
+          return jsonResponse({ error: 'Tài khoản người gửi không còn tồn tại' }, 404, request);
+        }
+        const targetData = JSON.parse(targetRaw);
+
+        if (senderFData.friends.length >= MAX_FRIENDS) {
+          return jsonResponse({ error: `Bạn đã đạt tối đa ${MAX_FRIENDS} bạn bè` }, 400, request);
+        }
+        if (targetFData.friends.length >= MAX_FRIENDS) {
+          return jsonResponse({ error: `Đối phương đã đạt tối đa ${MAX_FRIENDS} bạn bè` }, 400, request);
+        }
+
+        // Xóa khỏi pending
+        senderFData.incoming.splice(incIdx, 1);
+        targetFData.outgoing = targetFData.outgoing.filter(r => (typeof r === 'string' ? r : r.to) !== auth.username);
+
+        // Thêm vào danh sách bạn bè 2 chiều
+        if (!senderFData.friends.some(f => (typeof f === 'string' ? f : f.username) === targetUsername)) {
+          senderFData.friends.push({
+            username: targetUsername,
+            displayName: targetData.profile?.displayName || targetUsername,
+            avatar: targetData.profile?.avatar || '🦊',
+            rank: targetData.gameData?.rank || 'Tập Sự',
+            streak: targetData.gameData?.streak || 0,
+            addedAt: Date.now()
+          });
+        }
+
+        if (!targetFData.friends.some(f => (typeof f === 'string' ? f : f.username) === auth.username)) {
+          targetFData.friends.push({
+            username: auth.username,
+            displayName: auth.userData.profile?.displayName || auth.username,
+            avatar: auth.userData.profile?.avatar || '🦊',
+            rank: auth.userData.gameData?.rank || 'Tập Sự',
+            streak: auth.userData.gameData?.streak || 0,
+            addedAt: Date.now()
+          });
+        }
+
+        await kv.put(`friends:${auth.username}`, JSON.stringify(senderFData));
+        await kv.put(`friends:${targetUsername}`, JSON.stringify(targetFData));
+
+        return jsonResponse({
+          success: true,
+          message: 'Đã chấp nhận lời mời kết bạn thành công!',
+          friend: {
+            username: targetUsername,
+            displayName: targetData.profile?.displayName || targetUsername,
+            avatar: targetData.profile?.avatar || '🦊',
+            rank: targetData.gameData?.rank || 'Tập Sự',
+            streak: targetData.gameData?.streak || 0
+          }
+        }, 200, request);
+      }
+
+      // ══════════════════════════════════════════════════
+      // API: POST /api/friends/reject
+      // Từ chối lời mời kết bạn
+      // ══════════════════════════════════════════════════
+      if (path === '/api/friends/reject' && method === 'POST') {
+        const auth = await authenticateToken(request, kv);
+        if (!auth) return jsonResponse({ error: 'Chưa đăng nhập' }, 401, request);
+
+        const parsed = await readJsonBody(request);
+        if (parsed.error) return jsonResponse({ error: parsed.error }, parsed.status, request);
+        const targetUsername = String(parsed.data.targetUsername || '').trim().toLowerCase();
+
+        const senderFData = await getFriendsData(kv, auth.username);
+        senderFData.incoming = senderFData.incoming.filter(r => (typeof r === 'string' ? r : r.from) !== targetUsername);
+        await kv.put(`friends:${auth.username}`, JSON.stringify(senderFData));
+
+        const targetFData = await getFriendsData(kv, targetUsername);
+        targetFData.outgoing = targetFData.outgoing.filter(r => (typeof r === 'string' ? r : r.to) !== auth.username);
+        await kv.put(`friends:${targetUsername}`, JSON.stringify(targetFData));
+
+        return jsonResponse({ success: true, message: 'Đã từ chối lời mời kết bạn' }, 200, request);
+      }
+
+      // ══════════════════════════════════════════════════
+      // API: POST /api/friends/cancel
+      // Hủy lời mời kết bạn đã gửi đi
+      // ══════════════════════════════════════════════════
+      if (path === '/api/friends/cancel' && method === 'POST') {
+        const auth = await authenticateToken(request, kv);
+        if (!auth) return jsonResponse({ error: 'Chưa đăng nhập' }, 401, request);
+
+        const parsed = await readJsonBody(request);
+        if (parsed.error) return jsonResponse({ error: parsed.error }, parsed.status, request);
+        const targetUsername = String(parsed.data.targetUsername || '').trim().toLowerCase();
+
+        const senderFData = await getFriendsData(kv, auth.username);
+        senderFData.outgoing = senderFData.outgoing.filter(r => (typeof r === 'string' ? r : r.to) !== targetUsername);
+        await kv.put(`friends:${auth.username}`, JSON.stringify(senderFData));
+
+        const targetFData = await getFriendsData(kv, targetUsername);
+        targetFData.incoming = targetFData.incoming.filter(r => (typeof r === 'string' ? r : r.from) !== auth.username);
+        await kv.put(`friends:${targetUsername}`, JSON.stringify(targetFData));
+
+        return jsonResponse({ success: true, message: 'Đã hủy lời mời kết bạn' }, 200, request);
+      }
+
+      // ══════════════════════════════════════════════════
+      // API: POST /api/friends/remove
+      // Hủy kết bạn
+      // ══════════════════════════════════════════════════
+      if (path === '/api/friends/remove' && method === 'POST') {
+        const auth = await authenticateToken(request, kv);
+        if (!auth) return jsonResponse({ error: 'Chưa đăng nhập' }, 401, request);
+
+        const parsed = await readJsonBody(request);
+        if (parsed.error) return jsonResponse({ error: parsed.error }, parsed.status, request);
+        const targetUsername = String(parsed.data.targetUsername || '').trim().toLowerCase();
+
+        const senderFData = await getFriendsData(kv, auth.username);
+        senderFData.friends = senderFData.friends.filter(f => (typeof f === 'string' ? f : f.username) !== targetUsername);
+        await kv.put(`friends:${auth.username}`, JSON.stringify(senderFData));
+
+        const targetFData = await getFriendsData(kv, targetUsername);
+        targetFData.friends = targetFData.friends.filter(f => (typeof f === 'string' ? f : f.username) !== auth.username);
+        await kv.put(`friends:${targetUsername}`, JSON.stringify(targetFData));
+
+        return jsonResponse({ success: true, message: 'Đã hủy kết bạn thành công' }, 200, request);
+      }
+
+      // ══════════════════════════════════════════════════
+      // API: POST /api/friends/block
+      // Chặn người dùng (hủy kết bạn, hủy lời mời hai bên, đưa vào danh sách chặn)
+      // ══════════════════════════════════════════════════
+      if (path === '/api/friends/block' && method === 'POST') {
+        const auth = await authenticateToken(request, kv);
+        if (!auth) return jsonResponse({ error: 'Chưa đăng nhập' }, 401, request);
+
+        const parsed = await readJsonBody(request);
+        if (parsed.error) return jsonResponse({ error: parsed.error }, parsed.status, request);
+        const targetUsername = String(parsed.data.targetUsername || '').trim().toLowerCase();
+
+        if (!targetUsername || targetUsername === auth.username) {
+          return jsonResponse({ error: 'Tên người dùng không hợp lệ' }, 400, request);
+        }
+
+        const senderFData = await getFriendsData(kv, auth.username);
+        senderFData.friends = senderFData.friends.filter(f => (typeof f === 'string' ? f : f.username) !== targetUsername);
+        senderFData.incoming = senderFData.incoming.filter(r => (typeof r === 'string' ? r : r.from) !== targetUsername);
+        senderFData.outgoing = senderFData.outgoing.filter(r => (typeof r === 'string' ? r : r.to) !== targetUsername);
+
+        if (!senderFData.blocked.includes(targetUsername)) {
+          senderFData.blocked.push(targetUsername);
+        }
+        await kv.put(`friends:${auth.username}`, JSON.stringify(senderFData));
+
+        const targetFData = await getFriendsData(kv, targetUsername);
+        targetFData.friends = targetFData.friends.filter(f => (typeof f === 'string' ? f : f.username) !== auth.username);
+        targetFData.incoming = targetFData.incoming.filter(r => (typeof r === 'string' ? r : r.from) !== auth.username);
+        targetFData.outgoing = targetFData.outgoing.filter(r => (typeof r === 'string' ? r : r.to) !== auth.username);
+        await kv.put(`friends:${targetUsername}`, JSON.stringify(targetFData));
+
+        return jsonResponse({ success: true, message: 'Đã chặn người dùng này thành công' }, 200, request);
+      }
+
+      // ══════════════════════════════════════════════════
+      // API: POST /api/friends/unblock
+      // Bỏ chặn người dùng
+      // ══════════════════════════════════════════════════
+      if (path === '/api/friends/unblock' && method === 'POST') {
+        const auth = await authenticateToken(request, kv);
+        if (!auth) return jsonResponse({ error: 'Chưa đăng nhập' }, 401, request);
+
+        const parsed = await readJsonBody(request);
+        if (parsed.error) return jsonResponse({ error: parsed.error }, parsed.status, request);
+        const targetUsername = String(parsed.data.targetUsername || '').trim().toLowerCase();
+
+        const senderFData = await getFriendsData(kv, auth.username);
+        senderFData.blocked = senderFData.blocked.filter(u => u !== targetUsername);
+        await kv.put(`friends:${auth.username}`, JSON.stringify(senderFData));
+
+        return jsonResponse({ success: true, message: 'Đã bỏ chặn người dùng' }, 200, request);
+      }
+
+      // ══════════════════════════════════════════════════
+      // API: POST /api/friends/invite-room
+      // Mời bạn bè vào phòng chơi (chỉ cho phép bạn bè, không có chat tự do)
+      // ══════════════════════════════════════════════════
+      if (path === '/api/friends/invite-room' && method === 'POST') {
+        const auth = await authenticateToken(request, kv);
+        if (!auth) return jsonResponse({ error: 'Chưa đăng nhập' }, 401, request);
+
+        const parsed = await readJsonBody(request);
+        if (parsed.error) return jsonResponse({ error: parsed.error }, parsed.status, request);
+        const targetUsername = String(parsed.data.targetUsername || '').trim().toLowerCase();
+        const roomCode = String(parsed.data.roomCode || '').trim().toUpperCase();
+        const gameMode = String(parsed.data.gameMode || 'party').slice(0, 30);
+
+        if (!roomCode || roomCode.length < 4 || roomCode.length > 8) {
+          return jsonResponse({ error: 'Mã phòng không hợp lệ' }, 400, request);
+        }
+
+        const senderFData = await getFriendsData(kv, auth.username);
+        const isFriend = senderFData.friends.some(f => (typeof f === 'string' ? f : f.username) === targetUsername);
+        if (!isFriend) {
+          return jsonResponse({ error: 'Chỉ có thể gửi lời mời vào phòng cho người trong danh sách bạn bè' }, 403, request);
+        }
+
+        const targetFData = await getFriendsData(kv, targetUsername);
+        if (targetFData.blocked.includes(auth.username)) {
+          return jsonResponse({ error: 'Không thể gửi lời mời đến người dùng này' }, 403, request);
+        }
+
+        // Dọn dẹp lời mời hết hạn
+        const now = Date.now();
+        targetFData.invites = targetFData.invites.filter(inv => (now - inv.time) < ROOM_INVITE_TTL_MS);
+
+        // Chống spam mời cùng một mã phòng liên tục trong 60 giây
+        const existingSame = targetFData.invites.find(inv => inv.from === auth.username && inv.roomCode === roomCode && (now - inv.time) < 60000);
+        if (existingSame) {
+          return jsonResponse({ error: 'Bạn vừa gửi lời mời phòng này. Vui lòng chờ 1 phút!' }, 429, request);
+        }
+
+        targetFData.invites.unshift({
+          from: auth.username,
+          displayName: auth.userData.profile?.displayName || auth.username,
+          avatar: auth.userData.profile?.avatar || '🦊',
+          roomCode,
+          gameMode,
+          time: now
+        });
+
+        // Giữ tối đa 5 lời mời hoạt động
+        targetFData.invites = targetFData.invites.slice(0, MAX_ACTIVE_ROOM_INVITES);
+
+        await kv.put(`friends:${targetUsername}`, JSON.stringify(targetFData));
+
+        return jsonResponse({
+          success: true,
+          message: `Đã gửi lời mời tham gia phòng ${roomCode} tới ${targetUsername}!`
         }, 200, request);
       }
 
