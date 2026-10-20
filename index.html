@@ -2479,6 +2479,10 @@ small, .text-xs, .nav-item .label, [style*="font-size:.7"], [style*="font-size: 
         </div>
         <button class="sfx-btn" id="sfxToggle" onclick="toggleSfx()" title="Bật/Tắt âm thanh điện tử">🔊</button>
         <button class="sfx-btn" id="vfxToggle" onclick="toggleVfx()" title="Bật/Tắt hiệu ứng rung & nổ (VFX)">✨</button>
+        <button class="sfx-btn" id="headerFriendsBtn" onclick="openFriendsModal()" title="Hệ thống bạn bè & Lời mời" style="position:relative">
+          👥
+          <span class="badge-count-pill" id="friendsPendingBadge" style="display:none;position:absolute;top:-4px;right:-4px;background:var(--neon-pink);color:#fff;font-size:10px;font-weight:900;border-radius:10px;padding:1px 5px;line-height:1.2">0</span>
+        </button>
         <button class="sfx-btn" id="headerLeaderboardBtn" onclick="openLeaderboardModal()" title="Bảng xếp hạng tuần">🏆</button>
         <button class="sfx-btn" id="themeQuickToggleBtn" onclick="openThemePickerModal()" title="Đổi phong cách giao diện & Sáng/Tối">🎨</button>
         <button class="sfx-btn" id="settingsBtn" onclick="openSettingsModal()" title="Cài đặt giọng đọc tiếng Nhật & hệ thống">⚙️</button>
@@ -2519,6 +2523,13 @@ small, .text-xs, .nav-item .label, [style*="font-size:.7"], [style*="font-size: 
             </div>
           </div>
         </div>
+
+        <!-- Quick Access: Friends & Invites -->
+        <button class="btn btn-ghost btn-full btn-sm" onclick="openFriendsModal()" style="margin-bottom:.75rem;display:flex;align-items:center;justify-content:center;gap:.45rem;font-weight:700;font-size:.82rem;border:1px solid var(--border)">
+          <span>👥</span>
+          <span>Bạn Bè & Lời Mời</span>
+          <span id="hubFriendsBadge" style="display:none;background:var(--neon-pink);color:#fff;font-size:10px;font-weight:900;padding:1px 6px;border-radius:10px">0</span>
+        </button>
 
         <!-- Sakura Bot Virtual Pet Companion Card -->
         <div class="card hub-sakura-pet-area" id="sakuraPetCard" style="background:linear-gradient(135deg, rgba(255, 42, 109, 0.12), rgba(0, 240, 255, 0.08));border:1.5px solid var(--neon-sakura);border-radius:var(--radius-md);padding:1rem;margin-bottom:1rem">
@@ -2567,18 +2578,27 @@ small, .text-xs, .nav-item .label, [style*="font-size:.7"], [style*="font-size: 
           </div>
         </div>
 
-        <!-- 10-Minute Daily Study Ritual (Guided Quest) -->
-        <div class="ritual-card hub-ritual-area">
-          <div class="ritual-tag">★ NHIỆM VỤ HÀNG NGÀY</div>
-          <div class="ritual-title">Nghi Thức 10 Phút Luyện Tập</div>
-          <div class="ritual-sub">Hoàn thành 4 chặng để giữ vững Streak và nhận +50 EXP thưởng!</div>
-          <div class="ritual-steps">
-            <div class="step-chip" id="rStep1">1. Flashcard</div>
-            <div class="step-chip" id="rStep2">2. Phát âm</div>
-            <div class="step-chip" id="rStep3">3. Nhạc Anime</div>
-            <div class="step-chip" id="rStep4">4. Shiritori</div>
+        <!-- 10-Minute Daily Study Ritual (Guided Quest) & 4 Random Daily Quests -->
+        <div class="ritual-card hub-ritual-area" id="dailyQuestsHubCard">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.35rem">
+            <div class="ritual-tag">★ NHIỆM VỤ HÀNG NGÀY</div>
+            <span style="font-size:.72rem;color:var(--neon-gold);font-weight:700" id="dailyQuestsDateBadge">Hôm nay</span>
           </div>
-          <button class="btn btn-primary btn-full" onclick="startDailyRitual()">Bắt Đầu Nghi Thức Hôm Nay ⚡</button>
+          <div class="ritual-title" style="font-size:1.05rem">Nhiệm Vụ Hằng Ngày Ngẫu Nhiên</div>
+          <div class="ritual-sub" style="font-size:.75rem;margin-bottom:.65rem">
+            4 thử thách đồng bộ hôm nay theo hạt giống ngày. Hoàn thành để nhận EXP và giữ chuỗi Streak!
+          </div>
+
+          <!-- Dynamic 4 Quests List Container -->
+          <div id="dailyQuestsListContainer" style="display:flex;flex-direction:column;gap:.45rem;margin-bottom:.75rem">
+            <!-- Danh sách 4 nhiệm vụ được khởi tạo tự động theo ngày -->
+          </div>
+
+          <div style="display:flex;gap:.4rem">
+            <button class="btn btn-primary btn-full btn-sm" onclick="startDailyRitual()" style="font-size:.78rem">
+              ⚡ Nghi Thức 10 Phút Luyện Tập
+            </button>
+          </div>
           <div id="dailyRitualMysteryBoxBadge" style="margin-top:.45rem;font-size:.75rem;display:flex;align-items:center;justify-content:center;gap:.35rem;color:var(--neon-gold)">🎁 Thưởng: Hộp Quà Vật Phẩm Ảo Hàng Ngày</div>
         </div>
 
@@ -2634,6 +2654,49 @@ small, .text-xs, .nav-item .label, [style*="font-size:.7"], [style*="font-size: 
               <div style="font-family:var(--font-arcade);font-size:1.35rem;font-weight:800;color:var(--neon-sakura)" id="statWins">0</div>
               <div style="font-size:12px;color:var(--text-muted)">Chiến Thắng 2P</div>
             </div>
+          </div>
+        </div>
+
+        <!-- Interactive Learning Analytics Canvas Chart (Zero External Libraries) -->
+        <div class="card hub-analytics-card" style="margin-top:1rem;padding:1rem;background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-md)">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem;flex-wrap:wrap;gap:.4rem">
+            <div style="font-size:.85rem;font-weight:800;color:var(--text-primary);display:flex;align-items:center;gap:.35rem">
+              <span>📈</span>
+              <span>BIỂU ĐỒ TIẾN ĐỘ HỌC TẬP (CANVAS)</span>
+            </div>
+            <div style="display:flex;gap:.25rem" id="analyticsChartTabs">
+              <button class="btn btn-sm btn-cyan analytics-tab-btn" id="btnChartExp7" onclick="switchAnalyticsTab('exp7')" style="font-size:.7rem;padding:.2rem .45rem">EXP 7 Ngày</button>
+              <button class="btn btn-sm btn-ghost analytics-tab-btn" id="btnChartExp30" onclick="switchAnalyticsTab('exp30')" style="font-size:.7rem;padding:.2rem .45rem">EXP 30 Ngày</button>
+              <button class="btn btn-sm btn-ghost analytics-tab-btn" id="btnChartMastery" onclick="switchAnalyticsTab('mastery')" style="font-size:.7rem;padding:.2rem .45rem">Từ Thuộc N5-N3</button>
+            </div>
+          </div>
+
+          <!-- Quick Metrics Bar -->
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.35rem;text-align:center;margin-bottom:.75rem">
+            <div style="background:var(--bg-card);padding:.35rem .25rem;border-radius:var(--radius-sm);border:1px solid var(--border)">
+              <div style="font-size:.65rem;color:var(--text-muted)">Tỉ Lệ Đúng</div>
+              <div style="font-family:var(--font-arcade);font-size:1rem;color:var(--neon-lime);font-weight:800" id="analyticsAccuracyText">100%</div>
+            </div>
+            <div style="background:var(--bg-card);padding:.35rem .25rem;border-radius:var(--radius-sm);border:1px solid var(--border)">
+              <div style="font-size:.65rem;color:var(--text-muted)">Chuỗi Streak</div>
+              <div style="font-family:var(--font-arcade);font-size:1rem;color:var(--neon-gold);font-weight:800" id="analyticsStreakText">1 Ngày</div>
+            </div>
+            <div style="background:var(--bg-card);padding:.35rem .25rem;border-radius:var(--radius-sm);border:1px solid var(--border)">
+              <div style="font-size:.65rem;color:var(--text-muted)">EXP Hôm Nay</div>
+              <div style="font-family:var(--font-arcade);font-size:1rem;color:var(--neon-cyan);font-weight:800" id="analyticsTodayExpText">+0</div>
+            </div>
+            <div style="background:var(--bg-card);padding:.35rem .25rem;border-radius:var(--radius-sm);border:1px solid var(--border)">
+              <div style="font-size:.65rem;color:var(--text-muted)">Tổng Thuộc</div>
+              <div style="font-family:var(--font-arcade);font-size:1rem;color:var(--neon-sakura);font-weight:800" id="analyticsTotalMasteredText">0 từ</div>
+            </div>
+          </div>
+
+          <!-- Canvas Drawing Box -->
+          <div style="position:relative;width:100%;height:190px;background:rgba(0,0,0,0.25);border-radius:var(--radius-sm);border:1px solid rgba(255,255,255,0.06);overflow:hidden">
+            <canvas id="learningAnalyticsCanvas" style="width:100%;height:100%;display:block"></canvas>
+          </div>
+          <div style="font-size:.68rem;color:var(--text-muted);margin-top:.4rem;text-align:center" id="analyticsCanvasCaption">
+            Tự động đồng bộ và lưu lịch sử học tập vào thiết bị sau mỗi phiên học.
           </div>
         </div>
       </aside>
@@ -2989,6 +3052,39 @@ small, .text-xs, .nav-item .label, [style*="font-size:.7"], [style*="font-size: 
             <div style="font-size:.8rem;color:var(--text-muted);font-weight:700">MÃ PHÒNG CỦA BẠN (CHẠM ĐỂ CHÉP):</div>
             <div class="room-code-tag" id="partyRoomCode" onclick="copyRoomCode()" title="Chạm để sao chép" style="font-size:1.8rem;letter-spacing:.2em;margin:.4rem 0">...</div>
             <div style="font-size:.82rem;color:var(--neon-cyan);cursor:pointer" id="copyStatusText" onclick="copyRoomCode()">📋 Gửi mã này cho bạn bè để cùng kết nối</div>
+            <button class="btn btn-cyan btn-sm btn-full" onclick="openInviteFriendsToPartyModal()" style="margin-top:.65rem;font-weight:800;font-size:.82rem;display:flex;align-items:center;justify-content:center;gap:.35rem">
+              📨 Mời Bạn Bè Vào Phòng Này
+            </button>
+          </div>
+
+          <!-- Host Bot Control Box -->
+          <div style="margin-top:.85rem;padding:.75rem;background:rgba(255,42,109,0.06);border:1px solid var(--neon-pink);border-radius:var(--radius-md)">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div>
+                <strong style="font-size:.85rem;color:var(--text-primary);display:flex;align-items:center;gap:.35rem">
+                  <span>🤖</span>
+                  <span>Đối Thủ Bot (Luyện Tập Tự Động)</span>
+                </strong>
+                <div style="font-size:.72rem;color:var(--text-muted)">Chơi tất cả chế độ nhiều người cùng Bot AI</div>
+              </div>
+              <button class="btn btn-sm btn-ghost" id="partyBotToggleBtn" onclick="togglePartyBot()">BẬT BOT</button>
+            </div>
+            <div id="partyBotConfigArea" style="display:none;margin-top:.6rem;padding-top:.5rem;border-top:1px dashed rgba(255,42,109,0.3)">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem;flex-wrap:wrap;gap:.35rem">
+                <span style="font-size:.75rem;color:var(--text-secondary)">Độ khó của Bot:</span>
+                <div style="display:flex;gap:.25rem" id="partyBotDiffButtonGroup">
+                  <button class="btn btn-sm btn-cyan party-bot-diff-btn" id="pBotDiffEasy" onclick="setPartyBotDifficulty('easy')">Dễ</button>
+                  <button class="btn btn-sm btn-ghost party-bot-diff-btn" id="pBotDiffMed" onclick="setPartyBotDifficulty('med')">Vừa</button>
+                  <button class="btn btn-sm btn-ghost party-bot-diff-btn" id="pBotDiffHard" onclick="setPartyBotDifficulty('hard')">Khó</button>
+                </div>
+              </div>
+              <button class="btn btn-primary btn-sm btn-full" onclick="startPartyWithBot()" style="font-weight:800;font-size:.82rem">
+                🚀 Vào Phòng Chơi Ngay Cùng Bot
+              </button>
+              <div style="font-size:.7rem;color:var(--text-muted);text-align:center;margin-top:.35rem">
+                🔒 Trận đấu với Bot là luyện tập, không tính vào BXH hay thống kê.
+              </div>
+            </div>
           </div>
 
           <div style="margin-top:.75rem">
@@ -3017,6 +3113,9 @@ small, .text-xs, .nav-item .label, [style*="font-size:.7"], [style*="font-size: 
 
     <!-- Active Connected Room (Hidden until connected) -->
     <div id="activePartyRoom" style="display:none">
+      <div id="partyBotActiveNotice" style="display:none;font-size:.78rem;color:var(--neon-gold);text-align:center;margin-bottom:.75rem;background:rgba(255,215,0,0.08);padding:.4rem .8rem;border-radius:var(--radius-sm);border:1px solid rgba(255,215,0,0.25)">
+        🤖 Chế độ đối thủ Bot đang kích hoạt • Không tính vào Bảng Xếp Hạng PvP
+      </div>
       <div class="party-room-grid">
         <div class="party-sidebar-col">
           <!-- Live Scoreboard -->
@@ -3030,7 +3129,24 @@ small, .text-xs, .nav-item .label, [style*="font-size:.7"], [style*="font-size: 
             <div class="vs-player">
               <div class="vs-avatar p2" id="p2Avatar">🥷</div>
               <div style="font-weight:700;font-size:.85rem" id="p2Name">Đối Thủ</div>
+              <span id="p2BotBadge" style="display:none;font-size:.65rem;background:var(--neon-pink);color:#fff;padding:.1rem .4rem;border-radius:var(--radius-full);font-weight:800;margin-top:2px">🤖 BOT</span>
               <div class="vs-score" id="p2Score">0</div>
+            </div>
+          </div>
+
+          <!-- In-Room Host Bot Controls -->
+          <div class="card" id="inRoomBotCard" style="margin-bottom:.75rem;padding:.75rem;background:rgba(255,42,109,0.06);border:1px solid rgba(255,42,109,0.25)">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <span style="font-size:.78rem;font-weight:700;color:var(--text-primary)">🤖 Đối Thủ Bot:</span>
+              <button class="btn btn-xs btn-ghost" id="inRoomBotToggleBtn" onclick="toggleInRoomPartyBot()" style="font-size:.72rem">BẬT BOT</button>
+            </div>
+            <div id="inRoomBotDiffRow" style="display:none;justify-content:space-between;align-items:center;margin-top:.45rem;padding-top:.45rem;border-top:1px dashed var(--border)">
+              <span style="font-size:.72rem;color:var(--text-muted)">Độ khó:</span>
+              <div style="display:flex;gap:.25rem" id="inRoomBotDiffGroup">
+                <button class="btn btn-xs btn-cyan inroom-diff-btn" id="inRoomDiffEasy" onclick="setPartyBotDifficulty('easy')">Dễ</button>
+                <button class="btn btn-xs btn-ghost inroom-diff-btn" id="inRoomDiffMed" onclick="setPartyBotDifficulty('med')">Vừa</button>
+                <button class="btn btn-xs btn-ghost inroom-diff-btn" id="inRoomDiffHard" onclick="setPartyBotDifficulty('hard')">Khó</button>
+              </div>
             </div>
           </div>
 
@@ -3058,6 +3174,8 @@ small, .text-xs, .nav-item .label, [style*="font-size:.7"], [style*="font-size: 
               </button>
             </div>
           </div>
+
+          <button class="btn btn-ghost btn-sm btn-full" style="margin-top:.75rem" onclick="leavePartyRoom()">🚪 Rời Phòng / Về Sảnh</button>
         </div>
 
         <div class="party-arena-col">
@@ -3142,11 +3260,48 @@ small, .text-xs, .nav-item .label, [style*="font-size:.7"], [style*="font-size: 
         </div>
 
         <!-- Level Selector for Dojo -->
-        <div style="display:flex;gap:.35rem;margin-bottom:1rem;flex-wrap:wrap">
+        <div style="display:flex;gap:.35rem;margin-bottom:.75rem;flex-wrap:wrap">
           <button class="btn btn-sm btn-cyan dojo-lvl-btn" id="dojoLvlAll" onclick="setDojoLevel('ALL')">Tất Cả (2,126)</button>
           <button class="btn btn-sm btn-ghost dojo-lvl-btn" id="dojoLvlN5" onclick="setDojoLevel('N5')">N5 (660)</button>
           <button class="btn btn-sm btn-ghost dojo-lvl-btn" id="dojoLvlN4" onclick="setDojoLevel('N4')">N4 (646)</button>
           <button class="btn btn-sm btn-ghost dojo-lvl-btn" id="dojoLvlN3" onclick="setDojoLevel('N3')">N3 (820)</button>
+        </div>
+
+        <!-- Chế độ học theo chủ đề (Topic Filter) -->
+        <div style="margin-bottom:.75rem">
+          <label style="font-size:.72rem;color:var(--text-muted);display:block;margin-bottom:.25rem;font-weight:700">🏷️ CHỦ ĐỀ HỌC TẬP:</label>
+          <select id="dojoCategorySelect" class="form-select" onchange="onDojoCategoryChange(this.value)" style="width:100%;font-size:.8rem;padding:.4rem .6rem;background:var(--bg-card);color:var(--text-primary);border:1px solid var(--border);border-radius:var(--radius-sm)">
+            <option value="ALL">🌸 Tất Cả 90 Chủ Đề (Toàn Bộ Kho)</option>
+          </select>
+        </div>
+
+        <!-- Chọn số từ mỗi phiên (Session Size Selector) -->
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem;background:var(--bg-card);padding:.4rem .65rem;border-radius:var(--radius-sm);border:1px solid var(--border)">
+          <span style="font-size:.75rem;color:var(--text-secondary);font-weight:700">⏱️ Số từ mỗi phiên:</span>
+          <select id="dojoSessionSizeSelect" onchange="onDojoSessionSizeChange(this.value)" style="font-size:.75rem;padding:.2rem .4rem;background:var(--bg-surface);color:var(--neon-cyan);border:1px solid var(--border);border-radius:var(--radius-sm);font-weight:700">
+            <option value="5">5 từ / phiên</option>
+            <option value="10" selected>10 từ / phiên</option>
+            <option value="15">15 từ / phiên</option>
+            <option value="20">20 từ / phiên</option>
+            <option value="30">30 từ / phiên</option>
+          </select>
+        </div>
+
+        <!-- Gợi ý học tiếp theo thông minh (Smart SRS & Mistakes Recommendation) -->
+        <div class="card" id="dojoRecommendationCard" style="margin-bottom:1rem;background:linear-gradient(135deg, rgba(255,190,11,0.08), rgba(5,217,232,0.08));border:1px solid rgba(255,190,11,0.3);padding:.85rem">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.35rem">
+            <div style="display:flex;align-items:center;gap:.35rem">
+              <span style="font-size:1.1rem">🎯</span>
+              <span style="font-size:.78rem;font-weight:800;color:var(--neon-gold);letter-spacing:.03em">GỢI Ý HỌC HÔM NAY</span>
+            </div>
+            <span id="dojoRecBadge" style="font-size:.68rem;background:rgba(255,190,11,0.2);color:var(--neon-gold);padding:.1rem .4rem;border-radius:var(--radius-full);font-weight:800">SRS</span>
+          </div>
+          <div id="dojoRecText" style="font-size:.8rem;color:var(--text-secondary);margin-bottom:.65rem;line-height:1.45">
+            Đang phân tích dữ liệu ôn tập ngắt quãng và từ hay sai...
+          </div>
+          <button class="btn btn-sm btn-primary btn-full" id="dojoRecActionBtn" onclick="startRecommendedStudy()" style="font-size:.75rem;font-weight:800">
+            ⚡ Bắt Đầu Ôn Gợi Ý Ngay
+          </button>
         </div>
 
         <!-- Dojo Quick Guide Card on Desktop -->
@@ -3916,6 +4071,17 @@ small, .text-xs, .nav-item .label, [style*="font-size:.7"], [style*="font-size: 
       <input class="inp" id="profileBioInput" placeholder="Ví dụ: Chăm chỉ luyện từ vựng mỗi tối!" maxlength="150" style="width:100%">
     </div>
 
+    <!-- Cài đặt Quyền Riêng Tư (Mặc định: Chỉ Bạn Bè) -->
+    <div style="margin-bottom:1rem">
+      <label style="font-size:.8rem;color:var(--text-secondary);font-weight:700;display:block;margin-bottom:.3rem">QUYỀN RIÊNG TƯ HỒ SƠ:</label>
+      <select class="inp" id="profilePrivacySelect" style="width:100%">
+        <option value="friends">🤝 Chỉ Bạn Bè (Mặc định - Chỉ bạn bè mới xem được hồ sơ chi tiết)</option>
+        <option value="public">🌐 Công Khai (Bất kỳ ai cũng có thể xem hồ sơ chi tiết)</option>
+        <option value="private">🔒 Riêng Tư (Chỉ mình tôi, người khác không thấy chi tiết)</option>
+      </select>
+      <div style="font-size:11px;color:var(--text-muted);margin-top:.25rem">Khi ở chế độ Chỉ Bạn Bè hoặc Riêng Tư, người lạ sẽ không thể xem mục tiêu, chuỗi ngày, huy hiệu hay bio của bạn.</div>
+    </div>
+
     <!-- Worker URL Configuration (Customizable) -->
     <div style="margin-bottom:1.25rem;background:var(--bg-surface);padding:.75rem;border-radius:var(--radius-sm);border:1px solid var(--border)">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.3rem">
@@ -3960,6 +4126,156 @@ small, .text-xs, .nav-item .label, [style*="font-size:.7"], [style*="font-size: 
         🗑️ Xóa Vĩnh Viễn Tài Khoản & Dữ Liệu
       </button>
     </div>
+  </div>
+</div>
+
+<!-- MODAL HỆ THỐNG BẠN BÈ & LỜI MỜI -->
+<div class="modal-overlay" id="friendsModalOverlay">
+  <div class="modal-box" style="max-width:540px;text-align:left;max-height:92vh;max-height:92dvh;display:flex;flex-direction:column;padding:1.25rem">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem;padding-bottom:.5rem;border-bottom:1px solid var(--border)">
+      <div>
+        <div style="font-size:1.15rem;font-weight:800;color:var(--text-primary);display:flex;align-items:center;gap:.4rem">
+          <span>👥</span>
+          <span>Hệ Thống Bạn Bè Ninja</span>
+        </div>
+        <div style="font-size:.78rem;color:var(--text-muted)">Kết nối thi đấu Shiritori • Tối đa 50 bạn & 20 lời mời chờ</div>
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="closeFriendsModal()" style="padding:.2rem .6rem;font-size:1rem;line-height:1">✕</button>
+    </div>
+
+    <!-- Active Room Invites Banner (nếu có) -->
+    <div id="friendsActiveRoomInvitesBox" style="display:none;margin-bottom:.75rem"></div>
+
+    <!-- Sub-Tabs Navigation -->
+    <div class="auth-tabs" style="margin-bottom:.85rem">
+      <button class="auth-tab-btn active" id="btnTabFriendsList" onclick="switchFriendsTab('list')">
+        🤝 Bạn Bè (<span id="friendsCountBadge">0/50</span>)
+      </button>
+      <button class="auth-tab-btn" id="btnTabFriendsPending" onclick="switchFriendsTab('pending')">
+        📬 Lời Mời (<span id="friendsPendingCountBadge">0</span>)
+      </button>
+      <button class="auth-tab-btn" id="btnTabFriendsSearch" onclick="switchFriendsTab('search')">
+        🔍 Tìm Bạn
+      </button>
+      <button class="auth-tab-btn" id="btnTabFriendsBlocked" onclick="switchFriendsTab('blocked')">
+        🚫 Đã Chặn
+      </button>
+    </div>
+
+    <!-- Tab 1: Danh Sách Bạn Bè -->
+    <div id="viewFriendsList" style="flex:1;overflow-y:auto;min-height:220px;max-height:50vh">
+      <div id="friendsListContainer"></div>
+    </div>
+
+    <!-- Tab 2: Lời Mời Đang Chờ -->
+    <div id="viewFriendsPending" style="display:none;flex:1;overflow-y:auto;min-height:220px;max-height:50vh">
+      <div style="font-size:.82rem;font-weight:800;color:var(--neon-cyan);margin-bottom:.4rem">LỜI MỜI NHẬN ĐƯỢC:</div>
+      <div id="friendsIncomingContainer" style="margin-bottom:1rem"></div>
+      <div style="font-size:.82rem;font-weight:800;color:var(--text-muted);margin-bottom:.4rem">LỜI MỜI ĐÃ GỬI ĐI:</div>
+      <div id="friendsOutgoingContainer"></div>
+    </div>
+
+    <!-- Tab 3: Tìm Bạn Bè (Chỉ tìm chính xác username) -->
+    <div id="viewFriendsSearch" style="display:none;flex:1;overflow-y:auto;min-height:220px">
+      <div style="font-size:.8rem;color:var(--text-secondary);margin-bottom:.6rem;line-height:1.4">
+        🔒 <strong>Bảo mật quyền riêng tư:</strong> Tìm kiếm chỉ áp dụng với <strong>tên đăng nhập chính xác</strong>. Hệ thống không cho phép liệt kê hay duyệt danh sách người dùng.
+      </div>
+      <div style="display:flex;gap:.5rem;margin-bottom:1rem">
+        <input class="inp" id="friendSearchInput" placeholder="Nhập chính xác username (ví dụ: ninja_n5)..." maxlength="20" style="flex:1;font-size:.88rem" onkeydown="if(event.key==='Enter') executeFriendSearch()">
+        <button class="btn btn-cyan btn-sm" id="btnExecFriendSearch" onclick="executeFriendSearch()">🔍 Tìm</button>
+      </div>
+      <div id="friendSearchResultBox"></div>
+    </div>
+
+    <!-- Tab 4: Danh Sách Đã Chặn -->
+    <div id="viewFriendsBlocked" style="display:none;flex:1;overflow-y:auto;min-height:220px">
+      <div style="font-size:.8rem;color:var(--text-muted);margin-bottom:.6rem">
+        Người dùng bị chặn sẽ không thể tìm thấy bạn hay gửi lời mời cho bạn.
+      </div>
+      <div id="friendsBlockedContainer"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL XEM HỒ SƠ NGƯỜI DÙNG KHÁC (CÔNG KHAI & QUYỀN RIÊNG TƯ) -->
+<div class="modal-overlay" id="otherUserProfileModalOverlay">
+  <div class="modal-box" style="max-width:480px;text-align:left;max-height:90vh;max-height:90dvh;overflow-y:auto;padding:1.25rem">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.85rem;padding-bottom:.5rem;border-bottom:1px solid var(--border)">
+      <div>
+        <div style="font-size:1.1rem;font-weight:800;color:var(--text-primary)">Hồ Sơ Học Viên</div>
+        <div style="font-size:.78rem;color:var(--text-muted)" id="otherUserUsernameTag">@username</div>
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="closeOtherUserProfileModal()" style="padding:.2rem .6rem;font-size:1rem;line-height:1">✕</button>
+    </div>
+
+    <!-- Profile Header Card -->
+    <div style="display:flex;gap:.85rem;align-items:center;background:var(--bg-surface);padding:1rem;border-radius:var(--radius-md);border:1px solid var(--border);margin-bottom:.85rem">
+      <div style="font-size:2.8rem;line-height:1;width:56px;height:56px;display:flex;align-items:center;justify-content:center;background:var(--bg-card);border-radius:var(--radius-full);border:2px solid var(--neon-cyan)" id="otherUserAvatarDisplay">🦊</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:1.15rem;font-weight:900;color:var(--text-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap" id="otherUserDisplayName">...</div>
+        <div style="display:flex;gap:.35rem;align-items:center;margin-top:.25rem;flex-wrap:wrap">
+          <span class="badge" id="otherUserRankBadge" style="font-size:.72rem;background:rgba(0,240,255,0.15);color:var(--neon-cyan)">Học Viên</span>
+          <span class="badge" id="otherUserPrivacyBadge" style="font-size:.72rem">🤝 Chỉ bạn bè</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Restricted Privacy Notice (khi hồ sơ riêng tư hoặc chưa kết bạn) -->
+    <div id="otherUserRestrictedBox" style="display:none;background:rgba(255,190,11,0.08);border:1px solid var(--neon-gold);border-radius:var(--radius-md);padding:1rem;text-align:center;margin-bottom:.85rem">
+      <div style="font-size:1.8rem;margin-bottom:.3rem">🔒</div>
+      <div style="font-size:.88rem;font-weight:800;color:var(--neon-gold);margin-bottom:.25rem" id="otherUserRestrictedTitle">Hồ Sơ Giới Hạn</div>
+      <div style="font-size:.78rem;color:var(--text-secondary)" id="otherUserRestrictedDesc">Chỉ bạn bè mới có thể xem chi tiết học tập của người này.</div>
+    </div>
+
+    <!-- Full Details Box (khi hồ sơ công khai hoặc đã là bạn bè) -->
+    <div id="otherUserFullDetailsBox">
+      <!-- Stats 3 Cols -->
+      <div style="display:grid;grid-template-columns:repeat(3, 1fr);gap:.4rem;margin-bottom:.85rem;text-align:center">
+        <div style="background:var(--bg-surface);padding:.5rem .3rem;border-radius:var(--radius-sm)">
+          <div style="font-size:11px;color:var(--text-muted)">MỤC TIÊU</div>
+          <div style="font-size:.9rem;font-weight:800;color:var(--neon-cyan)" id="otherUserJlptTarget">N5</div>
+        </div>
+        <div style="background:var(--bg-surface);padding:.5rem .3rem;border-radius:var(--radius-sm)">
+          <div style="font-size:11px;color:var(--text-muted)">CHUỖI HỌC</div>
+          <div style="font-size:.9rem;font-weight:800;color:var(--neon-pink)" id="otherUserStreak">1 ngày</div>
+        </div>
+        <div style="background:var(--bg-surface);padding:.5rem .3rem;border-radius:var(--radius-sm)">
+          <div style="font-size:11px;color:var(--text-muted)">KINH NGHIỆM</div>
+          <div style="font-size:.9rem;font-weight:800;color:var(--neon-gold)" id="otherUserXp">0 EXP</div>
+        </div>
+      </div>
+
+      <!-- Bio Box (Không chứa liên kết bấm được) -->
+      <div style="margin-bottom:.85rem">
+        <div style="font-size:.78rem;color:var(--text-muted);font-weight:700;margin-bottom:.25rem">TIỂU SỬ:</div>
+        <div style="background:var(--bg-surface);padding:.6rem .8rem;border-radius:var(--radius-sm);border:1px solid var(--border);font-size:.85rem;color:var(--text-primary);line-height:1.4" id="otherUserBioText">
+          ...
+        </div>
+      </div>
+
+      <!-- Badges Showcase -->
+      <div style="margin-bottom:.85rem">
+        <div style="font-size:.78rem;color:var(--text-muted);font-weight:700;margin-bottom:.35rem">HUY HIỆU ĐÃ MỞ:</div>
+        <div id="otherUserBadgesGrid" style="display:flex;gap:.35rem;flex-wrap:wrap"></div>
+      </div>
+    </div>
+
+    <!-- Actions Footer -->
+    <div id="otherUserActionsFooter" style="display:flex;gap:.4rem;flex-wrap:wrap;border-top:1px solid var(--border);padding-top:.75rem"></div>
+  </div>
+</div>
+
+<!-- MODAL MỜI BẠN BÈ VÀO PHÒNG PARTY -->
+<div class="modal-overlay" id="inviteFriendsModalOverlay">
+  <div class="modal-box" style="max-width:440px;text-align:left;max-height:85vh;max-height:85dvh;overflow-y:auto;padding:1.25rem">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.85rem;padding-bottom:.5rem;border-bottom:1px solid var(--border)">
+      <div>
+        <div style="font-size:1.1rem;font-weight:800;color:var(--text-primary)">Mời Bạn Bè Vào Phòng</div>
+        <div style="font-size:.78rem;color:var(--text-muted)">Mã phòng: <strong id="invitePartyRoomCodeTag" style="color:var(--neon-gold)">...</strong></div>
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="closeInviteFriendsModal()" style="padding:.2rem .6rem;font-size:1rem;line-height:1">✕</button>
+    </div>
+    <div id="inviteFriendsListContainer"></div>
   </div>
 </div>
 
@@ -4213,19 +4529,44 @@ small, .text-xs, .nav-item .label, [style*="font-size:.7"], [style*="font-size: 
         </div>
       </div>
 
-      <!-- Section 4: Âm Thanh Trò Chơi & Hiệu Ứng (Game Juice) -->
+      <!-- Section 4: Âm Thanh Trò Chơi & Hiệu Ứng (Game Juice & Web Audio) -->
       <div style="padding:.9rem;background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-md);display:flex;flex-direction:column;gap:.75rem">
-        <div style="font-size:.82rem;font-weight:800;color:var(--text-muted)">🎮 HIỆU ỨNG TRÒ CHƠI & CẢM GIÁC (GAME JUICE):</div>
+        <div style="font-size:.82rem;font-weight:800;color:var(--text-muted)">🎮 HIỆU ỨNG TRÒ CHƠI & ÂM THANH (WEB AUDIO API):</div>
         
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <div style="display:flex;flex-direction:column">
-            <span style="font-size:.82rem;font-weight:700">🔊 Âm thanh điện tử (Web Audio Synth)</span>
-            <span style="font-size:.72rem;color:var(--text-muted)">Tiếng click, trả lời đúng, combo, level up</span>
+        <!-- Âm thanh hiệu ứng (SFX) -->
+        <div style="display:flex;flex-direction:column;gap:.35rem">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div style="display:flex;flex-direction:column">
+              <span style="font-size:.82rem;font-weight:700">🔊 Âm thanh hiệu ứng (SFX Synth)</span>
+              <span style="font-size:.72rem;color:var(--text-muted)">Đúng, sai, combo, level up, mở quà, thắng boss</span>
+            </div>
+            <button class="btn btn-ghost btn-sm" id="modalSfxToggleBtn" onclick="toggleSfx()">BẬT</button>
           </div>
-          <button class="btn btn-ghost btn-sm" id="modalSfxToggleBtn" onclick="toggleSfx()">BẬT</button>
+          <div style="display:flex;align-items:center;gap:.6rem;margin-top:.2rem">
+            <span style="font-size:.75rem;color:var(--text-muted);min-width:45px">Âm lượng:</span>
+            <input type="range" id="sfxVolumeSlider" min="0" max="100" value="80" oninput="onSfxVolumeChange(this.value)" style="flex:1;accent-color:var(--neon-cyan)">
+            <span style="font-size:.75rem;font-weight:700;color:var(--neon-cyan);min-width:32px;text-align:right" id="sfxVolumeValueText">80%</span>
+          </div>
         </div>
 
-        <div style="display:flex;justify-content:space-between;align-items:center">
+        <!-- Âm thanh nhạc nền & Anime MV -->
+        <div style="display:flex;flex-direction:column;gap:.35rem;border-top:1px solid rgba(255,255,255,0.06);padding-top:.6rem">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div style="display:flex;flex-direction:column">
+              <span style="font-size:.82rem;font-weight:700">🎵 Âm lượng nhạc nền & Anime MV</span>
+              <span style="font-size:.72rem;color:var(--text-muted)">Nhạc phát YouTube Lounge và âm thanh nền</span>
+            </div>
+            <button class="btn btn-ghost btn-sm" id="modalMusicToggleBtn" onclick="toggleMusic()">BẬT</button>
+          </div>
+          <div style="display:flex;align-items:center;gap:.6rem;margin-top:.2rem">
+            <span style="font-size:.75rem;color:var(--text-muted);min-width:45px">Âm lượng:</span>
+            <input type="range" id="musicVolumeSlider" min="0" max="100" value="70" oninput="onMusicVolumeChange(this.value)" style="flex:1;accent-color:var(--neon-sakura)">
+            <span style="font-size:.75rem;font-weight:700;color:var(--neon-sakura);min-width:32px;text-align:right" id="musicVolumeValueText">70%</span>
+          </div>
+        </div>
+
+        <!-- Hiệu ứng rung màn hình & nổ hạt (VFX) -->
+        <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(255,255,255,0.06);padding-top:.6rem">
           <div style="display:flex;flex-direction:column">
             <span style="font-size:.82rem;font-weight:700">✨ Hiệu ứng rung màn hình & nổ hạt (VFX)</span>
             <span style="font-size:.72rem;color:var(--text-muted)">Rung haptic phản hồi và hiệu ứng hạt neon</span>
@@ -4487,6 +4828,60 @@ small, .text-xs, .nav-item .label, [style*="font-size:.7"], [style*="font-size: 
     </div>
 
     <button class="btn btn-primary btn-full" style="margin-top:1.2rem" onclick="closeCollectiblesModal()">Đóng</button>
+  </div>
+</div>
+
+<!-- Dojo End-of-Session Summary Modal (Tóm tắt phiên học) -->
+<div class="modal-overlay" id="dojoSessionSummaryModal">
+  <div class="modal-box" style="max-width:540px;text-align:center;max-height:90vh;max-height:90dvh;overflow-y:auto">
+    <div style="font-size:3rem;line-height:1;margin-bottom:.5rem">🎉</div>
+    <div style="font-size:1.3rem;font-weight:900;color:var(--neon-gold);margin-bottom:.25rem" id="dojoSummaryTitle">HOÀN THÀNH PHIÊN HỌC!</div>
+    <div style="font-size:.82rem;color:var(--text-secondary);margin-bottom:1.1rem" id="dojoSummarySubtitle">
+      Bạn đã hoàn tất phiên luyện tập từ vựng xuất sắc! Dữ liệu đã được lưu vào lịch sử học tập.
+    </div>
+
+    <!-- 4 Stats Tiles -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.4rem;margin-bottom:1.1rem;text-align:center">
+      <div style="background:var(--bg-surface);padding:.6rem .3rem;border-radius:var(--radius-sm);border:1px solid var(--border)">
+        <div style="font-size:.7rem;color:var(--text-muted)">Chính Xác</div>
+        <div style="font-family:var(--font-arcade);font-size:1.15rem;font-weight:900;color:var(--neon-lime)" id="dojoSummaryAcc">100%</div>
+      </div>
+      <div style="background:var(--bg-surface);padding:.6rem .3rem;border-radius:var(--radius-sm);border:1px solid var(--border)">
+        <div style="font-size:.7rem;color:var(--text-muted)">EXP Nhận</div>
+        <div style="font-family:var(--font-arcade);font-size:1.15rem;font-weight:900;color:var(--neon-gold)" id="dojoSummaryExp">+50</div>
+      </div>
+      <div style="background:var(--bg-surface);padding:.6rem .3rem;border-radius:var(--radius-sm);border:1px solid var(--border)">
+        <div style="font-size:.7rem;color:var(--text-muted)">Từ Đúng</div>
+        <div style="font-family:var(--font-arcade);font-size:1.15rem;font-weight:900;color:var(--neon-cyan)" id="dojoSummaryCorrect">10</div>
+      </div>
+      <div style="background:var(--bg-surface);padding:.6rem .3rem;border-radius:var(--radius-sm);border:1px solid var(--border)">
+        <div style="font-size:.7rem;color:var(--text-muted)">Cần Ôn Lại</div>
+        <div style="font-family:var(--font-arcade);font-size:1.15rem;font-weight:900;color:var(--neon-sakura)" id="dojoSummaryWrong">0</div>
+      </div>
+    </div>
+
+    <!-- Wrong Words Breakdown (if any) -->
+    <div id="dojoSummaryWrongArea" style="display:none;text-align:left;margin-bottom:1.1rem;background:rgba(255,42,109,0.06);border:1px solid rgba(255,42,109,0.25);border-radius:var(--radius-sm);padding:.75rem">
+      <div style="font-size:.78rem;font-weight:800;color:var(--neon-sakura);margin-bottom:.4rem;display:flex;align-items:center;gap:.35rem">
+        <span>⚠️</span>
+        <span>DANH SÁCH TỪ CẦN ÔN LẠI:</span>
+      </div>
+      <div id="dojoSummaryWrongList" style="display:flex;flex-direction:column;gap:.35rem;max-height:140px;overflow-y:auto">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+
+    <div style="display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap">
+      <button class="btn btn-secondary" id="dojoSummaryRetryWrongBtn" style="display:none" onclick="restartDojoSessionWithWrongWords()">
+        🔄 Ôn Lại Từ Sai Ngay
+      </button>
+      <button class="btn btn-primary" onclick="startNewDojoSession()">
+        ▶️ Phiên Tiếp Theo
+      </button>
+      <button class="btn btn-ghost" onclick="closeDojoSessionSummaryModal()">
+        Đóng
+      </button>
+    </div>
   </div>
 </div>
 
@@ -5034,6 +5429,21 @@ let sfxEnabled = (function() {
 let vfxEnabled = (function() {
   try { return localStorage.getItem('emi_vfx_enabled') !== 'false'; } catch(e) { return true; }
 })();
+let sfxVolume = (function() {
+  try {
+    const v = localStorage.getItem('emi_sfx_volume');
+    return v !== null ? Math.max(0, Math.min(1, parseFloat(v))) : 0.8;
+  } catch(e) { return 0.8; }
+})();
+let musicEnabled = (function() {
+  try { return localStorage.getItem('emi_music_enabled') !== 'false'; } catch(e) { return true; }
+})();
+let musicVolume = (function() {
+  try {
+    const v = localStorage.getItem('emi_music_volume');
+    return v !== null ? Math.max(0, Math.min(1, parseFloat(v))) : 0.7;
+  } catch(e) { return 0.7; }
+})();
 
 let currentCombo = 0;
 let comboTimer = null;
@@ -5056,6 +5466,64 @@ function updateSfxToggleUI() {
     modalBtn.textContent = sfxEnabled ? 'BẬT' : 'TẮT';
     modalBtn.style.color = sfxEnabled ? 'var(--neon-green)' : 'var(--text-muted)';
   }
+  const slider = document.getElementById('sfxVolumeSlider');
+  if (slider) slider.value = Math.round(sfxVolume * 100);
+  const textVal = document.getElementById('sfxVolumeValueText');
+  if (textVal) textVal.textContent = Math.round(sfxVolume * 100) + '%';
+}
+
+function updateMusicVolumeUI() {
+  const btn = document.getElementById('musicToggle');
+  if (btn) btn.textContent = musicEnabled ? '🎵' : '🔇';
+  const modalBtn = document.getElementById('modalMusicToggleBtn');
+  if (modalBtn) {
+    modalBtn.textContent = musicEnabled ? 'BẬT' : 'TẮT';
+    modalBtn.style.color = musicEnabled ? 'var(--neon-green)' : 'var(--text-muted)';
+  }
+  const slider = document.getElementById('musicVolumeSlider');
+  if (slider) slider.value = Math.round(musicVolume * 100);
+  const textVal = document.getElementById('musicVolumeValueText');
+  if (textVal) textVal.textContent = Math.round(musicVolume * 100) + '%';
+}
+
+function onSfxVolumeChange(val) {
+  const num = parseInt(val, 10);
+  sfxVolume = Math.max(0, Math.min(1, num / 100));
+  try { localStorage.setItem('emi_sfx_volume', sfxVolume.toString()); } catch(e) {}
+  const textVal = document.getElementById('sfxVolumeValueText');
+  if (textVal) textVal.textContent = num + '%';
+  if (sfxEnabled) playSfx('click');
+}
+
+function onMusicVolumeChange(val) {
+  const num = parseInt(val, 10);
+  musicVolume = Math.max(0, Math.min(1, num / 100));
+  try { localStorage.setItem('emi_music_volume', musicVolume.toString()); } catch(e) {}
+  const textVal = document.getElementById('musicVolumeValueText');
+  if (textVal) textVal.textContent = num + '%';
+  applyMusicVolume();
+}
+
+function applyMusicVolume() {
+  const effVol = musicEnabled ? musicVolume : 0;
+  if (typeof mainYtPlayer !== 'undefined' && mainYtPlayer) {
+    try {
+      if (typeof mainYtPlayer.setVolume === 'function') mainYtPlayer.setVolume(Math.round(effVol * 100));
+      if (!musicEnabled) { if (typeof mainYtPlayer.mute === 'function') mainYtPlayer.mute(); }
+      else { if (typeof mainYtPlayer.unMute === 'function') mainYtPlayer.unMute(); }
+    } catch(_) {}
+  }
+  if (typeof activeAnimeDjAudio !== 'undefined' && activeAnimeDjAudio) {
+    try { activeAnimeDjAudio.volume = effVol; } catch(_) {}
+  }
+}
+
+function toggleMusic() {
+  musicEnabled = !musicEnabled;
+  try { localStorage.setItem('emi_music_enabled', musicEnabled ? 'true' : 'false'); } catch(e) {}
+  updateMusicVolumeUI();
+  applyMusicVolume();
+  showToast(musicEnabled ? '🎵 Âm lượng nhạc nền: BẬT' : '🔇 Âm lượng nhạc nền: ĐÃ TẮT');
 }
 
 function updateVfxToggleUI() {
@@ -5072,7 +5540,7 @@ function toggleSfx() {
   sfxEnabled = !sfxEnabled;
   try { localStorage.setItem('emi_sfx_enabled', sfxEnabled ? 'true' : 'false'); } catch(e) {}
   updateSfxToggleUI();
-  showToast(sfxEnabled ? '🔊 Âm thanh điện tử (Web Audio): BẬT' : '🔇 Âm thanh điện tử: TẮT');
+  showToast(sfxEnabled ? '🔊 Âm thanh hiệu ứng: BẬT' : '🔇 Âm thanh hiệu ứng: TẮT');
 }
 
 function toggleVfx() {
@@ -5082,35 +5550,62 @@ function toggleVfx() {
   showToast(vfxEnabled ? '✨ Hiệu ứng rung & nổ hạt (VFX): BẬT' : '🚫 Hiệu ứng hình ảnh (VFX): TẮT');
 }
 
+// ── BỘ TỔNG HỢP ÂM THANH HIỆU ỨNG THUẦN WEB AUDIO API (KHÔNG TẢI FILE) ──
 function playComboSfx(combo) {
   if (!sfxEnabled) return;
   try {
     if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     if (audioCtx.state === 'suspended') audioCtx.resume();
     const now = audioCtx.currentTime;
+    const masterGain = sfxVolume;
     
-    // Thang âm thăng tiến (C5, D5, E5, G5, A5, C6, D6, E6, G6)
-    const scale = [523.25, 587.33, 659.25, 783.99, 880.00, 1046.50, 1174.66, 1318.51, 1567.98];
-    const baseIdx = Math.min(Math.max(0, combo - 1), scale.length - 2);
-    const noteCount = combo <= 1 ? 1 : (combo <= 3 ? 2 : 3);
-    
-    for (let i = 0; i < noteCount; i++) {
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      const freq = scale[Math.min(baseIdx + i, scale.length - 1)];
-      const startTime = now + (i * 0.065);
-      
-      osc.type = combo >= 5 ? 'triangle' : 'sine';
-      osc.frequency.setValueAtTime(freq, startTime);
-      osc.frequency.exponentialRampToValueAtTime(freq * 1.02, startTime + 0.12);
-      
-      gain.gain.setValueAtTime(0.18, startTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.22);
-      
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      osc.start(startTime);
-      osc.stop(startTime + 0.25);
+    // Phân bậc Combo theo mức (Tier 1: nhẹ, Tier 2: vừa, Tier 3: bùng nổ / fever)
+    if (combo <= 4) {
+      // Tier 1 (x2 - x4): 2 nốt bổng thanh thoát
+      const notes = [659.25, 880.00]; // E5 -> A5
+      notes.forEach((freq, idx) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+        gain.gain.setValueAtTime(0.18 * masterGain, now + idx * 0.08);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.22);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(now + idx * 0.08);
+        osc.stop(now + idx * 0.08 + 0.25);
+      });
+    } else if (combo <= 9) {
+      // Tier 2 (x5 - x9): 3 nốt vui nhộn, hào hứng
+      const notes = [523.25, 659.25, 783.99]; // C5 -> E5 -> G5
+      notes.forEach((freq, idx) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, now + idx * 0.07);
+        gain.gain.setValueAtTime(0.22 * masterGain, now + idx * 0.07);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.07 + 0.26);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(now + idx * 0.07);
+        osc.stop(now + idx * 0.07 + 0.3);
+      });
+    } else {
+      // Tier 3 (x10+ Fever): 4 nốt arpeggio lấp lánh rực rỡ
+      const notes = [523.25, 783.99, 1046.50, 1318.51]; // C5 -> G5 -> C6 -> E6
+      notes.forEach((freq, idx) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, now + idx * 0.06);
+        osc.frequency.exponentialRampToValueAtTime(freq * 1.02, now + idx * 0.06 + 0.15);
+        gain.gain.setValueAtTime(0.25 * masterGain, now + idx * 0.06);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.06 + 0.35);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(now + idx * 0.06);
+        osc.stop(now + idx * 0.06 + 0.4);
+      });
     }
   } catch(e) {}
 }
@@ -5121,20 +5616,52 @@ function playWrongSfx() {
     if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     if (audioCtx.state === 'suspended') audioCtx.resume();
     const now = audioCtx.currentTime;
+    const masterGain = sfxVolume;
+
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
-    
+    const filter = audioCtx.createBiquadFilter();
+
     osc.type = 'sawtooth';
-    osc.frequency.setValueAtTime(220, now);
-    osc.linearRampToValueAtTime(110, now + 0.22);
-    
-    gain.gain.setValueAtTime(0.18, now);
+    osc.frequency.setValueAtTime(240, now);
+    osc.linearRampToValueAtTime(100, now + 0.22);
+
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(500, now);
+
+    gain.gain.setValueAtTime(0.22 * masterGain, now);
     gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
-    
-    osc.connect(gain);
+
+    osc.connect(filter);
+    filter.connect(gain);
     gain.connect(audioCtx.destination);
     osc.start(now);
     osc.stop(now + 0.26);
+  } catch(e) {}
+}
+
+function playCorrectSfx() {
+  if (!sfxEnabled) return;
+  try {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const now = audioCtx.currentTime;
+    const masterGain = sfxVolume;
+
+    // Chuông kép thanh trong 523Hz -> 784Hz
+    const chord = [523.25, 783.99];
+    chord.forEach((freq, idx) => {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, now + idx * 0.07);
+      gain.gain.setValueAtTime(0.2 * masterGain, now + idx * 0.07);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.07 + 0.28);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(now + idx * 0.07);
+      osc.stop(now + idx * 0.07 + 0.3);
+    });
   } catch(e) {}
 }
 
@@ -5273,39 +5800,107 @@ function playSfx(type, options = {}) {
     GameJuice.onWrong();
     return;
   }
-  if(!sfxEnabled) return;
+  if (!sfxEnabled) return;
   try {
-    if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    if(audioCtx.state === 'suspended') audioCtx.resume();
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
     
     const now = audioCtx.currentTime;
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
+    const masterGain = sfxVolume;
 
-    if(type === 'win') {
-      // Hợp âm chiến thắng 3 nốt
+    if (type === 'win') {
+      // Hợp âm chiến thắng 4 nốt trong sáng
       const chord = [523.25, 659.25, 783.99, 1046.50];
       chord.forEach((freq, i) => {
         const o = audioCtx.createOscillator();
         const g = audioCtx.createGain();
         o.type = 'triangle';
         o.frequency.setValueAtTime(freq, now + i * 0.08);
-        g.gain.setValueAtTime(0.15, now + i * 0.08);
-        g.gain.exponentialRampToValueAtTime(0.001, now + i * 0.08 + 0.35);
+        g.gain.setValueAtTime(0.2 * masterGain, now + i * 0.08);
+        g.gain.exponentialRampToValueAtTime(0.001, now + i * 0.08 + 0.38);
         o.connect(g);
         g.connect(audioCtx.destination);
         o.start(now + i * 0.08);
-        o.stop(now + i * 0.08 + 0.4);
+        o.stop(now + i * 0.08 + 0.42);
       });
-    } else if(type === 'click') {
+    } else if (type === 'levelup') {
+      // Âm thanh Lên Cấp (Fanfare thăng tiến hùng tráng C4 -> E4 -> G4 -> C5 ngân vang)
+      const fanNotes = [261.63, 329.63, 392.00, 523.25];
+      fanNotes.forEach((freq, i) => {
+        const o = audioCtx.createOscillator();
+        const g = audioCtx.createGain();
+        const filt = audioCtx.createBiquadFilter();
+        filt.type = 'lowpass';
+        filt.frequency.setValueAtTime(1800, now + i * 0.09);
+        
+        o.type = 'sawtooth';
+        o.frequency.setValueAtTime(freq, now + i * 0.09);
+        const duration = (i === fanNotes.length - 1) ? 0.65 : 0.22;
+        g.gain.setValueAtTime(0.25 * masterGain, now + i * 0.09);
+        g.gain.exponentialRampToValueAtTime(0.001, now + i * 0.09 + duration);
+        
+        o.connect(filt);
+        filt.connect(g);
+        g.connect(audioCtx.destination);
+        o.start(now + i * 0.09);
+        o.stop(now + i * 0.09 + duration + 0.05);
+      });
+    } else if (type === 'gift_open') {
+      // Âm thanh Mở Hộp Quà (Lấp lánh thần tiên - chuỗi micro-chime 1200 - 2400Hz)
+      const sparkles = [1174.66, 1396.91, 1567.98, 1760.00, 2093.00, 2349.32];
+      sparkles.forEach((freq, i) => {
+        const o = audioCtx.createOscillator();
+        const g = audioCtx.createGain();
+        o.type = 'sine';
+        o.frequency.setValueAtTime(freq, now + i * 0.045);
+        g.gain.setValueAtTime(0.18 * masterGain, now + i * 0.045);
+        g.gain.exponentialRampToValueAtTime(0.001, now + i * 0.045 + 0.25);
+        o.connect(g);
+        g.connect(audioCtx.destination);
+        o.start(now + i * 0.045);
+        o.stop(now + i * 0.045 + 0.28);
+      });
+    } else if (type === 'boss_win') {
+      // Âm thanh Thắng Boss (Hợp âm rực rỡ hoành tráng đa tầng)
+      const bossChord = [196.00, 261.63, 329.63, 392.00, 523.25, 659.25];
+      bossChord.forEach((freq, i) => {
+        const o = audioCtx.createOscillator();
+        const g = audioCtx.createGain();
+        o.type = i < 2 ? 'sawtooth' : 'triangle';
+        o.frequency.setValueAtTime(freq, now);
+        g.gain.setValueAtTime((0.15 + (i * 0.02)) * masterGain, now);
+        g.gain.exponentialRampToValueAtTime(0.001, now + 0.75);
+        o.connect(g);
+        g.connect(audioCtx.destination);
+        o.start(now);
+        o.stop(now + 0.8);
+      });
+    } else if (type === 'tab_switch') {
+      // Âm thanh Chuyển Màn / Tab (Whoosh sweep tương lai)
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
       osc.type = 'sine';
-      osc.frequency.setValueAtTime(800, now);
-      gain.gain.setValueAtTime(0.12, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+      osc.frequency.setValueAtTime(320, now);
+      osc.exponentialRampToValueAtTime(850, now + 0.11);
+      gain.gain.setValueAtTime(0.14 * masterGain, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
       osc.start(now);
-      osc.stop(now + 0.08);
+      osc.stop(now + 0.13);
+    } else if (type === 'click') {
+      // Âm thanh Bấm Nút (Tactile pop dứt khoát)
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(850, now);
+      osc.exponentialRampToValueAtTime(420, now + 0.05);
+      gain.gain.setValueAtTime(0.15 * masterGain, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.055);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(now);
+      osc.stop(now + 0.06);
     }
   } catch(e) {}
 }
@@ -5504,13 +6099,17 @@ function addXP(amount, activityKey = null, isCorrect = true) {
   updateUserUI();
 
   if (newRank.level > oldRank.level) {
-    playSfx('win');
+    playSfx('levelup');
     showModal('🎉 THĂNG CẤP NINJA!',
       `Chúc mừng! Bạn đã thăng lên Cấp ${newRank.level}: ${newRank.title}!`,
       `Danh hiệu mới: <strong>${newRank.emoji} ${newRank.title}</strong><br>Tiếp tục rèn luyện để chạm tới mốc Chunin và Hokage!`
     );
   } else {
     playSfx('correct');
+  }
+
+  if (typeof recordDailyExpForAnalytics === 'function') {
+    recordDailyExpForAnalytics(actualGain);
   }
 
   showToast(`⚡ +${actualGain} EXP!`);
@@ -5978,6 +6577,12 @@ function updateUserUI() {
       else el.classList.remove('done');
     }
   });
+
+  // Tự động đồng bộ Nhiệm Vụ Hằng Ngày & Gợi Ý Học & Thống Kê Học Tập
+  if (typeof ensureDailyQuests === 'function') ensureDailyQuests();
+  if (typeof renderDailyQuests === 'function') renderDailyQuests();
+  if (typeof renderDojoRecommendation === 'function') renderDojoRecommendation();
+  if (typeof updateAnalyticsQuickStats === 'function') updateAnalyticsQuickStats();
 }
 
 function changeUserName() {
@@ -6071,6 +6676,9 @@ function updateAuthUI() {
     userData.avatar = avatar;
     if (authCurrentUser.profile.bio) userData.bio = authCurrentUser.profile.bio;
     if (authCurrentUser.profile.jlptTarget) userData.jlptTarget = authCurrentUser.profile.jlptTarget;
+
+    // Tải ngầm thông báo bạn bè
+    if (typeof refreshFriendsDataSilent === 'function') refreshFriendsDataSilent();
   } else {
     // Chế độ Khách (Guest)
     if (headerAvatar) headerAvatar.textContent = userData.avatar || '🦊';
@@ -6083,6 +6691,12 @@ function updateAuthUI() {
       hubSyncBadge.className = 'sync-badge guest';
       hubSyncBadge.innerHTML = '💾 KHÁCH (OFFLINE)';
     }
+
+    // Ẩn badge thông báo bạn bè khi là khách
+    const hBadge = document.getElementById('friendsPendingBadge');
+    const hubBadge = document.getElementById('hubFriendsBadge');
+    if (hBadge) hBadge.style.display = 'none';
+    if (hubBadge) hubBadge.style.display = 'none';
   }
 
   // Cập nhật avatarDisplay và userNameDisplay trên Hub
@@ -6373,18 +6987,21 @@ function openProfileModal() {
   const xpTag = document.getElementById('profileXpTag');
   const streakTag = document.getElementById('profileStreakTag');
   const starsTag = document.getElementById('profileStarsTag');
+  const privacySelect = document.getElementById('profilePrivacySelect');
 
   if (authCurrentUser) {
     if (usernameTag) usernameTag.textContent = `@${authCurrentUser.username}`;
     if (dispNameInp) dispNameInp.value = authCurrentUser.profile.displayName || '';
     if (bioInp) bioInp.value = authCurrentUser.profile.bio || '';
     if (targetSelect) targetSelect.value = authCurrentUser.profile.jlptTarget || 'N5';
+    if (privacySelect) privacySelect.value = authCurrentUser.profile.privacy || 'friends';
     selectProfileAvatar(authCurrentUser.profile.avatar || '🦊', false);
   } else {
     if (usernameTag) usernameTag.textContent = '@Khách (Chưa đăng nhập)';
     if (dispNameInp) dispNameInp.value = userData.name || '';
     if (bioInp) bioInp.value = userData.bio || '';
     if (targetSelect) targetSelect.value = userData.jlptTarget || 'N5';
+    if (privacySelect) privacySelect.value = userData.privacy || 'friends';
     selectProfileAvatar(userData.avatar || '🦊', false);
   }
 
@@ -6527,12 +7144,14 @@ async function saveProfileSettings() {
   const dispNameInp = document.getElementById('profileDisplayNameInput');
   const bioInp = document.getElementById('profileBioInput');
   const targetSelect = document.getElementById('profileJlptTargetSelect');
+  const privacySelect = document.getElementById('profilePrivacySelect');
   const workerUrlInp = document.getElementById('profileWorkerUrlInput');
   const btn = document.getElementById('btnSaveProfile');
 
   const displayName = dispNameInp ? dispNameInp.value.trim().slice(0, 30) : userData.name;
   const bio = bioInp ? bioInp.value.trim().slice(0, 150) : '';
   const jlptTarget = targetSelect ? targetSelect.value : 'N5';
+  const privacy = privacySelect ? privacySelect.value : (userData.privacy || 'friends');
   const customWorkerUrl = workerUrlInp ? workerUrlInp.value.trim() : '';
 
   if (customWorkerUrl && customWorkerUrl !== AUTH_WORKER_URL) {
@@ -6545,6 +7164,7 @@ async function saveProfileSettings() {
   userData.avatar = selectedProfileAvatar;
   userData.bio = bio;
   userData.jlptTarget = jlptTarget;
+  userData.privacy = privacy;
   saveUserData();
   updateUserUI();
   updateAuthUI();
@@ -6564,6 +7184,7 @@ async function saveProfileSettings() {
           avatar: selectedProfileAvatar,
           bio,
           jlptTarget,
+          privacy,
           voiceMode: userData.voiceMode || 'anime'
         })
       });
@@ -6645,6 +7266,13 @@ async function doLogout() {
   authSessionToken = '';
   authCurrentUser = null;
   localStorage.removeItem('emi_auth_token');
+  currentFriendsCache = { friends: [], incoming: [], outgoing: [], blocked: [], invites: [] };
+  lastSyncedDataHash = '';
+  hasPendingCloudSync = false;
+  if (pendingCloudSyncTimer) {
+    clearTimeout(pendingCloudSyncTimer);
+    pendingCloudSyncTimer = null;
+  }
 
   closeProfileModal();
   updateAuthUI();
@@ -6735,49 +7363,120 @@ function applyUserDataFromCloud(cloudUser) {
   saveUserData();
   updateUserUI();
   if (typeof renderQuestRoadmap === 'function') renderQuestRoadmap();
+
+  // Đánh dấu dữ liệu đã đồng bộ từ Cloud để tránh gửi trùng ngay sau khi nạp
+  if (typeof computeDataHash === 'function' && typeof getSyncPayload === 'function') {
+    lastSyncedDataHash = computeDataHash(getSyncPayload().gameData);
+    lastCloudSyncTime = Date.now();
+    hasPendingCloudSync = false;
+  }
 }
 
 // ══════════════════════════════════════════════════
-//  RATE-LIMITED CLOUD SYNC & MYSTERY GACHA BOX
+//  RATE-LIMITED CLOUD SYNC & TỐI ƯU HÓA LƯỢT GHI KV
+//  - Giãn cách: Tối đa 1 lần mỗi 5 phút (300,000ms) mỗi người.
+//  - So khớp thay đổi (Deep Hash Comparison): CHỈ ghi lên KV khi dữ liệu thực sự đổi.
+//  - Cơ chế gộp (Coalescing Queue): Nếu có thay đổi trong lúc đang đếm ngược 5 phút,
+//    hệ thống tự động hẹn giờ và gộp lại thành 1 lượt ghi duy nhất khi hết 5 phút.
+//
+//  CÁC ĐIỂM CÒN GHI NHIỀU TRÊN HỆ THỐNG ĐÃ ĐƯỢC KIỂM SOÁT:
+//  1. triggerGameSync:
+//     - Các điểm gọi: quest_stage_end, boss_battle_end, solo_anime_end,
+//       party_anime_duel_end, daily_ritual_end, scenario_end, coop_boss_end,
+//       survival_end, mystery_box_opened.
+//     - Kiểm soát: Toàn bộ được lọc qua computeDataHash và giới hạn 5 phút.
+//  2. Bảng xếp hạng tuần (/api/leaderboard/submit):
+//     - Giới hạn tốc độ: 60 giây / lần / người. Chỉ gửi điểm cao nhất.
+//  3. Hệ thống bạn bè (friends:username):
+//     - Ghi 2 chiều khi gửi/nhận lời mời, giới hạn tối đa 50 bạn và 20 lời mời.
+//     - Rate limit gửi lời mời: 10 lần/15 phút/user và 20 lần/15 phút/IP.
 // ══════════════════════════════════════════════════
 let lastCloudSyncTime = 0;
-const CLOUD_SYNC_MIN_INTERVAL_MS = 60000; // Tối đa mỗi 60 giây mỗi người
+const CLOUD_SYNC_MIN_INTERVAL_MS = 5 * 60 * 1000; // 5 phút (300,000ms)
+let lastSyncedDataHash = '';
+let hasPendingCloudSync = false;
+let pendingCloudSyncTimer = null;
 
-async function triggerGameSync(triggerReason = 'round_end') {
+function computeDataHash(obj) {
+  if (!obj) return 'empty';
+  const str = JSON.stringify(obj);
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = ((hash << 5) - hash) + str.charCodeAt(i);
+    hash |= 0;
+  }
+  return hash.toString() + '_' + str.length;
+}
+
+function getSyncPayload() {
+  return {
+    gameData: {
+      xp: userData.xp || 0,
+      rank: getRank(userData.xp || 0).title,
+      streak: userData.streak || 1,
+      voicePref: localStorage.getItem('emi_voice_uri') || '',
+      questData: userData.questData || null,
+      collectibles: Array.isArray(userData.collectibles) ? userData.collectibles : [],
+      equippedFrame: userData.equippedFrame || '',
+      mysteryBoxClaimed: userData.mysteryBoxLastClaimed || ''
+    }
+  };
+}
+
+async function triggerGameSync(triggerReason = 'round_end', forceNow = false) {
   if (!authCurrentUser || !authSessionToken) return false;
-  if (isSyncingToCloud) return false;
+
+  const currentPayload = getSyncPayload();
+  const currentHash = computeDataHash(currentPayload.gameData);
+
+  // 1. Kiểm tra dữ liệu thực sự đổi chưa: nếu hash không đổi, bỏ qua 100%
+  if (currentHash === lastSyncedDataHash && lastSyncedDataHash !== '') {
+    return false;
+  }
 
   const now = Date.now();
-  if (now - lastCloudSyncTime < CLOUD_SYNC_MIN_INTERVAL_MS) {
-    const remainingSec = Math.round((CLOUD_SYNC_MIN_INTERVAL_MS - (now - lastCloudSyncTime)) / 1000);
-    console.log(`[CloudSync] Giới hạn tần suất 60s (còn ${remainingSec}s) - lý do: ${triggerReason}`);
+  const elapsed = now - lastCloudSyncTime;
+
+  // 2. Kiểm tra giới hạn 5 phút (300,000ms)
+  if (!forceNow && elapsed < CLOUD_SYNC_MIN_INTERVAL_MS) {
+    hasPendingCloudSync = true;
+    const remainingMs = CLOUD_SYNC_MIN_INTERVAL_MS - elapsed;
+    const remainingSec = Math.round(remainingMs / 1000);
+    console.log(`[CloudSync] Giãn đồng bộ 5 phút (còn ${remainingSec}s) - Gộp lưu: ${triggerReason}`);
+
+    // Thiết lập timer tự động đồng bộ khi hết 5 phút nếu chưa có
+    if (!pendingCloudSyncTimer) {
+      pendingCloudSyncTimer = setTimeout(() => {
+        pendingCloudSyncTimer = null;
+        if (hasPendingCloudSync) {
+          triggerGameSync('timer_flush_5min');
+        }
+      }, remainingMs);
+    }
+    return false;
+  }
+
+  if (isSyncingToCloud) {
+    hasPendingCloudSync = true;
     return false;
   }
 
   isSyncingToCloud = true;
   lastCloudSyncTime = now;
+  hasPendingCloudSync = false;
+  if (pendingCloudSyncTimer) {
+    clearTimeout(pendingCloudSyncTimer);
+    pendingCloudSyncTimer = null;
+  }
 
   try {
-    const payload = {
-      gameData: {
-        xp: userData.xp || 0,
-        rank: getRank(userData.xp || 0).title,
-        streak: userData.streak || 1,
-        voicePref: localStorage.getItem('emi_voice_uri') || '',
-        questData: userData.questData || null,
-        collectibles: Array.isArray(userData.collectibles) ? userData.collectibles : [],
-        equippedFrame: userData.equippedFrame || '',
-        mysteryBoxClaimed: userData.mysteryBoxLastClaimed || ''
-      }
-    };
-
     const res = await fetch(`${AUTH_WORKER_URL}/api/sync`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${authSessionToken}`
       },
-      body: JSON.stringify(payload)
+      body: JSON.stringify(currentPayload)
     });
 
     if (res.ok) {
@@ -6785,10 +7484,13 @@ async function triggerGameSync(triggerReason = 'round_end') {
       if (data.gameData) {
         authCurrentUser.gameData = data.gameData;
       }
+      lastSyncedDataHash = currentHash;
+      console.log(`[CloudSync] Đồng bộ thành công lên KV đám mây (${triggerReason})`);
       return true;
     }
   } catch (e) {
     console.warn('Lỗi khi đồng bộ đám mây:', e);
+    hasPendingCloudSync = true;
   } finally {
     isSyncingToCloud = false;
   }
@@ -6796,7 +7498,802 @@ async function triggerGameSync(triggerReason = 'round_end') {
 }
 
 function queueCloudSync() {
-  // Đồng bộ đám mây được kích hoạt có kiểm soát khi kết thúc lượt hoặc mở hộp quà
+  triggerGameSync('queue_call');
+}
+
+// Đồng bộ khẩn cấp khi người dùng đóng trang nếu còn dữ liệu chờ gộp
+window.addEventListener('beforeunload', () => {
+  if (hasPendingCloudSync && authCurrentUser && authSessionToken) {
+    try {
+      const payload = getSyncPayload();
+      fetch(`${AUTH_WORKER_URL}/api/sync`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authSessionToken}`
+        },
+        body: JSON.stringify(payload),
+        keepalive: true
+      });
+    } catch (e) {}
+  }
+});
+
+// ══════════════════════════════════════════════════
+//  HỆ THỐNG BẠN BÈ & QUYỀN RIÊNG TƯ (CLIENT)
+// ══════════════════════════════════════════════════
+let currentFriendsCache = {
+  friends: [],
+  incoming: [],
+  outgoing: [],
+  blocked: [],
+  invites: []
+};
+
+// Loại bỏ liên kết khỏi Bio nhằm chống lừa đảo / XSS
+function stripBioLinks(text) {
+  if (typeof text !== 'string') return '';
+  const urlPattern = /(https?:\/\/[^\s]+|www\.[^\s]+|[a-zA-Z0-9-]+\.(?:com|net|org|io|vn|edu|gov|xyz|app|dev|me|info|biz|cc|tv)[^\s]*)/gi;
+  return text.replace(urlPattern, '[liên kết đã bị ẩn]').replace(/<[^>]*>/g, '').trim();
+}
+
+// Mở modal Bạn Bè
+function openFriendsModal(tab = 'list') {
+  if (!authCurrentUser || !authSessionToken) {
+    showToast('⚠️ Vui lòng đăng nhập để sử dụng tính năng Bạn Bè!');
+    openAuthModal('login');
+    return;
+  }
+  const modal = document.getElementById('friendsModalOverlay');
+  if (!modal) return;
+  modal.classList.add('show');
+  switchFriendsTab(tab);
+  loadFriendsData();
+}
+
+function closeFriendsModal() {
+  const modal = document.getElementById('friendsModalOverlay');
+  if (modal) modal.classList.remove('show');
+}
+
+function switchFriendsTab(tab) {
+  const tabs = ['list', 'pending', 'search', 'blocked'];
+  tabs.forEach(t => {
+    const btn = document.getElementById('btnTabFriends' + t.charAt(0).toUpperCase() + t.slice(1));
+    const view = document.getElementById('viewFriends' + t.charAt(0).toUpperCase() + t.slice(1));
+    if (btn) btn.classList.toggle('active', t === tab);
+    if (view) view.style.display = t === tab ? 'block' : 'none';
+  });
+}
+
+// Tải dữ liệu bạn bè từ Cloud Worker
+async function loadFriendsData() {
+  if (!authCurrentUser || !authSessionToken) return;
+  try {
+    const res = await fetch(`${AUTH_WORKER_URL}/api/friends`, {
+      headers: {
+        'Authorization': `Bearer ${authSessionToken}`
+      }
+    });
+    if (!res.ok) return;
+    const data = await res.json();
+    currentFriendsCache = data;
+
+    // Cập nhật badges số lượng
+    updateFriendsBadges(data);
+
+    // Render các tab
+    renderFriendsList(data.friends || []);
+    renderPendingRequests(data.incoming || [], data.outgoing || []);
+    renderBlockedList(data.blocked || []);
+    renderActiveRoomInvites(data.invites || []);
+  } catch (e) {
+    console.warn('Lỗi khi tải dữ liệu bạn bè:', e);
+  }
+}
+
+// Cập nhật số lượng thông báo bạn bè
+function updateFriendsBadges(data) {
+  const friendsCount = (data.friends || []).length;
+  const pendingIncoming = (data.incoming || []).length;
+
+  const countBadge = document.getElementById('friendsCountBadge');
+  if (countBadge) countBadge.textContent = `${friendsCount}/50`;
+
+  const pendingBadge = document.getElementById('friendsPendingCountBadge');
+  if (pendingBadge) pendingBadge.textContent = pendingIncoming;
+
+  // Header & Hub badges
+  const hBadge = document.getElementById('friendsPendingBadge');
+  const hubBadge = document.getElementById('hubFriendsBadge');
+  if (pendingIncoming > 0) {
+    if (hBadge) { hBadge.textContent = pendingIncoming; hBadge.style.display = 'inline-block'; }
+    if (hubBadge) { hubBadge.textContent = pendingIncoming; hubBadge.style.display = 'inline-block'; }
+  } else {
+    if (hBadge) hBadge.style.display = 'none';
+    if (hubBadge) hubBadge.style.display = 'none';
+  }
+}
+
+// Kiểm tra lời mời nền im lặng
+async function refreshFriendsDataSilent() {
+  if (!authCurrentUser || !authSessionToken) return;
+  try {
+    const res = await fetch(`${AUTH_WORKER_URL}/api/friends`, {
+      headers: { 'Authorization': `Bearer ${authSessionToken}` }
+    });
+    if (res.ok) {
+      const data = await res.json();
+      currentFriendsCache = data;
+      updateFriendsBadges(data);
+    }
+  } catch (e) {}
+}
+
+// Render Tab 1: Danh sách bạn bè
+function renderFriendsList(friends) {
+  const container = document.getElementById('friendsListContainer');
+  if (!container) return;
+
+  if (!friends || friends.length === 0) {
+    container.innerHTML = `
+      <div style="text-align:center;padding:2.5rem 1rem;color:var(--text-muted)">
+        <div style="font-size:2.5rem;margin-bottom:.5rem">🤝</div>
+        <div style="font-size:.92rem;font-weight:700;color:var(--text-secondary);margin-bottom:.3rem">Chưa có bạn bè nào</div>
+        <div style="font-size:.78rem">Nhấn tab <strong>"🔍 Tìm Bạn"</strong> bên trên để kết bạn bằng tên đăng nhập chính xác!</div>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = friends.map(f => {
+    const uName = typeof f === 'string' ? f : f.username;
+    const dName = escapeHTML((typeof f === 'object' && f.displayName) ? f.displayName : uName);
+    const avatar = escapeHTML((typeof f === 'object' && f.avatar) ? f.avatar : '🦊');
+    const rank = escapeHTML((typeof f === 'object' && f.rank) ? f.rank : 'Tập Sự');
+    const streak = (typeof f === 'object' && typeof f.streak === 'number') ? f.streak : 0;
+
+    return `
+      <div style="display:flex;align-items:center;justify-content:space-between;background:var(--bg-surface);padding:.75rem .9rem;border-radius:var(--radius-md);border:1px solid var(--border);margin-bottom:.5rem">
+        <div style="display:flex;align-items:center;gap:.65rem;min-width:0;flex:1">
+          <div style="font-size:1.8rem;line-height:1;width:40px;height:40px;display:flex;align-items:center;justify-content:center;background:var(--bg-card);border-radius:var(--radius-full);border:1px solid var(--border);flex-shrink:0">${avatar}</div>
+          <div style="min-width:0;flex:1">
+            <div style="font-weight:800;color:var(--text-primary);font-size:.9rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${dName}</div>
+            <div style="font-size:.72rem;color:var(--text-muted);display:flex;gap:.4rem;align-items:center">
+              <span>@${escapeHTML(uName)}</span>
+              <span>•</span>
+              <span style="color:var(--neon-cyan)">${rank}</span>
+              ${streak > 0 ? `<span>• 🔥 ${streak}d</span>` : ''}
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;gap:.3rem;flex-shrink:0">
+          <button class="btn btn-ghost btn-sm" onclick="openOtherUserProfileModal('${escapeHTML(uName)}')" style="padding:.25rem .55rem;font-size:.75rem" title="Xem hồ sơ">
+            👁️ Xem
+          </button>
+          <button class="btn btn-cyan btn-sm" onclick="promptInviteFriendToParty('${escapeHTML(uName)}')" style="padding:.25rem .55rem;font-size:.75rem" title="Mời vào phòng">
+            🎮 Mời
+          </button>
+          <button class="btn btn-ghost btn-sm" onclick="confirmRemoveFriend('${escapeHTML(uName)}')" style="padding:.25rem .45rem;font-size:.75rem;color:var(--neon-pink)" title="Hủy kết bạn">
+            💔
+          </button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// Render Tab 2: Lời mời kết bạn (Incoming & Outgoing)
+function renderPendingRequests(incoming, outgoing) {
+  const inContainer = document.getElementById('friendsIncomingContainer');
+  const outContainer = document.getElementById('friendsOutgoingContainer');
+
+  // Incoming
+  if (inContainer) {
+    if (!incoming || incoming.length === 0) {
+      inContainer.innerHTML = `<div style="font-size:.78rem;color:var(--text-muted);padding:.5rem 0">Không có lời mời nào nhận được.</div>`;
+    } else {
+      inContainer.innerHTML = incoming.map(r => {
+        const uFrom = typeof r === 'string' ? r : r.from;
+        const dName = escapeHTML((typeof r === 'object' && r.displayName) ? r.displayName : uFrom);
+        const avatar = escapeHTML((typeof r === 'object' && r.avatar) ? r.avatar : '🦊');
+
+        return `
+          <div style="display:flex;align-items:center;justify-content:space-between;background:var(--bg-surface);padding:.6rem .8rem;border-radius:var(--radius-sm);border:1px solid var(--border);margin-bottom:.4rem">
+            <div style="display:flex;align-items:center;gap:.5rem;min-width:0;flex:1">
+              <span style="font-size:1.5rem">${avatar}</span>
+              <div style="min-width:0;flex:1">
+                <div style="font-weight:700;font-size:.85rem;color:var(--text-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${dName}</div>
+                <div style="font-size:.72rem;color:var(--text-muted)">@${escapeHTML(uFrom)}</div>
+              </div>
+            </div>
+            <div style="display:flex;gap:.3rem;flex-shrink:0">
+              <button class="btn btn-primary btn-sm" onclick="acceptFriendRequest('${escapeHTML(uFrom)}')" style="padding:.2rem .6rem;font-size:.75rem">
+                ✓ Nhận
+              </button>
+              <button class="btn btn-ghost btn-sm" onclick="rejectFriendRequest('${escapeHTML(uFrom)}')" style="padding:.2rem .5rem;font-size:.75rem">
+                ✕ Từ chối
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+  }
+
+  // Outgoing
+  if (outContainer) {
+    if (!outgoing || outgoing.length === 0) {
+      outContainer.innerHTML = `<div style="font-size:.78rem;color:var(--text-muted);padding:.5rem 0">Không có lời mời nào đã gửi.</div>`;
+    } else {
+      outContainer.innerHTML = outgoing.map(r => {
+        const uTo = typeof r === 'string' ? r : r.to;
+        const dName = escapeHTML((typeof r === 'object' && r.displayName) ? r.displayName : uTo);
+        const avatar = escapeHTML((typeof r === 'object' && r.avatar) ? r.avatar : '🦊');
+
+        return `
+          <div style="display:flex;align-items:center;justify-content:space-between;background:var(--bg-surface);padding:.6rem .8rem;border-radius:var(--radius-sm);border:1px solid var(--border);margin-bottom:.4rem">
+            <div style="display:flex;align-items:center;gap:.5rem;min-width:0;flex:1">
+              <span style="font-size:1.5rem">${avatar}</span>
+              <div style="min-width:0;flex:1">
+                <div style="font-weight:700;font-size:.85rem;color:var(--text-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${dName}</div>
+                <div style="font-size:.72rem;color:var(--text-muted)">@${escapeHTML(uTo)} • Đang chờ đối phương...</div>
+              </div>
+            </div>
+            <button class="btn btn-ghost btn-sm" onclick="cancelFriendRequest('${escapeHTML(uTo)}')" style="padding:.2rem .6rem;font-size:.75rem;color:var(--neon-pink)">
+              Hủy
+            </button>
+          </div>
+        `;
+      }).join('');
+    }
+  }
+}
+
+// Render Tab 4: Blocked list
+function renderBlockedList(blocked) {
+  const container = document.getElementById('friendsBlockedContainer');
+  if (!container) return;
+
+  if (!blocked || blocked.length === 0) {
+    container.innerHTML = `<div style="text-align:center;padding:2rem 0;color:var(--text-muted);font-size:.82rem">Danh sách chặn đang trống.</div>`;
+    return;
+  }
+
+  container.innerHTML = blocked.map(u => {
+    return `
+      <div style="display:flex;align-items:center;justify-content:space-between;background:var(--bg-surface);padding:.6rem .8rem;border-radius:var(--radius-sm);border:1px solid var(--border);margin-bottom:.4rem">
+        <span style="font-weight:700;font-size:.85rem;color:var(--text-muted)">🚫 @${escapeHTML(u)}</span>
+        <button class="btn btn-ghost btn-sm" onclick="unblockUser('${escapeHTML(u)}')" style="padding:.2rem .6rem;font-size:.75rem">
+          Bỏ Chặn
+        </button>
+      </div>
+    `;
+  }).join('');
+}
+
+// Render Active Room Invites Banner
+function renderActiveRoomInvites(invites) {
+  const box = document.getElementById('friendsActiveRoomInvitesBox');
+  if (!box) return;
+
+  if (!invites || invites.length === 0) {
+    box.style.display = 'none';
+    box.innerHTML = '';
+    return;
+  }
+
+  box.style.display = 'block';
+  box.innerHTML = invites.map(inv => {
+    const fromName = escapeHTML(inv.displayName || inv.from);
+    const roomCode = escapeHTML(inv.roomCode);
+    const mode = escapeHTML(inv.gameMode || 'Party');
+
+    return `
+      <div style="background:linear-gradient(135deg, rgba(0,240,255,0.12), rgba(255,42,109,0.1));border:1.5px solid var(--neon-cyan);border-radius:var(--radius-md);padding:.75rem .9rem;margin-bottom:.45rem;display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div style="font-size:.85rem;font-weight:800;color:var(--neon-cyan)">🎮 ${fromName} đã mời bạn vào phòng!</div>
+          <div style="font-size:.75rem;color:var(--text-secondary)">Mã phòng: <strong style="color:var(--neon-gold);letter-spacing:.1em">${roomCode}</strong> • Chế độ: ${mode}</div>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="joinPartyRoomWithCode('${roomCode}')" style="font-weight:800;font-size:.8rem;padding:.35rem .75rem">
+          🚀 Vào Phòng
+        </button>
+      </div>
+    `;
+  }).join('');
+}
+
+// Tìm kiếm bạn bè chính xác
+async function executeFriendSearch() {
+  const inp = document.getElementById('friendSearchInput');
+  const resultBox = document.getElementById('friendSearchResultBox');
+  const btn = document.getElementById('btnExecFriendSearch');
+  if (!inp || !resultBox) return;
+
+  const target = inp.value.trim().toLowerCase();
+  if (!target) {
+    showToast('⚠️ Vui lòng nhập tên đăng nhập cần tìm!');
+    return;
+  }
+  if (!/^[a-z0-9_]{3,20}$/.test(target)) {
+    showToast('⚠️ Tên đăng nhập phải từ 3-20 ký tự (chữ thường, số hoặc _)');
+    return;
+  }
+
+  if (btn) { btn.disabled = true; btn.textContent = '⏳ Đang tìm...'; }
+  resultBox.innerHTML = '<div style="padding:1rem;text-align:center;color:var(--text-muted)">⏳ Đang tra cứu chính xác...</div>';
+
+  try {
+    const res = await fetch(`${AUTH_WORKER_URL}/api/friends/search?username=${encodeURIComponent(target)}`, {
+      headers: { 'Authorization': `Bearer ${authSessionToken}` }
+    });
+    const data = await res.json();
+
+    if (!res.ok) {
+      resultBox.innerHTML = `
+        <div style="background:rgba(255,71,87,0.08);border:1px solid rgba(255,71,87,0.3);border-radius:var(--radius-md);padding:1rem;text-align:center;color:var(--text-secondary);font-size:.85rem">
+          ${escapeHTML(data.error || 'Không tìm thấy người dùng với tên đăng nhập này.')}
+        </div>
+      `;
+      return;
+    }
+
+    const u = data.user;
+    const rel = data.relation || {};
+    const dName = escapeHTML(u.displayName || u.username);
+    const avatar = escapeHTML(u.avatar || '🦊');
+    const rank = escapeHTML(u.rank || 'Tập Sự');
+    const uName = escapeHTML(u.username);
+
+    let actionBtnHtml = '';
+    if (rel.isFriend) {
+      actionBtnHtml = `<span class="badge" style="background:rgba(0,245,155,0.15);color:var(--neon-green)">✓ Đã là bạn bè</span>`;
+    } else if (rel.hasOutgoing) {
+      actionBtnHtml = `<span class="badge" style="background:rgba(255,190,11,0.15);color:var(--neon-gold)">⏳ Đã gửi lời mời</span>`;
+    } else if (rel.hasIncoming) {
+      actionBtnHtml = `<button class="btn btn-primary btn-sm" onclick="acceptFriendRequest('${uName}')">✓ Chấp nhận lời mời</button>`;
+    } else {
+      actionBtnHtml = `<button class="btn btn-primary btn-sm" onclick="sendFriendRequest('${uName}')">➕ Gửi Lời Mời Kết Bạn</button>`;
+    }
+
+    resultBox.innerHTML = `
+      <div style="background:var(--bg-surface);border:1.5px solid var(--neon-cyan);border-radius:var(--radius-md);padding:1rem">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem">
+          <div style="display:flex;align-items:center;gap:.75rem">
+            <div style="font-size:2rem;line-height:1;width:44px;height:44px;display:flex;align-items:center;justify-content:center;background:var(--bg-card);border-radius:var(--radius-full);border:1px solid var(--border)">${avatar}</div>
+            <div>
+              <div style="font-weight:800;color:var(--text-primary);font-size:.95rem">${dName}</div>
+              <div style="font-size:.75rem;color:var(--text-muted)">@${uName} • ${rank}</div>
+            </div>
+          </div>
+          <div>${actionBtnHtml}</div>
+        </div>
+        <div style="display:flex;justify-content:flex-end">
+          <button class="btn btn-ghost btn-sm" onclick="openOtherUserProfileModal('${uName}')" style="font-size:.78rem">
+            👁️ Xem Hồ Sơ Chi Tiết
+          </button>
+        </div>
+      </div>
+    `;
+  } catch (err) {
+    resultBox.innerHTML = `<div style="color:var(--neon-pink);font-size:.82rem;text-align:center">Lỗi kết nối máy chủ: ${escapeHTML(err.message)}</div>`;
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = '🔍 Tìm'; }
+  }
+}
+
+// Gửi lời mời kết bạn
+async function sendFriendRequest(targetUsername) {
+  if (!authCurrentUser || !authSessionToken) return;
+  try {
+    const res = await fetch(`${AUTH_WORKER_URL}/api/friends/request`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authSessionToken}`
+      },
+      body: JSON.stringify({ targetUsername })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      showToast(`⚠️ ${data.error || 'Không thể gửi lời mời'}`);
+      return;
+    }
+    playSfx('win');
+    showToast(`🎉 ${data.message || 'Đã gửi lời mời kết bạn!'}`);
+    loadFriendsData();
+    executeFriendSearch();
+  } catch (e) {
+    showToast('⚠️ Lỗi kết nối khi gửi lời mời.');
+  }
+}
+
+// Chấp nhận lời mời
+async function acceptFriendRequest(targetUsername) {
+  if (!authCurrentUser || !authSessionToken) return;
+  try {
+    const res = await fetch(`${AUTH_WORKER_URL}/api/friends/accept`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authSessionToken}`
+      },
+      body: JSON.stringify({ targetUsername })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      showToast(`⚠️ ${data.error || 'Lỗi khi chấp nhận'}`);
+      return;
+    }
+    playSfx('win');
+    showToast(`🤝 Đã trở thành bạn bè với @${targetUsername}!`);
+    loadFriendsData();
+  } catch (e) {
+    showToast('⚠️ Lỗi kết nối máy chủ.');
+  }
+}
+
+// Từ chối lời mời
+async function rejectFriendRequest(targetUsername) {
+  if (!authCurrentUser || !authSessionToken) return;
+  try {
+    const res = await fetch(`${AUTH_WORKER_URL}/api/friends/reject`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authSessionToken}`
+      },
+      body: JSON.stringify({ targetUsername })
+    });
+    if (res.ok) {
+      showToast('Đã từ chối lời mời kết bạn.');
+      loadFriendsData();
+    }
+  } catch (e) {}
+}
+
+// Hủy lời mời đã gửi
+async function cancelFriendRequest(targetUsername) {
+  if (!authCurrentUser || !authSessionToken) return;
+  try {
+    const res = await fetch(`${AUTH_WORKER_URL}/api/friends/cancel`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authSessionToken}`
+      },
+      body: JSON.stringify({ targetUsername })
+    });
+    if (res.ok) {
+      showToast('Đã hủy lời mời kết bạn.');
+      loadFriendsData();
+    }
+  } catch (e) {}
+}
+
+// Hủy kết bạn
+function confirmRemoveFriend(targetUsername) {
+  if (confirm(`Bạn có chắc chắn muốn hủy kết bạn với @${targetUsername}?`)) {
+    doRemoveFriend(targetUsername);
+  }
+}
+
+async function doRemoveFriend(targetUsername) {
+  if (!authCurrentUser || !authSessionToken) return;
+  try {
+    const res = await fetch(`${AUTH_WORKER_URL}/api/friends/remove`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authSessionToken}`
+      },
+      body: JSON.stringify({ targetUsername })
+    });
+    if (res.ok) {
+      showToast(`Đã hủy kết bạn với @${targetUsername}.`);
+      loadFriendsData();
+    }
+  } catch (e) {}
+}
+
+// Chặn người dùng
+function confirmBlockUser(targetUsername) {
+  if (confirm(`Chặn @${targetUsername}? Người dùng này sẽ không thể tìm thấy bạn, gửi lời mời hay kết bạn với bạn.`)) {
+    doBlockUser(targetUsername);
+  }
+}
+
+async function doBlockUser(targetUsername) {
+  if (!authCurrentUser || !authSessionToken) return;
+  try {
+    const res = await fetch(`${AUTH_WORKER_URL}/api/friends/block`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authSessionToken}`
+      },
+      body: JSON.stringify({ targetUsername })
+    });
+    if (res.ok) {
+      showToast(`Đã chặn @${targetUsername}.`);
+      closeOtherUserProfileModal();
+      loadFriendsData();
+    }
+  } catch (e) {}
+}
+
+// Bỏ chặn
+async function unblockUser(targetUsername) {
+  if (!authCurrentUser || !authSessionToken) return;
+  try {
+    const res = await fetch(`${AUTH_WORKER_URL}/api/friends/unblock`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authSessionToken}`
+      },
+      body: JSON.stringify({ targetUsername })
+    });
+    if (res.ok) {
+      showToast(`Đã bỏ chặn @${targetUsername}.`);
+      loadFriendsData();
+    }
+  } catch (e) {}
+}
+
+// Xem hồ sơ người khác
+async function openOtherUserProfileModal(username) {
+  if (!authCurrentUser || !authSessionToken) {
+    showToast('⚠️ Vui lòng đăng nhập để xem hồ sơ!');
+    return;
+  }
+
+  const modal = document.getElementById('otherUserProfileModalOverlay');
+  if (!modal) return;
+  modal.classList.add('show');
+
+  const nameEl = document.getElementById('otherUserDisplayName');
+  const userTag = document.getElementById('otherUserUsernameTag');
+  const avatarEl = document.getElementById('otherUserAvatarDisplay');
+  const restrBox = document.getElementById('otherUserRestrictedBox');
+  const fullBox = document.getElementById('otherUserFullDetailsBox');
+  const footer = document.getElementById('otherUserActionsFooter');
+
+  if (nameEl) nameEl.textContent = 'Đang tải...';
+  if (userTag) userTag.textContent = `@${escapeHTML(username)}`;
+  if (avatarEl) avatarEl.textContent = '🦊';
+  if (restrBox) restrBox.style.display = 'none';
+  if (fullBox) fullBox.style.display = 'none';
+  if (footer) footer.innerHTML = '';
+
+  try {
+    const res = await fetch(`${AUTH_WORKER_URL}/api/profile/${encodeURIComponent(username)}`, {
+      headers: { 'Authorization': `Bearer ${authSessionToken}` }
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      showToast(`⚠️ ${data.error || 'Không thể xem hồ sơ'}`);
+      closeOtherUserProfileModal();
+      return;
+    }
+
+    const p = data.profile;
+    const isFriend = !!p.isFriend;
+
+    if (nameEl) nameEl.textContent = p.displayName || p.username;
+    if (avatarEl) avatarEl.textContent = p.avatar || '🦊';
+
+    // Privacy badge
+    const privBadge = document.getElementById('otherUserPrivacyBadge');
+    if (privBadge) {
+      if (p.privacy === 'public') {
+        privBadge.textContent = '🌐 Công khai';
+        privBadge.className = 'badge';
+      } else if (p.privacy === 'private') {
+        privBadge.textContent = '🔒 Riêng tư';
+        privBadge.className = 'badge';
+      } else {
+        privBadge.textContent = '🤝 Chỉ bạn bè';
+        privBadge.className = 'badge';
+      }
+    }
+
+    const rankBadge = document.getElementById('otherUserRankBadge');
+    if (rankBadge) rankBadge.textContent = p.rank || 'Tập Sự';
+
+    if (p.isRestricted) {
+      if (restrBox) {
+        restrBox.style.display = 'block';
+        const desc = document.getElementById('otherUserRestrictedDesc');
+        if (desc) desc.textContent = p.message || 'Hồ sơ người dùng này đang ở chế độ giới hạn.';
+      }
+      if (fullBox) fullBox.style.display = 'none';
+    } else {
+      if (restrBox) restrBox.style.display = 'none';
+      if (fullBox) fullBox.style.display = 'block';
+
+      const jlptEl = document.getElementById('otherUserJlptTarget');
+      if (jlptEl) jlptEl.textContent = p.jlptTarget || 'N5';
+
+      const streakEl = document.getElementById('otherUserStreak');
+      if (streakEl) streakEl.textContent = `${p.streak || 0} ngày`;
+
+      const xpEl = document.getElementById('otherUserXp');
+      if (xpEl) xpEl.textContent = `${p.xp || 0} EXP`;
+
+      // Bio: Lọc liên kết và hiển thị qua textContent chống XSS
+      const bioEl = document.getElementById('otherUserBioText');
+      if (bioEl) {
+        bioEl.textContent = stripBioLinks(p.bio || 'Người dùng này chưa viết tiểu sử.');
+      }
+
+      // Badges
+      const badgesGrid = document.getElementById('otherUserBadgesGrid');
+      if (badgesGrid) {
+        const uBadges = Array.isArray(p.badges) ? p.badges : [];
+        if (uBadges.length === 0) {
+          badgesGrid.innerHTML = `<span style="font-size:.78rem;color:var(--text-muted)">Chưa có huy hiệu nào.</span>`;
+        } else {
+          badgesGrid.innerHTML = uBadges.map(bId => {
+            const sysB = (typeof SYSTEM_BADGES !== 'undefined') ? SYSTEM_BADGES.find(sb => sb.id === bId) : null;
+            const icon = sysB ? sysB.icon : '🏅';
+            const bName = sysB ? sysB.name : bId;
+            return `<span class="badge" title="${escapeHTML(bName)}" style="display:flex;align-items:center;gap:.25rem;font-size:.75rem"><span>${icon}</span> <span>${escapeHTML(bName)}</span></span>`;
+          }).join('');
+        }
+      }
+    }
+
+    // Render footer action buttons
+    if (footer) {
+      const uName = escapeHTML(username);
+      if (isFriend) {
+        footer.innerHTML = `
+          <button class="btn btn-cyan btn-sm" onclick="closeOtherUserProfileModal(); promptInviteFriendToParty('${uName}');">
+            🎮 Mời Vào Phòng
+          </button>
+          <button class="btn btn-ghost btn-sm" onclick="closeOtherUserProfileModal(); confirmRemoveFriend('${uName}');" style="color:var(--neon-pink)">
+            💔 Hủy Kết Bạn
+          </button>
+          <button class="btn btn-ghost btn-sm" onclick="confirmBlockUser('${uName}');" style="color:var(--text-muted)">
+            🚫 Chặn
+          </button>
+        `;
+      } else {
+        footer.innerHTML = `
+          <button class="btn btn-primary btn-sm" onclick="sendFriendRequest('${uName}');">
+            ➕ Gửi Lời Mời Kết Bạn
+          </button>
+          <button class="btn btn-ghost btn-sm" onclick="confirmBlockUser('${uName}');" style="color:var(--text-muted)">
+            🚫 Chặn
+          </button>
+        `;
+      }
+    }
+  } catch (err) {
+    showToast('⚠️ Lỗi khi tải hồ sơ người dùng.');
+    closeOtherUserProfileModal();
+  }
+}
+
+function closeOtherUserProfileModal() {
+  const modal = document.getElementById('otherUserProfileModalOverlay');
+  if (modal) modal.classList.remove('show');
+}
+
+// Mời bạn vào phòng Party
+function promptInviteFriendToParty(username) {
+  if (myRoomCode && isPartyHost) {
+    sendRoomInviteToFriend(username, myRoomCode);
+  } else {
+    if (confirm(`Bạn chưa mở phòng đấu. Bạn có muốn chuyển sang sảnh Party tạo phòng và gửi mã mời cho @${username} không?`)) {
+      closeFriendsModal();
+      switchTab('party');
+      createPartyRoom();
+      setTimeout(() => {
+        if (myRoomCode) {
+          sendRoomInviteToFriend(username, myRoomCode);
+        }
+      }, 500);
+    }
+  }
+}
+
+async function sendRoomInviteToFriend(targetUsername, roomCode) {
+  if (!authCurrentUser || !authSessionToken) return;
+  try {
+    const res = await fetch(`${AUTH_WORKER_URL}/api/friends/invite-room`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authSessionToken}`
+      },
+      body: JSON.stringify({
+        targetUsername,
+        roomCode,
+        gameMode: (typeof partyGameMode !== 'undefined' ? partyGameMode : 'party')
+      })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      showToast(`⚠️ ${data.error || 'Lỗi gửi lời mời'}`);
+      return;
+    }
+    playSfx('win');
+    showToast(`📨 ${data.message || 'Đã gửi lời mời vào phòng!'}`);
+  } catch (e) {
+    showToast('⚠️ Lỗi kết nối khi gửi lời mời vào phòng.');
+  }
+}
+
+// Mở modal mời bạn bè từ trong phòng Party
+function openInviteFriendsToPartyModal() {
+  if (!myRoomCode) {
+    showToast('⚠️ Vui lòng tạo mã phòng trước khi mời bạn bè!');
+    return;
+  }
+  if (!authCurrentUser || !authSessionToken) {
+    showToast('⚠️ Vui lòng đăng nhập để mời bạn bè!');
+    openAuthModal('login');
+    return;
+  }
+
+  const modal = document.getElementById('inviteFriendsModalOverlay');
+  const codeTag = document.getElementById('invitePartyRoomCodeTag');
+  const container = document.getElementById('inviteFriendsListContainer');
+  if (!modal || !container) return;
+
+  if (codeTag) codeTag.textContent = myRoomCode;
+
+  const friends = currentFriendsCache.friends || [];
+  if (friends.length === 0) {
+    container.innerHTML = `
+      <div style="text-align:center;padding:1.5rem;color:var(--text-muted);font-size:.85rem">
+        Bạn chưa có bạn bè nào để gửi lời mời.<br>
+        <button class="btn btn-ghost btn-sm" onclick="closeInviteFriendsModal(); openFriendsModal('search');" style="margin-top:.75rem">
+          🔍 Tìm & Thêm Bạn Mới
+        </button>
+      </div>
+    `;
+  } else {
+    container.innerHTML = friends.map(f => {
+      const uName = typeof f === 'string' ? f : f.username;
+      const dName = escapeHTML((typeof f === 'object' && f.displayName) ? f.displayName : uName);
+      const avatar = escapeHTML((typeof f === 'object' && f.avatar) ? f.avatar : '🦊');
+
+      return `
+        <div style="display:flex;align-items:center;justify-content:space-between;background:var(--bg-surface);padding:.6rem .8rem;border-radius:var(--radius-sm);border:1px solid var(--border);margin-bottom:.4rem">
+          <div style="display:flex;align-items:center;gap:.5rem">
+            <span style="font-size:1.5rem">${avatar}</span>
+            <div>
+              <div style="font-weight:700;font-size:.85rem;color:var(--text-primary)">${dName}</div>
+              <div style="font-size:.72rem;color:var(--text-muted)">@${escapeHTML(uName)}</div>
+            </div>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="sendRoomInviteToFriend('${escapeHTML(uName)}', '${escapeHTML(myRoomCode)}')" style="font-size:.75rem">
+            📨 Gửi Lời Mời
+          </button>
+        </div>
+      `;
+    }).join('');
+  }
+
+  modal.classList.add('show');
+}
+
+function closeInviteFriendsModal() {
+  const modal = document.getElementById('inviteFriendsModalOverlay');
+  if (modal) modal.classList.remove('show');
+}
+
+// Tham gia phòng chơi bằng mã phòng trực tiếp từ lời mời
+function joinPartyRoomWithCode(code) {
+  closeFriendsModal();
+  switchTab('party');
+  const inp = document.getElementById('joinRoomCodeInput');
+  if (inp) inp.value = code;
+  showToast(`⚡ Đang kết nối tới phòng ${code}...`);
+  if (typeof joinPartyRoom === 'function') joinPartyRoom();
 }
 
 const MYSTERY_COLLECTIBLES = [
@@ -6854,7 +8351,7 @@ function closeMysteryBoxModal() {
 function unboxMysteryGift() {
   ensureCollectiblesData();
 
-  playSfx('win');
+  playSfx('gift_open');
   if (typeof triggerParticleBurst === 'function') {
     triggerParticleBurst();
   }
@@ -8082,7 +9579,7 @@ window.MUSIC_DB = ANIME_LIST;
 //  5. SCREEN ROUTER & NAVIGATION
 // ══════════════════════════════════════════════════
 function switchTab(tabId) {
-  playSfx('click');
+  playSfx('tab_switch');
   if (tabId !== 'dojo' && typeof soloAnimeTimer !== 'undefined' && soloAnimeTimer) {
     clearInterval(soloAnimeTimer);
     soloAnimeTimer = null;
@@ -8101,6 +9598,13 @@ function switchTab(tabId) {
     renderPlaylistDeck();
   } else if(tabId === 'quest') {
     renderQuestRoadmap();
+  } else if(tabId === 'hub') {
+    if (typeof updateAnalyticsQuickStats === 'function') updateAnalyticsQuickStats();
+    if (typeof renderLearningAnalyticsCanvas === 'function') renderLearningAnalyticsCanvas();
+    if (typeof renderDailyQuests === 'function') renderDailyQuests();
+  } else if(tabId === 'dojo') {
+    if (typeof initDojoTopicSelect === 'function') initDojoTopicSelect();
+    if (typeof renderDojoRecommendation === 'function') renderDojoRecommendation();
   }
 }
 
@@ -8139,6 +9643,7 @@ function closeActiveModal() {
   else if (id === 'sakuraWardrobeModal' && typeof closeSakuraWardrobeModal === 'function') closeSakuraWardrobeModal();
   else if (id === 'mysteryBoxModal' && typeof closeMysteryBoxModal === 'function') closeMysteryBoxModal();
   else if (id === 'collectiblesModal' && typeof closeCollectiblesModal === 'function') closeCollectiblesModal();
+  else if (id === 'dojoSessionSummaryModal' && typeof closeDojoSessionSummaryModal === 'function') closeDojoSessionSummaryModal();
   else if (id === 'modalOverlay' && typeof closeModal === 'function') closeModal();
   else topModal.classList.remove('show');
   return true;
@@ -8175,39 +9680,69 @@ let wrongWordsQuizPool = [];
 const QUEST_STAGES_CONFIG = {
   N5: [
     { name: '1. Chào Hỏi & Giao Tiếp Nhập Môn', category: 'Chào hỏi & Giao tiếp', icon: '🌸', desc: 'Học các câu chào hỏi, cảm ơn và xin lỗi thông dụng nhất.' },
-    { name: '2. Số Đếm, Lượng Từ & Lịch', category: 'Số đếm & Lượng từ', icon: '🔢', desc: 'Số đếm, tuổi tác, ngày tháng và lượng từ căn bản.' },
-    { name: '3. Gia Đình & Con Người', category: 'Gia đình & Xưng hô', icon: '👨‍👩‍👧', desc: 'Từ vựng xưng hô gia đình và giao tiếp xã hội.' },
+    { name: '2. Số Đếm & Lượng Từ Căn Bản', category: 'Số đếm & Lượng từ', icon: '🔢', desc: 'Số đếm, tuổi tác, ngày tháng và lượng từ căn bản.' },
+    { name: '3. Gia Đình & Đại Từ Xưng Hô', category: 'Gia đình & Xưng hô', icon: '👨‍👩‍👧', desc: 'Từ vựng xưng hô gia đình và giao tiếp thân mật.' },
     { name: '4. Ẩm Thực, Món Ăn & Đồ Uống', category: 'Ẩm thực & Đồ uống', icon: '🍱', desc: 'Các món ăn Nhật Bản và đồ uống thường ngày.' },
-    { name: '5. Động Vật & Cây Cỏ', category: 'Động vật & Cây cỏ', icon: '🐕', desc: 'Thế giới động vật và thiên nhiên phong phú.' },
-    { name: '6. Địa Điểm, Tòa Nhà & Vị Trí', category: 'Địa điểm & Tòa nhà', icon: '🏫', desc: 'Trường học, bệnh viện, nhà ga và vị trí không gian.' },
-    { name: '7. Đồ Vật & Trang Phục Thường Ngày', category: 'Đồ vật & Đồ dùng gia đình', icon: '🎒', desc: 'Vật dụng học tập, quần áo và đồ gia dụng.' },
-    { name: '8. Động Từ Nhóm 2 (Ichidan)', category: 'Động từ Ichidan (Nhóm 2)', icon: '🏃', desc: 'Ăn, ngủ, xem, dậy - các động từ kết thúc bằng -eru/-iru.' },
-    { name: '9. Động Từ Nhóm 1 (Godan) & Suru', category: 'Động từ Godan (Nhóm 1)', icon: '⚡', desc: 'Động tác, di chuyển và các hành động quan trọng.' },
-    { name: '10. Tính Từ N5 (Boss Stage N5)', category: 'Tính từ đuôi -i', icon: '👑', desc: 'Đại chiến Boss cuối N5: Miêu tả cảm xúc, tính chất đồ vật.' }
+    { name: '5. Động Vật & Cây Cỏ Quanh Ta', category: 'Động vật & Cây cỏ', icon: '🐕', desc: 'Thế giới động vật và thiên nhiên phong phú quanh ta.' },
+    { name: '6. Địa Điểm & Tòa Nhà Đô Thị', category: 'Địa điểm & Tòa nhà', icon: '🏫', desc: 'Trường học, bệnh viện, nhà ga và công trình đô thị.' },
+    { name: '7. Phương Hướng & Vị Trí Không Gian', category: 'Phương hướng & Vị trí', icon: '🧭', desc: 'Trên, dưới, trong, ngoài, trái, phải và định hướng.' },
+    { name: '8. Giao Thông & Phương Tiện Đi Lại', category: 'Giao thông & Di chuyển', icon: '🚆', desc: 'Tàu điện, xe buýt, máy bay và phương tiện di chuyển.' },
+    { name: '9. Đồ Vật & Đồ Dùng Gia Đình', category: 'Đồ vật & Đồ dùng gia đình', icon: '🎒', desc: 'Vật dụng học tập, đồ dùng phòng ngủ và sinh hoạt.' },
+    { name: '10. Trang Phục & Phụ Kiện Hàng Ngày', category: 'Trang phục & Phụ kiện', icon: '👘', desc: 'Quần áo, giày dép, mũ nón và phụ kiện thời trang.' },
+    { name: '11. Cơ Thể, Giác Quan & Sức Khỏe', category: 'Cơ thể & Sức khỏe', icon: '🩺', desc: 'Các bộ phận cơ thể và tình trạng sức khỏe căn bản.' },
+    { name: '12. Thiên Nhiên & Thời Tiết Bốn Mùa', category: 'Thiên nhiên & Thời tiết', icon: '⛅', desc: 'Mưa, nắng, gió, tuyết và bốn mùa Nhật Bản.' },
+    { name: '13. Động Từ Ichidan (Nhóm 2) Cốt Lõi', category: 'Động từ Ichidan (Nhóm 2)', icon: '🏃', desc: 'Ăn, ngủ, xem, dậy - các động từ kết thúc đuôi -eru/-iru.' },
+    { name: '14. Động Từ Godan (Nhóm 1) Hành Động', category: 'Động từ Godan (Nhóm 1)', icon: '⚡', desc: 'Động tác, di chuyển, nói, viết và hành động quan trọng.' },
+    { name: '15. Động Từ Suru & Bất Quy Tắc', category: 'Động từ Suru & Bất quy tắc', icon: '⚙️', desc: 'Học tập, mua sắm, dọn dẹp và các động từ bất quy tắc.' },
+    { name: '16. Tính Từ Đuôi -i Sắc Thái N5', category: 'Tính từ đuôi -i', icon: '🌟', desc: 'Nóng, lạnh, lớn, nhỏ, nhanh, chậm, vui vẻ.' },
+    { name: '17. Tính Từ Đuôi -na Phẩm Chất & Trạng Thái', category: 'Tính từ đuôi -na', icon: '💎', desc: 'Yên tĩnh, nổi tiếng, khỏe mạnh, tiện lợi, rảnh rỗi.' },
+    { name: '18. Đại Từ, Chỉ Định & Nghi Vấn Từ', category: 'Đại từ & Từ chỉ định', icon: '👉', desc: 'Kore, Sore, Are, Doremi, ai, cái gì, ở đâu, khi nào.' },
+    { name: '19. Phó Từ, Liên Từ & Từ Nối Câu', category: 'Phó từ & Liên từ', icon: '📑', desc: 'Rất, hơi, luôn luôn, nhưng, vì vậy, và rồi.' },
+    { name: '20. Con Người, Nghề Nghiệp & Xã Hội', category: 'Con người & Xã hội', icon: '👥', desc: 'Màn tổng hợp đỉnh cao N5 trước khi khiêu chiến Boss cuối!' }
   ],
   N4: [
-    { name: '1. Giao Tiếp & Đời Sống Nhật Bản', category: 'Giao tiếp & Đời sống Nhật Bản (N4)', icon: '🎎', desc: 'Phong tục, lễ nghi và nếp sống người Nhật.' },
-    { name: '2. Không Gian Sống & Đồ Gia Dụng', category: 'Nhà ở & Không gian sống (N4)', icon: '🏠', desc: 'Nhà cửa, đồ điện tử và sinh hoạt gia đình N4.' },
-    { name: '3. Giao Thông, Đi Lại & Nhà Ga', category: 'Giao thông, Đi lại & Nhà ga (N4)', icon: '🚆', desc: 'Tàu điện ngầm, xe buýt, vé tàu và lộ trình di chuyển.' },
-    { name: '4. Sức Khỏe, Y Tế & Thể Lực', category: 'Sức khỏe, Y tế & Cơ thể (N4)', icon: '💊', desc: 'Khám bệnh, thuốc men, triệu chứng và chăm sóc sức khỏe.' },
-    { name: '5. Nhà Hàng, Mua Sắm & Ẩm Thực', category: 'Nhà hàng, Mua sắm & Ẩm thực (N4)', icon: '🛒', desc: 'Gọi món, mua sắm và thanh toán tại Nhật.' },
-    { name: '6. Học Tập, Kỳ Thi & Giáo Dục', category: 'Học tập, Kỳ thi & Giáo dục (N4)', icon: '📚', desc: 'Trường lớp, bài kiểm tra và kiến thức học thuật N4.' },
-    { name: '7. Động Từ Godan Nâng Cao N4', category: 'Động từ Nhóm 1 - Godan (N4)', icon: '🥋', desc: 'Các động từ đa dạng thể hiện hành vi phức hợp.' },
-    { name: '8. Động Từ Suru & Động Từ Ghép', category: 'Động từ Suru & Danh động từ (N4)', icon: '⚙️', desc: 'Danh động từ tiếng Nhật thông dụng trong đời sống.' },
-    { name: '9. Tính Từ & Trạng Từ Mở Rộng', category: 'Tính từ đuôi -i (N4)', icon: '🌈', desc: 'Mô tả sắc thái tính cách, trạng thái tinh tế.' },
-    { name: '10. Cảm Xúc, Ý Chí & Quán Ngữ (Boss N4)', category: 'Cảm xúc, Ý chí & Trạng thái (N4)', icon: '⚔️', desc: 'Boss Stage N4: Chinh phục toàn bộ ngữ cảm N4 để mở N3!' }
+    { name: '1. Giao Tiếp & Đời Sống Nhật Bản', category: 'Giao tiếp & Đời sống Nhật Bản (N4)', icon: '🎎', desc: 'Phong tục, lễ nghi và nếp sống sinh hoạt người Nhật.' },
+    { name: '2. Gia Đình & Mối Quan Hệ Xã Hội', category: 'Gia đình & Mối quan hệ (N4)', icon: '🏡', desc: 'Gia đình mở rộng, bạn bè, hàng xóm và quan hệ xã hội.' },
+    { name: '3. Công Sở, Văn Phòng & Nghề Nghiệp', category: 'Công sở, Văn phòng & Nghề nghiệp (N4)', icon: '💼', desc: 'Nơi làm việc, đồng nghiệp, chức vụ và nhiệm vụ công sở.' },
+    { name: '4. Nhà Ở & Không Gian Sinh Hoạt', category: 'Nhà ở & Không gian sống (N4)', icon: '🏠', desc: 'Thuê nhà, phòng ốc, nội thất và không gian sinh hoạt.' },
+    { name: '5. Đồ Gia Dụng, Thiết Bị & Công Nghệ', category: 'Đồ gia dụng & Công nghệ (N4)', icon: '📱', desc: 'Đồ điện tử, máy tính, điện thoại và thiết bị hiện đại.' },
+    { name: '6. Giao Thông, Đi Lại & Nhà Ga N4', category: 'Giao thông, Đi lại & Nhà ga (N4)', icon: '🚆', desc: 'Tàu điện ngầm, shinkansen, vé xe và lộ trình chuyển tuyến.' },
+    { name: '7. Sức Khỏe, Khám Bệnh & Y Tế', category: 'Sức khỏe, Y tế & Cơ thể (N4)', icon: '💊', desc: 'Khám bệnh, thuốc thang, triệu chứng và chăm sóc y tế.' },
+    { name: '8. Nhà Hàng, Mua Sắm & Thanh Toán', category: 'Nhà hàng, Mua sắm & Ẩm thực (N4)', icon: '🛒', desc: 'Gọi món, đặt bàn, mua hàng và các phương thức thanh toán.' },
+    { name: '9. Thiên Nhiên, Khí Hậu & Địa Lý', category: 'Thiên nhiên, Khí hậu & Địa lý (N4)', icon: '🌊', desc: 'Bão, động đất, địa hình, khí hậu và sinh thái Nhật Bản.' },
+    { name: '10. Giải Trí, Nghệ Thuật & Lễ Hội', category: 'Giải trí, Nghệ thuật & Sự kiện (N4)', icon: '🎪', desc: 'Matsuri, rạp phim, âm nhạc, du lịch và vui chơi.' },
+    { name: '11. Học Tập, Kỳ Thi & Giáo Dục N4', category: 'Học tập, Kỳ thi & Giáo dục (N4)', icon: '📚', desc: 'Trường học, đề thi, học bổng và rèn luyện kiến thức.' },
+    { name: '12. Động Từ Godan (Nhóm 1) Phần 1', category: 'Động từ Nhóm 1 - Godan (N4) - Phần 1', icon: '🥋', desc: 'Động từ biến đổi linh hoạt trong các cấu trúc ngữ pháp N4.' },
+    { name: '13. Động Từ Godan (Nhóm 1) Phần 2', category: 'Động từ Nhóm 1 - Godan (N4) - Phần 2', icon: '⚔️', desc: 'Hành động phức tạp, di chuyển và tương tác thực tế.' },
+    { name: '14. Động Từ Ichidan (Nhóm 2) Nâng Cao', category: 'Động từ Nhóm 2 - Ichidan (N4)', icon: '🏹', desc: 'Các động từ đuôi -eru/-iru thể hiện thói quen, biến đổi.' },
+    { name: '15. Động Từ Suru & Danh Động Từ N4', category: 'Động từ Suru & Danh động từ (N4)', icon: '🔧', desc: 'Hợp tác, đăng ký, chuẩn bị, giải thích, liên lạc.' },
+    { name: '16. Tính Từ Đuôi -i Miêu Tả Sắc Thái', category: 'Tính từ đuôi -i (N4)', icon: '🌈', desc: 'Đau, ngứa, cay đắng, buồn ngủ, hiếm thấy, sâu sắc.' },
+    { name: '17. Tính Từ Đuôi -na Tinh Tế & Phẩm Chất', category: 'Tính từ đuôi -na (N4)', icon: '🎨', desc: 'Phức tạp, nguy hiểm, nhiệt tình, lịch sự, đặc biệt.' },
+    { name: '18. Phó Từ, Liên Từ & Quán Ngữ N4', category: 'Phó từ, Liên từ & Quán ngữ (N4)', icon: '🧩', desc: 'Chắc chắn, nhất định, hoàn toàn, thỉnh thoảng, quả nhiên.' },
+    { name: '19. Cảm Xúc, Ý Chí & Trạng Thái Tâm Lý', category: 'Cảm xúc, Ý chí & Trạng thái (N4)', icon: '💖', desc: 'Hồi hộp, thất vọng, tự tin, quyết tâm và hy vọng.' },
+    { name: '20. Động Từ Ghép & Hành Động Đa Tầng', category: 'Động từ ghép & Hành động thường ngày (N4)', icon: '⚡', desc: 'Màn 20 quyết định mở cánh cổng khiêu chiến Lôi Tướng Raijin!' }
   ],
   N3: [
-    { name: '1. Công Sở, Quản Lý & Sự Nghiệp', category: 'Công sở, Quản lý & Sự nghiệp (N3)', icon: '💼', desc: 'Môi trường làm việc chuyên nghiệp, đồng nghiệp và dự án.' },
-    { name: '2. Kinh Tế, Thương Mại & Tài Chính', category: 'Kinh tế, Thương mại & Tài chính (N3)', icon: '📈', desc: 'Thị trường, giá cả, hợp đồng và dịch vụ thương mại.' },
-    { name: '3. Tâm Lý, Cảm Xúc & Ý Chí N3', category: 'Tâm lý, Cảm xúc & Ý chí (N3)', icon: '🧠', desc: 'Nội tâm, nguyện vọng, kiên định và suy tư con người.' },
-    { name: '4. Kính Ngữ & Giao Tiếp Đẳng Cấp', category: 'Kính ngữ & Nghi thức giao tiếp cao cấp (N3)', icon: '🤝', desc: 'Sonkeigo, Kenjougo và Teineigo chuẩn mực Nhật Bản.' },
-    { name: '5. Giáo Dục, Học Thuật & Luận Bàn', category: 'Giáo dục, Học thuật & Luận bàn (N3)', icon: '🎓', desc: 'Học thuật, tranh luận và phân tích logic N3.' },
-    { name: '6. Khoa Học, Kỹ Thuật & Công Nghệ', category: 'Khoa học, Kỹ thuật & Công nghệ (N3)', icon: '🔬', desc: 'Khám phá thế giới, kỹ thuật số và môi trường sinh thái.' },
-    { name: '7. Động Từ Phức Hợp N3 (Phần 1)', category: 'Động từ phức hợp N3 (Phần 1 - Cốt lõi)', icon: '🌪️', desc: 'Các động từ ghép hai thành phần cốt lõi trong đề thi JLPT.' },
-    { name: '8. Động Từ Phức Hợp N3 (Phần 2)', category: 'Động từ phức hợp N3 (Phần 2 - Nâng cao)', icon: '🔥', desc: 'Động từ ghép nâng cao đòi hỏi hiểu sâu bản chất.' },
-    { name: '9. Phó Từ & Liên Từ Logic Đề Thi N3', category: 'Phó từ & Từ nối N3 cốt lõi (Đề thi JLPT N3)', icon: '📑', desc: 'Từ nối câu, từ chuyển ý quyết định điểm đọc hiểu.' },
-    { name: '10. Thành Ngữ 4 Chữ Hán (Đại Boss N3)', category: 'Thành ngữ bốn chữ & Triết lý N3 (Yojijukugo)', icon: '👑', desc: 'Đại đỉnh cao: Thành ngữ 4 chữ Hán Yojijukugo và triết lý sống!' }
+    { name: '1. Kinh Tế, Thương Mại & Tài Chính', category: 'Kinh tế, Thương mại & Tài chính (N3)', icon: '📈', desc: 'Thị trường, đầu tư, ngân sách, tiền tệ và tài chính.' },
+    { name: '2. Chính Trị, Pháp Luật & Xã Hội', category: 'Chính trị, Pháp luật & Xã hội (N3)', icon: '⚖️', desc: 'Chính sách, pháp luật, bầu cử và cơ cấu xã hội hiện đại.' },
+    { name: '3. Công Sở, Quản Lý & Sự Nghiệp', category: 'Công sở, Quản lý & Sự nghiệp (N3)', icon: '💼', desc: 'Lãnh đạo, đàm phán, tuyển dụng và thăng tiến sự nghiệp.' },
+    { name: '4. Khoa Học, Kỹ Thuật & Công Nghệ', category: 'Khoa học, Kỹ thuật & Công nghệ (N3)', icon: '🔬', desc: 'Kỹ thuật số, trí tuệ nhân tạo, nghiên cứu và phát minh.' },
+    { name: '5. Y Tế, Dược Học & Sức Khỏe Chuyên Sâu', category: 'Y tế, Dược học & Sức khỏe chuyên sâu (N3)', icon: '🏥', desc: 'Chẩn đoán y khoa, phẫu thuật, phòng dịch và trị liệu.' },
+    { name: '6. Tâm Lý, Cảm Xúc & Ý Chí N3', category: 'Tâm lý, Cảm xúc & Ý chí (N3)', icon: '🧠', desc: 'Nội tâm sâu sắc, động lực, băn khoăn và ý chí kiên định.' },
+    { name: '7. Kính Ngữ & Nghi Thức Giao Tiếp', category: 'Kính ngữ & Nghi thức giao tiếp cao cấp (N3)', icon: '🤝', desc: 'Tôn kính ngữ (Sonkeigo), Khiêm nhường ngữ (Kenjougo).' },
+    { name: '8. Giáo Dục, Học Thuật & Luận Bàn', category: 'Giáo dục, Học thuật & Luận bàn (N3)', icon: '🎓', desc: 'Luận văn, phản biện, hội thảo và tư duy phản biện.' },
+    { name: '9. Môi Trường, Sinh Thái & Biến Đổi Khí Hậu', category: 'Môi trường, Sinh thái & Khí hậu toàn cầu (N3)', icon: '🌍', desc: 'Ô nhiễm, tài nguyên tái tạo, bảo tồn và sinh thái.' },
+    { name: '10. Động Từ Phức Hợp Cốt Lõi (Phần 1)', category: 'Động từ phức hợp N3 (Phần 1 - Cốt lõi)', icon: '🌪️', desc: 'Động từ ghép hai thành phần trọng tâm trong đề thi N3.' },
+    { name: '11. Động Từ Phức Hợp Nâng Cao (Phần 2)', category: 'Động từ phức hợp N3 (Phần 2 - Nâng cao)', icon: '🔥', desc: 'Động từ ghép mang sắc thái ẩn dụ và nghĩa chuyển.' },
+    { name: '12. Động Từ Nhóm 1 - Godan Đa Nghĩa', category: 'Động từ Nhóm 1 - Godan (N3) - Đa nghĩa', icon: '🗡️', desc: 'Các động từ Godan có nhiều tầng ngữ nghĩa theo ngữ cảnh.' },
+    { name: '13. Động Từ Nhóm 2 - Ichidan Trừu Tượng', category: 'Động từ Nhóm 2 - Ichidan (N3)', icon: '🏹', desc: 'Thể hiện nhận thức, tiếp thu, biến chuyển và phán đoán.' },
+    { name: '14. Tính Từ Đuôi -i Sắc Thái Tinh Tế', category: 'Tính từ đuôi -i (N3) - Sắc thái tinh tế', icon: '🌟', desc: 'Mô tả chi tiết cảm giác giác quan và phẩm chất cao độ.' },
+    { name: '15. Tính Từ Đuôi -na Đa Dạng Phẩm Chất', category: 'Tính từ đuôi -na (N3) - Đa dạng phẩm chất', icon: '💎', desc: 'Khách quan, chủ quan, tiêu cực, tích cực và trừu tượng.' },
+    { name: '16. Phó Từ & Từ Nối Đề Thi JLPT N3', category: 'Phó từ & Từ nối N3 cốt lõi (Đề thi JLPT N3)', icon: '📑', desc: 'Từ nối logic, liên từ chuyển mạch quyết định điểm đọc hiểu.' },
+    { name: '17. Đời Sống Đô Thị, Giao Thông & Nhà Ở', category: 'Đời sống đô thị, Giao thông & Nhà ở N3', icon: '🏙️', desc: 'Quy hoạch đô thị, chung cư, tiện ích công cộng và giao thông.' },
+    { name: '18. Thương Mại, Tiếp Thị & Dịch Vụ', category: 'Thương mại, Tiếp thị & Dịch vụ N3', icon: '🛍️', desc: 'Chiến lược bán hàng, thương hiệu, khách hàng và chuỗi cung ứng.' },
+    { name: '19. Động Từ Phức Hợp N3 Mở Rộng', category: 'Động từ phức hợp N3 mở rộng', icon: '🚀', desc: 'Động từ ghép đa tầng ngữ nghĩa trong văn học và báo chí.' },
+    { name: '20. Thành Ngữ Bốn Chữ Hán & Triết Lý Sống', category: 'Thành ngữ bốn chữ & Triết lý N3 (Yojijukugo)', icon: '👑', desc: 'Đỉnh cao Hán tự N3: Thành ngữ Yojijukugo mở khóa Hắc Long Ryujin!' }
   ]
 };
 
@@ -8268,9 +9803,9 @@ function ensureQuestData() {
   if (!userData.questData) {
     userData.questData = {
       stars: {
-        N5: [0,0,0,0,0,0,0,0,0,0],
-        N4: [0,0,0,0,0,0,0,0,0,0],
-        N3: [0,0,0,0,0,0,0,0,0,0]
+        N5: new Array(20).fill(0),
+        N4: new Array(20).fill(0),
+        N3: new Array(20).fill(0)
       },
       unlockedStages: { N5: 0, N4: -1, N3: -1 },
       unlockedLevels: { N5: true, N4: false, N3: false },
@@ -8278,6 +9813,13 @@ function ensureQuestData() {
       wrongWords: []
     };
   }
+  // Đảm bảo mảng sao có tối thiểu 20 màn cho từng cấp độ đối với dữ liệu cũ
+  ['N5', 'N4', 'N3'].forEach(lvl => {
+    if (!userData.questData.stars[lvl]) userData.questData.stars[lvl] = [];
+    while (userData.questData.stars[lvl].length < 20) {
+      userData.questData.stars[lvl].push(0);
+    }
+  });
   if (!userData.questData.bossDefeated) {
     userData.questData.bossDefeated = { N5: false, N4: false, N3: false };
   }
@@ -8286,11 +9828,13 @@ function ensureQuestData() {
 function onBossNodeClick(lvl) {
   ensureQuestData();
   const qData = userData.questData;
+  const stages = QUEST_STAGES_CONFIG[lvl] || [];
+  const lastStageIdx = stages.length - 1;
   const starsArray = qData.stars[lvl] || [];
-  const isStage10Cleared = starsArray[9] && starsArray[9] > 0;
-  if (!isStage10Cleared) {
+  const isAllStagesCleared = starsArray[lastStageIdx] && starsArray[lastStageIdx] > 0;
+  if (!isAllStagesCleared) {
     playSfx('wrong');
-    showToast(`🔒 Trùm cuối ${lvl} đang khóa! Hãy vượt qua 10 màn của ${lvl} trước.`);
+    showToast(`🔒 Trùm cuối ${lvl} đang khóa! Hãy vượt qua toàn bộ ${stages.length} màn của ${lvl} trước.`);
     return;
   }
   startBossBattle(lvl);
@@ -8506,9 +10050,12 @@ function finishBossBattle(won) {
   if (!container) return;
 
   if (won) {
-    playSfx('win');
+    playSfx('boss_win');
     qData.bossDefeated[bossActiveLevel] = true;
     addXP(cfg.rewardXP, `boss_${bossActiveLevel}`, true);
+    if (typeof updateDailyQuestProgress === 'function') {
+      updateDailyQuestProgress('boss', 1);
+    }
 
     let unlockNotice = '';
     let nextLvl = '';
@@ -8683,31 +10230,32 @@ function renderQuestRoadmap() {
 
   // Render Boss Node
   const bossCfg = QUEST_BOSS_CONFIG[questActiveLevel];
-  const isStage10Cleared = starsArray[9] && starsArray[9] > 0;
+  const lastStageIdx = stages.length - 1;
+  const isAllStagesCleared = starsArray[lastStageIdx] && starsArray[lastStageIdx] > 0;
   const isBossDefeated = qData.bossDefeated && qData.bossDefeated[questActiveLevel];
 
   let bossStatusClass = 'locked';
   let bossBadgeIcon = '🔒';
-  let bossStarsDisplay = '<span style="font-size:.75rem;color:var(--text-muted)">Khóa (Cần vượt 10 màn)</span>';
+  let bossStarsDisplay = `<span style="font-size:.75rem;color:var(--text-muted)">Khóa (Cần vượt ${stages.length} màn)</span>`;
 
   if (isBossDefeated) {
     bossStatusClass = 'completed';
     bossBadgeIcon = '👑';
     bossStarsDisplay = '<span style="font-size:.78rem;color:var(--neon-gold);font-weight:800">👑 ĐÃ DIỆT TRÙM CUỐI</span>';
-  } else if (isStage10Cleared) {
+  } else if (isAllStagesCleared) {
     bossStatusClass = 'unlocked boss-node-ready';
     bossBadgeIcon = bossCfg.avatar;
     bossStarsDisplay = '<span style="font-size:.78rem;color:var(--neon-sakura);font-weight:900">⚔️ KHIÊU CHIẾN TRÙM CUỐI</span>';
   }
 
   const bossNodeHtml = `
-    <div class="quest-node-item ${bossStatusClass}" onclick="onBossNodeClick('${questActiveLevel}')" style="margin-top:.85rem;border:2px solid ${isBossDefeated ? 'var(--neon-gold)' : (isStage10Cleared ? 'var(--neon-sakura)' : 'var(--border)')};background:rgba(255,42,109,0.06)">
+    <div class="quest-node-item ${bossStatusClass}" onclick="onBossNodeClick('${questActiveLevel}')" style="margin-top:.85rem;border:2px solid ${isBossDefeated ? 'var(--neon-gold)' : (isAllStagesCleared ? 'var(--neon-sakura)' : 'var(--border)')};background:rgba(255,42,109,0.06)">
       <div class="quest-node-badge" style="font-size:1.6rem">
         ${bossBadgeIcon}
       </div>
       <div class="quest-node-content">
         <div>
-          <div class="quest-node-title" style="color:${isBossDefeated ? 'var(--neon-gold)' : (isStage10Cleared ? 'var(--neon-sakura)' : 'inherit')}">
+          <div class="quest-node-title" style="color:${isBossDefeated ? 'var(--neon-gold)' : (isAllStagesCleared ? 'var(--neon-sakura)' : 'inherit')}">
             👹 BOSS CUỐI: ${bossCfg.name}
           </div>
           <div class="quest-node-topic">
@@ -8730,7 +10278,8 @@ function selectQuestLevel(lvl) {
   if (!userData.questData.unlockedLevels[lvl]) {
     playSfx('wrong');
     const prevLvl = lvl === 'N3' ? 'N4' : 'N5';
-    showToast(`🔒 Cấp độ ${lvl} đang khóa! Bạn cần vượt qua 10 màn của ${prevLvl} với tối thiểu 1 sao.`);
+    const prevStages = QUEST_STAGES_CONFIG[prevLvl] || [];
+    showToast(`🔒 Cấp độ ${lvl} đang khóa! Bạn cần vượt qua ${prevStages.length} màn của ${prevLvl} và đánh bại Trùm Cuối.`);
     return;
   }
   questActiveLevel = lvl;
@@ -8754,10 +10303,26 @@ function onQuestNodeClick(lvl, stageIdx) {
 function getStageVocabulary(lvl, stageIdx) {
   const pool = (window.ALL_VOCAB || []).filter(x => x.level === lvl);
   const cfg = QUEST_STAGES_CONFIG[lvl][stageIdx];
-  let words = pool.filter(x => x.category && (x.category.includes(cfg.category) || cfg.category.includes(x.category)));
+  if (!cfg) return [];
+
+  // Lấy các từ vựng đúng chủ đề, loại bỏ trùng lặp tuyệt đối
+  const seen = new Set();
+  const words = pool.filter(x => {
+    const cat = x.category || x.cat || '';
+    const match = cat.includes(cfg.category) || cfg.category.includes(cat);
+    if (!match) return false;
+    const key = x.kanji || x.w || x.hiragana || x.r;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+
+  // Nếu kho từ vựng không đủ 10 từ: thông báo cho người dùng thay vì lặp từ
   if (words.length < 10) {
-    const extras = pool.filter(x => !words.includes(x));
-    words = words.concat(extras);
+    console.warn(`[JLPT Quest] Kho từ ${lvl} - Màn ${stageIdx + 1} (${cfg.category}) chỉ có ${words.length} từ, không đủ 10 từ theo yêu cầu!`);
+    if (typeof showToast === 'function') {
+      showToast(`⚠️ Kho từ ${lvl} - "${cfg.name}" chỉ có ${words.length} từ (cần tối thiểu 10 từ). Vui lòng bổ sung vào kho từ thay vì lặp từ!`);
+    }
   }
   return words.slice(0, 10);
 }
@@ -9232,6 +10797,10 @@ function renderQuestStageResult(forcedStars) {
   if (isPass) {
     playSfx('win');
     addXP(expGain, `quest_${questActiveLevel}_${activeQuestStageIdx}`, isPass);
+    if (typeof updateDailyQuestProgress === 'function') {
+      updateDailyQuestProgress('journey', 1);
+      if (stars === 3) updateDailyQuestProgress('perfect_stage', 1);
+    }
 
     // Cập nhật số sao cao nhất của màn
     const oldStars = qData.stars[questActiveLevel][activeQuestStageIdx] || 0;
@@ -9242,9 +10811,11 @@ function renderQuestStageResult(forcedStars) {
       qData.unlockedStages[questActiveLevel] = activeQuestStageIdx + 1;
     }
 
-    // Kiểm tra hoàn thành toàn bộ 10 màn của cấp để mở khiêu chiến Trùm Cuối!
+    // Kiểm tra hoàn thành toàn bộ các màn của cấp để mở khiêu chiến Trùm Cuối!
+    const stages = QUEST_STAGES_CONFIG[questActiveLevel] || [];
+    const lastStageIdx = stages.length - 1;
     let unlockedNewLevelMsg = '';
-    if (activeQuestStageIdx === 9) { // Màn 10 (màn cuối)
+    if (activeQuestStageIdx === lastStageIdx) { // Màn cuối cùng
       const boss = (typeof QUEST_BOSS_CONFIG !== 'undefined' && QUEST_BOSS_CONFIG[questActiveLevel]) ? QUEST_BOSS_CONFIG[questActiveLevel] : null;
       const bName = boss ? boss.name : 'Trùm Cuối';
       unlockedNewLevelMsg = `⚔️ XUẤT SẮC! BẠN ĐÃ MỞ KHÓA MÀN TRÙM CUỐI [${bName}]! HÃY ĐÁNH BẠI TRÙM ĐỂ MỞ CẤP TIẾP THEO!`;
@@ -9276,13 +10847,13 @@ function renderQuestStageResult(forcedStars) {
         ` : ''}
 
         <div style="display:flex;gap:.6rem;justify-content:center;margin-top:1.25rem">
-          ${activeQuestStageIdx < 9 ? `
+          ${activeQuestStageIdx < lastStageIdx ? `
             <button class="btn btn-primary" onclick="startQuestStage('${questActiveLevel}', ${activeQuestStageIdx + 1})">
               Màn Kế Tiếp ➔
             </button>
           ` : `
-            <button class="btn btn-cyan" onclick="closeQuestStageModal()">
-              🏆 Hoàn Tất Cấp ${questActiveLevel}!
+            <button class="btn btn-cyan" onclick="closeQuestStageModal(); onBossNodeClick('${questActiveLevel}')">
+              ⚔️ Khiêu Chiến Trùm Cuối ${questActiveLevel}!
             </button>
           `}
           <button class="btn btn-ghost" onclick="closeQuestStageModal()">
@@ -9371,6 +10942,9 @@ function renderWrongWordQuestion(qIdx) {
     // Hoàn tất đợt ôn tập
     playSfx('win');
     addXP(25, 'srs_review_batch', true);
+    if (typeof updateDailyQuestProgress === 'function') {
+      updateDailyQuestProgress('srs', 1);
+    }
     userData.srsReviewsDone = (userData.srsReviewsDone || 0) + 1;
     saveUserData();
     updateUserUI();
@@ -10137,6 +11711,9 @@ function endBlitzGame() {
     userData.blitzHighScore = blitzScore;
     saveUserData();
   }
+  if (typeof updateDailyQuestProgress === 'function') {
+    updateDailyQuestProgress('speed', 1);
+  }
 
   const recBadge = document.getElementById('blitzNewRecordBadge');
   if (recBadge) recBadge.style.display = isNew ? 'inline-block' : 'none';
@@ -10429,11 +12006,245 @@ function switchDojoMode(mode) {
 }
 
 let currentDojoLevel = 'ALL';
+let currentDojoCategory = 'ALL';
+let dojoCategoriesPopulated = false;
+
+function initDojoTopicSelect() {
+  const sel = document.getElementById('dojoCategorySelect');
+  if (!sel || dojoCategoriesPopulated) return;
+  const cats = (window.ALL_VOCAB && window.ALL_VOCAB.categories) ? window.ALL_VOCAB.categories : [];
+  sel.innerHTML = '<option value="ALL">🌸 Tất Cả 90 Chủ Đề (Toàn Bộ Kho)</option>';
+  cats.forEach(c => {
+    const opt = document.createElement('option');
+    opt.value = c;
+    opt.textContent = `🏷️ ${c}`;
+    sel.appendChild(opt);
+  });
+  dojoCategoriesPopulated = true;
+  const savedCat = localStorage.getItem('emi_dojo_category');
+  if (savedCat && cats.includes(savedCat)) {
+    currentDojoCategory = savedCat;
+    sel.value = savedCat;
+  }
+}
+
+function onDojoCategoryChange(cat) {
+  playSfx('click');
+  currentDojoCategory = cat || 'ALL';
+  try {
+    localStorage.setItem('emi_dojo_category', currentDojoCategory);
+  } catch(e) {}
+  fcIdx = 0;
+  quizIdx = 0;
+  pronIdx = 0;
+  renderFC();
+  if (document.getElementById('dojoQuizView') && document.getElementById('dojoQuizView').style.display !== 'none') {
+    renderQuizQ();
+  }
+  showToast(`🏷️ Chủ đề Dojo: ${cat === 'ALL' ? 'Tất cả 90 chủ đề' : cat}`);
+}
+
+function getDojoSessionSize() {
+  try {
+    const s = localStorage.getItem('emi_session_size');
+    const n = parseInt(s, 10);
+    return [5, 10, 15, 20, 30].includes(n) ? n : 10;
+  } catch(e) {
+    return 10;
+  }
+}
+
+function onDojoSessionSizeChange(sizeVal) {
+  playSfx('click');
+  const n = parseInt(sizeVal, 10) || 10;
+  try {
+    localStorage.setItem('emi_session_size', n);
+  } catch(e) {}
+  dojoSessionStats.target = n;
+  showToast(`⏱️ Đã đặt phiên học: ${n} từ / phiên`);
+}
+
+function renderDojoRecommendation() {
+  const card = document.getElementById('dojoRecommendationCard');
+  if (!card) return;
+  const badge = document.getElementById('dojoRecBadge');
+  const textEl = document.getElementById('dojoRecText');
+  const btn = document.getElementById('dojoRecActionBtn');
+
+  const dueList = (typeof getDueWrongWords === 'function') ? getDueWrongWords() : [];
+  const wrongWords = (userData.questData && userData.questData.wrongWords) ? userData.questData.wrongWords : [];
+  const sessionTarget = getDojoSessionSize();
+
+  if (dueList.length > 0) {
+    if (badge) { badge.textContent = 'SRS ĐẾN HẠN'; badge.style.color = 'var(--neon-gold)'; }
+    if (textEl) {
+      textEl.innerHTML = `Bạn có <strong style="color:var(--neon-gold)">${dueList.length} từ</strong> đến hạn ôn tập theo chu kỳ ngắt quãng SRS! Ôn ngay để lưu giữ vào trí nhớ dài hạn.`;
+    }
+    if (btn) {
+      btn.textContent = `⚡ Ôn Tập ${Math.min(dueList.length, sessionTarget)} Từ Đến Hạn`;
+      btn.onclick = () => startRecommendedStudy('due');
+    }
+  } else if (wrongWords.length > 0) {
+    if (badge) { badge.textContent = 'TỪ HAY SAI'; badge.style.color = 'var(--neon-sakura)'; }
+    if (textEl) {
+      textEl.innerHTML = `Bạn có <strong style="color:var(--neon-sakura)">${wrongWords.length} từ</strong> từng trả lời sai chưa vững vàng. Hãy luyện tập để đưa từ lên Hộp cao hơn!`;
+    }
+    if (btn) {
+      btn.textContent = `📝 Củng Cố ${Math.min(wrongWords.length, sessionTarget)} Từ Hay Sai`;
+      btn.onclick = () => startRecommendedStudy('wrong');
+    }
+  } else {
+    if (badge) { badge.textContent = 'PHONG ĐỘ CAO'; badge.style.color = 'var(--neon-lime)'; }
+    if (textEl) {
+      textEl.innerHTML = `Kho từ vựng của bạn đang ở phong độ tốt nhất! Không có từ trễ hạn. Hãy khám phá chủ đề mới để nạp thêm vốn từ.`;
+    }
+    if (btn) {
+      btn.textContent = `📇 Khám Phá Chủ Đề Mới`;
+      btn.onclick = () => startRecommendedStudy('new');
+    }
+  }
+}
+
+function startRecommendedStudy(type) {
+  playSfx('click');
+  if (type === 'due' || type === 'wrong') {
+    if (typeof startWrongWordsReview === 'function') {
+      startWrongWordsReview();
+    }
+  } else {
+    switchDojoMode('quiz');
+    showToast('📝 Bắt đầu phiên luyện trắc nghiệm chủ đề mới!');
+  }
+}
+
+let dojoSessionStats = {
+  total: 0,
+  target: 10,
+  correct: 0,
+  wrong: 0,
+  wrongList: [],
+  expGained: 0
+};
+
+function recordDojoSessionWord(wordItem, isCorrect, exp) {
+  if (!dojoSessionStats.target) dojoSessionStats.target = getDojoSessionSize();
+  dojoSessionStats.total++;
+  if (isCorrect) {
+    dojoSessionStats.correct++;
+    dojoSessionStats.expGained += (exp || 0);
+  } else {
+    dojoSessionStats.wrong++;
+    if (wordItem && !dojoSessionStats.wrongList.some(w => (w.kanji || w.w) === (wordItem.kanji || wordItem.w))) {
+      dojoSessionStats.wrongList.push(wordItem);
+    }
+  }
+
+  if (dojoSessionStats.total >= dojoSessionStats.target) {
+    showDojoSessionSummary();
+  }
+}
+
+function showDojoSessionSummary() {
+  playSfx('win');
+  const modal = document.getElementById('dojoSessionSummaryModal');
+  if (!modal) return;
+
+  const total = Math.max(1, dojoSessionStats.total);
+  const correct = dojoSessionStats.correct;
+  const wrong = dojoSessionStats.wrong;
+  const acc = Math.round((correct / total) * 100);
+  const exp = dojoSessionStats.expGained;
+
+  const titleEl = document.getElementById('dojoSummaryTitle');
+  if (titleEl) titleEl.textContent = acc >= 80 ? '🎉 PHIÊN HỌC XUẤT SẮC!' : '💪 HOÀN THÀNH PHIÊN HỌC!';
+  const subEl = document.getElementById('dojoSummarySubtitle');
+  if (subEl) subEl.textContent = `Bạn đã hoàn tất phiên ${total} từ vựng. Dữ liệu đã tự động đồng bộ vào lịch sử học tập.`;
+  const accEl = document.getElementById('dojoSummaryAcc');
+  if (accEl) accEl.textContent = `${acc}%`;
+  const expEl = document.getElementById('dojoSummaryExp');
+  if (expEl) expEl.textContent = `+${exp}`;
+  const corEl = document.getElementById('dojoSummaryCorrect');
+  if (corEl) corEl.textContent = correct;
+  const wrgEl = document.getElementById('dojoSummaryWrong');
+  if (wrgEl) wrgEl.textContent = wrong;
+
+  const wrongArea = document.getElementById('dojoSummaryWrongArea');
+  const wrongListEl = document.getElementById('dojoSummaryWrongList');
+  const retryBtn = document.getElementById('dojoSummaryRetryWrongBtn');
+
+  if (dojoSessionStats.wrongList.length > 0) {
+    if (wrongArea) wrongArea.style.display = 'block';
+    if (retryBtn) retryBtn.style.display = 'inline-block';
+    if (wrongListEl) {
+      wrongListEl.innerHTML = dojoSessionStats.wrongList.map(w => `
+        <div style="display:flex;justify-content:space-between;align-items:center;background:var(--bg-surface);padding:.35rem .6rem;border-radius:var(--radius-sm);border:1px solid var(--border)">
+          <div>
+            <strong style="font-family:var(--font-kanji);color:var(--neon-gold);font-size:.92rem">${escapeHTML(w.kanji || w.w)}</strong>
+            <span style="font-size:.78rem;color:var(--neon-cyan)">(${escapeHTML(w.hiragana || w.r || '')})</span>
+            <span style="font-size:.78rem;color:var(--text-secondary)">: ${escapeHTML(w.meaning || w.m || '')}</span>
+          </div>
+          <span style="font-size:.68rem;color:var(--neon-sakura);font-weight:700">Cần ôn</span>
+        </div>
+      `).join('');
+    }
+  } else {
+    if (wrongArea) wrongArea.style.display = 'none';
+    if (retryBtn) retryBtn.style.display = 'none';
+  }
+
+  modal.classList.add('show');
+
+  // Đồng bộ lịch sử học tập vào Canvas Analytics
+  if (typeof syncStudyHistorySession === 'function') {
+    syncStudyHistorySession(exp, correct, total);
+  }
+}
+
+function closeDojoSessionSummaryModal() {
+  playSfx('click');
+  const modal = document.getElementById('dojoSessionSummaryModal');
+  if (modal) modal.classList.remove('show');
+}
+
+function startNewDojoSession() {
+  closeDojoSessionSummaryModal();
+  dojoSessionStats = {
+    total: 0,
+    target: getDojoSessionSize(),
+    correct: 0,
+    wrong: 0,
+    wrongList: [],
+    expGained: 0
+  };
+  showToast(`▶️ Bắt đầu phiên mới (${dojoSessionStats.target} từ)!`);
+}
+
+function restartDojoSessionWithWrongWords() {
+  closeDojoSessionSummaryModal();
+  if (dojoSessionStats.wrongList.length === 0) {
+    startNewDojoSession();
+    return;
+  }
+  const toReview = [...dojoSessionStats.wrongList];
+  dojoSessionStats = {
+    total: 0,
+    target: toReview.length,
+    correct: 0,
+    wrong: 0,
+    wrongList: [],
+    expGained: 0
+  };
+  switchDojoMode('quiz');
+  showToast(`🔄 Đang ôn lại ${toReview.length} từ chưa đúng!`);
+}
 
 function getDojoVocabList() {
   const pool = window.ALL_VOCAB || window.N5_VOCAB || [];
-  if(currentDojoLevel === 'ALL') return pool;
-  return pool.filter(x => x.level === currentDojoLevel);
+  return pool.filter(x => {
+    if (currentDojoLevel !== 'ALL' && x.level !== currentDojoLevel) return false;
+    if (currentDojoCategory !== 'ALL' && x.category !== currentDojoCategory) return false;
+    return true;
+  });
 }
 
 function setDojoLevel(lvl) {
@@ -10508,6 +12319,12 @@ function markMasteredFC() {
     userData.fcMastered.push(key);
     addXP(10, `fc_${key}`, true);
   }
+  if (typeof updateDailyQuestProgress === 'function') {
+    updateDailyQuestProgress('fc', 1);
+  }
+  if (typeof recordDojoSessionWord === 'function') {
+    recordDojoSessionWord(item, true, 10);
+  }
   navDojoFC(1);
 }
 
@@ -10562,10 +12379,23 @@ function handleQuizAnswer(btn, isCorrect, q) {
     quizScore += 10;
     quizStreak++;
     addXP(5, `quiz_${q.kanji || q.w}`, true);
+    if (typeof updateDailyQuestProgress === 'function') {
+      updateDailyQuestProgress('quiz', 1);
+      if (quizStreak >= 5) updateDailyQuestProgress('combo', 1);
+    }
+    if (typeof recordDojoSessionWord === 'function') {
+      recordDojoSessionWord(q, true, 5);
+    }
   } else {
     playSfx('wrong');
     btn.classList.add('wrong');
     quizStreak = 0;
+    if (typeof recordDojoSessionWord === 'function') {
+      recordDojoSessionWord(q, false, 0);
+    }
+    if (typeof recordWrongWordInSRS === 'function') {
+      recordWrongWordInSRS(q);
+    }
   }
   document.getElementById('quizScore').textContent = quizScore;
   document.getElementById('quizStreak').textContent = quizStreak;
@@ -10951,6 +12781,9 @@ function judgePron(transcripts) {
   if (bestScore >= 70) {
     const targetWord = target ? (target.kanji || target.w) : bestTranscript;
     addXP(10, `pron_${targetWord}`, true);
+    if (typeof updateDailyQuestProgress === 'function') {
+      updateDailyQuestProgress('pron', 1);
+    }
   }
   saveUserData();
   updateUserUI();
@@ -11571,7 +13404,532 @@ function checkMusicBlank() {
 }
 
 // ══════════════════════════════════════════════════
-//  8. PEERJS MULTIPLAYER 2-PLAYER PARTY ARENA
+//  7B. RANDOM DAILY QUESTS (HẠT GIỐNG THEO NGÀY HÔM NAY)
+// ══════════════════════════════════════════════════
+const DAILY_QUESTS_MASTER_POOL = [
+  { id: 'fc_review', type: 'fc', title: 'Khám Phá Flashcard', desc: 'Lật xem 15 thẻ từ vựng trong Võ Đường Dojo', target: 15, exp: 25, icon: '📇', diff: 'Dễ' },
+  { id: 'quiz_master', type: 'quiz', title: 'Thử Thách Trắc Nghiệm', desc: 'Trả lời đúng 10 câu trắc nghiệm nghĩa từ', target: 10, exp: 30, icon: '📝', diff: 'Dễ' },
+  { id: 'pronounce_pro', type: 'pron', title: 'Luyện Phát Âm Chuẩn', desc: 'Luyện phát âm 5 từ vựng qua micro/nghe', target: 5, exp: 35, icon: '🎧', diff: 'Vừa' },
+  { id: 'quest_journey', type: 'journey', title: 'Tiến Bước Hành Trình', desc: 'Vượt qua 2 màn chơi trong Hành Trình JLPT', target: 2, exp: 40, icon: '🗺️', diff: 'Vừa' },
+  { id: 'anime_duel', type: 'anime', title: 'Thần Thoại Anime', desc: 'Hoàn thành 1 lượt đố vui Anime (Solo hoặc Party)', target: 1, exp: 25, icon: '🎭', diff: 'Dễ' },
+  { id: 'shiritori_chain', type: 'shiritori', title: 'Bậc Thầy Nối Từ', desc: 'Nối thành công 5 từ trong Shiritori Showdown', target: 5, exp: 35, icon: '🌸', diff: 'Vừa' },
+  { id: 'srs_retention', type: 'srs', title: 'Chiến Binh Trí Nhớ SRS', desc: 'Ôn tập 1 phiên từ đến hạn / từ hay sai (SRS)', target: 1, exp: 40, icon: '🧠', diff: 'Vừa' },
+  { id: 'speed_blitz', type: 'speed', title: 'Tốc Độ Ánh Sáng', desc: 'Chơi 1 ván Phản Xạ Blitz 60 Giây hoặc Đua Tốc Độ', target: 1, exp: 45, icon: '⚡', diff: 'Khó' },
+  { id: 'boss_slayer', type: 'boss', title: 'Thách Thức Trùm Cuối', desc: 'Tham gia 1 trận đánh Trùm Cuối hoặc Co-op Boss', target: 1, exp: 50, icon: '👹', diff: 'Khó' },
+  { id: 'combo_streak', type: 'combo', title: 'Chuỗi Bất Bại', desc: 'Đạt chuỗi combo 5 câu đúng liên tiếp', target: 5, exp: 35, icon: '🔥', diff: 'Vừa' },
+  { id: 'dictation_arena', type: 'dictation', title: 'Đôi Tai Vàng', desc: 'Chinh phục 5 câu Nghe Chép Chính Tả', target: 5, exp: 40, icon: '✍️', diff: 'Vừa' },
+  { id: 'perfect_star', type: 'perfect_stage', title: 'Màn Chơi Hoàn Hảo', desc: 'Đạt tối đa 3 sao trong 1 màn Hành Trình JLPT', target: 1, exp: 55, icon: '⭐', diff: 'Khó' }
+];
+
+function getDailyQuestsForDate(dateStr) {
+  let hash = 0;
+  for (let i = 0; i < dateStr.length; i++) {
+    hash = ((hash << 5) - hash) + dateStr.charCodeAt(i);
+    hash |= 0;
+  }
+  let seed = Math.abs(hash) || 12345;
+  function nextRnd() {
+    seed = (seed * 1664525 + 1013904223) % 4294967296;
+    return seed / 4294967296;
+  }
+  const indices = Array.from({ length: DAILY_QUESTS_MASTER_POOL.length }, (_, i) => i);
+  for (let i = indices.length - 1; i > 0; i--) {
+    const j = Math.floor(nextRnd() * (i + 1));
+    [indices[i], indices[j]] = [indices[j], indices[i]];
+  }
+  return indices.slice(0, 4).map(idx => ({ ...DAILY_QUESTS_MASTER_POOL[idx] }));
+}
+
+function ensureDailyQuests() {
+  const today = getTodayStr();
+  if (!userData.dailyQuestsData || userData.dailyQuestsData.date !== today || !Array.isArray(userData.dailyQuestsData.quests) || userData.dailyQuestsData.quests.length !== 4) {
+    const selected = getDailyQuestsForDate(today);
+    userData.dailyQuestsData = {
+      date: today,
+      quests: selected.map(q => ({
+        id: q.id,
+        type: q.type,
+        title: q.title,
+        desc: q.desc,
+        target: q.target,
+        exp: q.exp,
+        icon: q.icon,
+        diff: q.diff,
+        progress: 0,
+        claimed: false
+      }))
+    };
+    saveUserData();
+  }
+}
+
+function renderDailyQuests() {
+  ensureDailyQuests();
+  const cont = document.getElementById('dailyQuestsListContainer');
+  if (!cont) return;
+
+  const dateBadge = document.getElementById('dailyQuestsDateBadge');
+  if (dateBadge) dateBadge.textContent = userData.dailyQuestsData.date || getTodayStr();
+
+  const quests = userData.dailyQuestsData.quests || [];
+  cont.innerHTML = quests.map(q => {
+    const pct = Math.min(100, Math.round((q.progress / q.target) * 100));
+    const isReady = q.progress >= q.target && !q.claimed;
+    const isDone = q.claimed;
+
+    const diffColors = {
+      'Dễ': 'var(--neon-cyan)',
+      'Vừa': 'var(--neon-gold)',
+      'Khó': 'var(--neon-sakura)'
+    };
+    const diffColor = diffColors[q.diff] || 'var(--neon-cyan)';
+
+    let actionBtnHtml = '';
+    if (isDone) {
+      actionBtnHtml = `<span style="font-size:.72rem;color:var(--text-muted);font-weight:700">✓ Đã nhận</span>`;
+    } else if (isReady) {
+      actionBtnHtml = `<button class="btn btn-xs btn-cyan" onclick="claimDailyQuest('${q.id}')" style="font-weight:800;font-size:.72rem;padding:.2rem .55rem">🎁 Nhận +${q.exp} EXP</button>`;
+    } else {
+      actionBtnHtml = `<span style="font-size:.72rem;color:var(--text-muted)">${q.progress}/${q.target}</span>`;
+    }
+
+    return `
+      <div style="background:var(--bg-surface);border:1px solid ${isReady ? 'var(--neon-cyan)' : 'var(--border)'};border-radius:var(--radius-sm);padding:.5rem .65rem;display:flex;flex-direction:column;gap:.3rem">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:.4rem">
+          <div style="display:flex;align-items:center;gap:.35rem">
+            <span style="font-size:1.1rem">${q.icon}</span>
+            <span style="font-size:.82rem;font-weight:700;color:var(--text-primary)">${escapeHTML(q.title)}</span>
+            <span style="font-size:.65rem;padding:.05rem .35rem;border-radius:var(--radius-full);border:1px solid ${diffColor};color:${diffColor};font-weight:800">${q.diff}</span>
+          </div>
+          <div>${actionBtnHtml}</div>
+        </div>
+        <div style="font-size:.72rem;color:var(--text-secondary)">${escapeHTML(q.desc)}</div>
+        <div style="width:100%;height:4px;background:rgba(255,255,255,0.08);border-radius:2px;overflow:hidden">
+          <div style="width:${pct}%;height:100%;background:${isDone ? 'var(--text-muted)' : (isReady ? 'var(--neon-lime)' : 'var(--neon-cyan)')};border-radius:2px"></div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function updateDailyQuestProgress(type, count = 1) {
+  ensureDailyQuests();
+  let updated = false;
+  (userData.dailyQuestsData.quests || []).forEach(q => {
+    if (q.type === type && !q.claimed && q.progress < q.target) {
+      q.progress = Math.min(q.target, q.progress + count);
+      updated = true;
+      if (q.progress >= q.target) {
+        playSfx('correct');
+        showToast(`🎉 Đã hoàn thành nhiệm vụ: ${q.title}! Hãy nhận thưởng.`);
+      }
+    }
+  });
+  if (updated) {
+    saveUserData();
+    renderDailyQuests();
+  }
+}
+
+function claimDailyQuest(qId) {
+  ensureDailyQuests();
+  const q = (userData.dailyQuestsData.quests || []).find(x => x.id === qId);
+  if (!q || q.claimed || q.progress < q.target) return;
+
+  q.claimed = true;
+  saveUserData();
+  playSfx('gift_open');
+  addXP(q.exp, 'daily_quest_' + qId, true);
+  showToast(`🎁 Đã nhận +${q.exp} EXP từ nhiệm vụ "${q.title}"!`);
+  renderDailyQuests();
+  updateUserUI();
+  if (typeof syncStudyHistorySession === 'function') {
+    syncStudyHistorySession(q.exp, 1, 1);
+  }
+}
+
+// ══════════════════════════════════════════════════
+//  7C. CANVAS LEARNING ANALYTICS ENGINE (ZERO EXTERNAL LIBRARIES)
+// ══════════════════════════════════════════════════
+let activeAnalyticsTab = 'exp7'; // 'exp7' | 'exp30' | 'mastery'
+
+function getLearningHistory() {
+  try {
+    const raw = localStorage.getItem('emi_learning_history_v1');
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+  const today = getTodayStr();
+  return {
+    dailyExp: { [today]: 30 },
+    sessions: [],
+    stats: { totalAnswered: 0, totalCorrect: 0 }
+  };
+}
+
+function saveLearningHistory(hist) {
+  try {
+    localStorage.setItem('emi_learning_history_v1', JSON.stringify(hist));
+  } catch(e) {}
+}
+
+function recordDailyExpForAnalytics(gain) {
+  if (!gain || gain <= 0) return;
+  const hist = getLearningHistory();
+  const today = getTodayStr();
+  hist.dailyExp[today] = (hist.dailyExp[today] || 0) + gain;
+  saveLearningHistory(hist);
+  updateAnalyticsQuickStats();
+  if (activeAnalyticsTab === 'exp7' || activeAnalyticsTab === 'exp30') {
+    renderLearningAnalyticsCanvas(activeAnalyticsTab);
+  }
+}
+
+function syncStudyHistorySession(exp, correct, total) {
+  const hist = getLearningHistory();
+  const today = getTodayStr();
+  if (exp > 0) hist.dailyExp[today] = (hist.dailyExp[today] || 0) + exp;
+  hist.sessions.push({
+    date: today,
+    exp: exp || 0,
+    correct: correct || 0,
+    total: total || 0,
+    time: Date.now()
+  });
+  if (hist.sessions.length > 100) hist.sessions = hist.sessions.slice(-100);
+  hist.stats.totalAnswered = (hist.stats.totalAnswered || 0) + (total || 0);
+  hist.stats.totalCorrect = (hist.stats.totalCorrect || 0) + (correct || 0);
+  saveLearningHistory(hist);
+  updateAnalyticsQuickStats();
+  renderLearningAnalyticsCanvas(activeAnalyticsTab);
+}
+
+function updateAnalyticsQuickStats() {
+  const hist = getLearningHistory();
+  const today = getTodayStr();
+  
+  // Accuracy
+  const accEl = document.getElementById('analyticsAccuracyText');
+  if (accEl) {
+    if (hist.stats.totalAnswered > 0) {
+      const rate = Math.round((hist.stats.totalCorrect / hist.stats.totalAnswered) * 100);
+      accEl.textContent = `${rate}%`;
+    } else {
+      accEl.textContent = '100%';
+    }
+  }
+
+  // Streak
+  const streakEl = document.getElementById('analyticsStreakText');
+  if (streakEl) streakEl.textContent = `${userData.streak || 1} Ngày`;
+
+  // Today EXP
+  const expEl = document.getElementById('analyticsTodayExpText');
+  if (expEl) expEl.textContent = `+${hist.dailyExp[today] || 0}`;
+
+  // Total Mastered
+  const mastEl = document.getElementById('analyticsTotalMasteredText');
+  if (mastEl) {
+    const mast = (typeof getJlptMastery === 'function') ? getJlptMastery() : { total: 0 };
+    mastEl.textContent = `${mast.total || (userData.fcMastered || []).length} từ`;
+  }
+}
+
+function switchAnalyticsTab(tab) {
+  playSfx('click');
+  activeAnalyticsTab = tab;
+  ['exp7', 'exp30', 'mastery'].forEach(t => {
+    const btn = document.getElementById(t === 'exp7' ? 'btnChartExp7' : (t === 'exp30' ? 'btnChartExp30' : 'btnChartMastery'));
+    if (btn) {
+      btn.className = 'btn btn-sm analytics-tab-btn ' + (tab === t ? 'btn-cyan' : 'btn-ghost');
+    }
+  });
+  renderLearningAnalyticsCanvas(tab);
+}
+
+function renderLearningAnalyticsCanvas(tab = activeAnalyticsTab) {
+  const canvas = document.getElementById('learningAnalyticsCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  const w = rect.width || 360;
+  const h = rect.height || 190;
+  canvas.width = Math.round(w * dpr);
+  canvas.height = Math.round(h * dpr);
+  ctx.save();
+  ctx.scale(dpr, dpr);
+  ctx.clearRect(0, 0, w, h);
+
+  const hist = getLearningHistory();
+  const today = getTodayStr();
+
+  const captionEl = document.getElementById('analyticsCanvasCaption');
+
+  if (tab === 'exp7') {
+    if (captionEl) captionEl.textContent = 'Biểu đồ cột EXP 7 ngày gần nhất • Tự động ghi nhớ theo ngày.';
+    drawExp7Chart(ctx, w, h, hist, today);
+  } else if (tab === 'exp30') {
+    if (captionEl) captionEl.textContent = 'Đường cong EXP tích lũy 30 ngày • Nổi bật đỉnh cao học tập.';
+    drawExp30Chart(ctx, w, h, hist, today);
+  } else if (tab === 'mastery') {
+    if (captionEl) captionEl.textContent = 'Tiến độ làm chủ từ vựng theo chuẩn JLPT N5 · N4 · N3.';
+    drawMasteryChart(ctx, w, h);
+  }
+  ctx.restore();
+}
+
+function drawExp7Chart(ctx, w, h, hist, today) {
+  const days = [];
+  for (let i = 6; i >= 0; i--) {
+    days.push(addDaysToStr(today, -i));
+  }
+  const values = days.map(d => hist.dailyExp[d] || 0);
+  const maxVal = Math.max(50, ...values);
+
+  const padLeft = 32;
+  const padRight = 14;
+  const padTop = 24;
+  const padBottom = 26;
+  const chartW = w - padLeft - padRight;
+  const chartH = h - padTop - padBottom;
+
+  // Grid lines
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.07)';
+  ctx.lineWidth = 1;
+  for (let step = 0; step <= 3; step++) {
+    const y = padTop + chartH - (chartH * (step / 3));
+    ctx.beginPath();
+    ctx.moveTo(padLeft, y);
+    ctx.lineTo(w - padRight, y);
+    ctx.stroke();
+
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.35)';
+    ctx.font = '9px sans-serif';
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(Math.round((maxVal * step) / 3), padLeft - 6, y);
+  }
+
+  const barCount = 7;
+  const slotW = chartW / barCount;
+  const barW = Math.min(26, slotW * 0.55);
+
+  days.forEach((d, idx) => {
+    const val = values[idx];
+    const barH = (val / maxVal) * chartH;
+    const x = padLeft + (idx * slotW) + (slotW - barW) / 2;
+    const y = padTop + chartH - barH;
+
+    // Gradient bar
+    const grad = ctx.createLinearGradient(0, y, 0, padTop + chartH);
+    if (d === today) {
+      grad.addColorStop(0, '#ff2a6d');
+      grad.addColorStop(1, '#05d9e8');
+    } else {
+      grad.addColorStop(0, '#05d9e8');
+      grad.addColorStop(1, 'rgba(5, 217, 232, 0.25)');
+    }
+    ctx.fillStyle = grad;
+
+    // Rounded cap
+    const r = Math.min(4, barH / 2);
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + barW - r, y);
+    ctx.quadraticCurveTo(x + barW, y, x + barW, y + r);
+    ctx.lineTo(x + barW, padTop + chartH);
+    ctx.lineTo(x, padTop + chartH);
+    ctx.lineTo(x, y + r);
+    ctx.quadraticCurveTo(x, y, x + r, y);
+    ctx.closePath();
+    ctx.fill();
+
+    // Value label
+    if (val > 0) {
+      ctx.fillStyle = d === today ? '#ff2a6d' : '#05d9e8';
+      ctx.font = 'bold 9px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(val, x + barW / 2, y - 5);
+    }
+
+    // Date label
+    const parts = d.split('-');
+    const label = `${parts[2]}/${parts[1]}`;
+    ctx.fillStyle = d === today ? '#05d9e8' : 'rgba(255, 255, 255, 0.5)';
+    ctx.font = d === today ? 'bold 9px sans-serif' : '9px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'top';
+    ctx.fillText(label, x + barW / 2, padTop + chartH + 7);
+  });
+}
+
+function drawExp30Chart(ctx, w, h, hist, today) {
+  const days = [];
+  for (let i = 29; i >= 0; i--) {
+    days.push(addDaysToStr(today, -i));
+  }
+  const values = days.map(d => hist.dailyExp[d] || 0);
+  const maxVal = Math.max(60, ...values);
+
+  const padLeft = 32;
+  const padRight = 14;
+  const padTop = 22;
+  const padBottom = 26;
+  const chartW = w - padLeft - padRight;
+  const chartH = h - padTop - padBottom;
+
+  // Grid
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.06)';
+  ctx.lineWidth = 1;
+  for (let step = 0; step <= 3; step++) {
+    const y = padTop + chartH - (chartH * (step / 3));
+    ctx.beginPath();
+    ctx.moveTo(padLeft, y);
+    ctx.lineTo(w - padRight, y);
+    ctx.stroke();
+
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.35)';
+    ctx.font = '9px sans-serif';
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(Math.round((maxVal * step) / 3), padLeft - 6, y);
+  }
+
+  // Points
+  const pts = days.map((d, idx) => {
+    const x = padLeft + (idx / 29) * chartW;
+    const y = padTop + chartH - ((values[idx] / maxVal) * chartH);
+    return { x, y, val: values[idx], day: d };
+  });
+
+  // Gradient area fill under curve
+  ctx.beginPath();
+  areaGrad = ctx.createLinearGradient(0, padTop, 0, padTop + chartH);
+  areaGrad.addColorStop(0, 'rgba(5, 217, 232, 0.35)');
+  areaGrad.addColorStop(1, 'rgba(5, 217, 232, 0.01)');
+  ctx.fillStyle = areaGrad;
+
+  ctx.moveTo(pts[0].x, padTop + chartH);
+  ctx.lineTo(pts[0].x, pts[0].y);
+  for (let i = 0; i < pts.length - 1; i++) {
+    const cx = (pts[i].x + pts[i + 1].x) / 2;
+    const cy = (pts[i].y + pts[i + 1].y) / 2;
+    ctx.quadraticCurveTo(pts[i].x, pts[i].y, cx, cy);
+  }
+  ctx.lineTo(pts[pts.length - 1].x, pts[pts.length - 1].y);
+  ctx.lineTo(pts[pts.length - 1].x, padTop + chartH);
+  ctx.closePath();
+  ctx.fill();
+
+  // Stroke curve line on top
+  ctx.beginPath();
+  ctx.moveTo(pts[0].x, pts[0].y);
+  for (let i = 0; i < pts.length - 1; i++) {
+    const cx = (pts[i].x + pts[i + 1].x) / 2;
+    const cy = (pts[i].y + pts[i + 1].y) / 2;
+    ctx.quadraticCurveTo(pts[i].x, pts[i].y, cx, cy);
+  }
+  ctx.lineTo(pts[pts.length - 1].x, pts[pts.length - 1].y);
+
+  ctx.strokeStyle = '#05d9e8';
+  ctx.lineWidth = 2.5;
+  ctx.shadowColor = '#05d9e8';
+  ctx.shadowBlur = 6;
+  ctx.stroke();
+  ctx.shadowBlur = 0;
+
+  // Active points
+  pts.forEach(p => {
+    if (p.val > 0) {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.day === today ? 4 : 2.5, 0, Math.PI * 2);
+      ctx.fillStyle = p.day === today ? '#ff2a6d' : '#05d9e8';
+      ctx.fill();
+    }
+  });
+
+  // X Axis labels
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.45)';
+  ctx.font = '9px sans-serif';
+  ctx.textBaseline = 'top';
+
+  const dStart = days[0].split('-');
+  const dMid = days[14].split('-');
+  const dEnd = days[29].split('-');
+
+  ctx.textAlign = 'left';
+  ctx.fillText(`${dStart[2]}/${dStart[1]}`, padLeft, padTop + chartH + 7);
+
+  ctx.textAlign = 'center';
+  ctx.fillText(`${dMid[2]}/${dMid[1]}`, padLeft + chartW / 2, padTop + chartH + 7);
+
+  ctx.textAlign = 'right';
+  ctx.fillStyle = '#05d9e8';
+  ctx.fillText(`${dEnd[2]}/${dEnd[1]} (Nay)`, w - padRight, padTop + chartH + 7);
+}
+
+function drawMasteryChart(ctx, w, h) {
+  const mast = (typeof getJlptMastery === 'function') ? getJlptMastery() : { N5: 0, N4: 0, N3: 0, total: 0 };
+  const levels = [
+    { key: 'N5', total: 660, count: mast.N5 || 0, color: '#05d9e8', name: 'JLPT N5 (Căn bản)' },
+    { key: 'N4', total: 646, count: mast.N4 || 0, color: '#00ff9f', name: 'JLPT N4 (Sơ cấp)' },
+    { key: 'N3', total: 820, count: mast.N3 || 0, color: '#ffbe0b', name: 'JLPT N3 (Trung cấp)' }
+  ];
+
+  const padLeft = 14;
+  const padRight = 14;
+  const padTop = 18;
+  const barH = 22;
+  const gap = 24;
+
+  levels.forEach((lvl, idx) => {
+    const y = padTop + idx * (barH + gap);
+    const pct = Math.min(100, Math.round((lvl.count / lvl.total) * 100));
+
+    // Label row
+    ctx.fillStyle = lvl.color;
+    ctx.font = 'bold 11px sans-serif';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'bottom';
+    ctx.fillText(`${lvl.name}: ${lvl.count} / ${lvl.total} từ`, padLeft, y - 4);
+
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+    ctx.textAlign = 'right';
+    ctx.fillText(`${pct}%`, w - padRight, y - 4);
+
+    // Track
+    const trackW = w - padLeft - padRight;
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
+    ctx.beginPath();
+    if (ctx.roundRect) ctx.roundRect(padLeft, y, trackW, barH, 4); else ctx.rect(padLeft, y, trackW, barH);
+    ctx.fill();
+
+    // Fill
+    const fillW = Math.max(6, (pct / 100) * trackW);
+    const grad = ctx.createLinearGradient(padLeft, 0, padLeft + fillW, 0);
+    grad.addColorStop(0, lvl.color);
+    grad.addColorStop(1, '#ff2a6d');
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    if (ctx.roundRect) ctx.roundRect(padLeft, y, fillW, barH, 4); else ctx.rect(padLeft, y, fillW, barH);
+    ctx.fill();
+  });
+
+  // Summary footer
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+  ctx.font = '10px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'top';
+  const totalCore = 2126;
+  const masteredTotal = mast.total || 0;
+  const allPct = ((masteredTotal / totalCore) * 100).toFixed(1);
+  ctx.fillText(`Tổng hợp: ${masteredTotal} / ${totalCore} từ vựng JLPT đã thành thạo (${allPct}%)`, w / 2, h - 18);
+}
+
+// ══════════════════════════════════════════════════
+//  8. PEERJS MULTIPLAYER 2-PLAYER PARTY ARENA & PARTY BOT AI ENGINE
 // ══════════════════════════════════════════════════
 let peer = null;
 let partyConn = null;
@@ -11582,6 +13940,151 @@ let partyP2Score = 0;
 let activePartyGameType = ''; // 'shiritori' | 'anime' | 'kanji' | 'speed_race' | 'coop_boss' | 'survival_shiri'
 let partyTurnTimer = null;
 let timeLeft = 20;
+
+// PARTY BOT AI CONTROLS & STATE (Easy, Medium, Hard - NEVER counted in leaderboards)
+let isPartyBotActive = false;
+let isPartyBotMatch = false;
+let partyBotDifficulty = 'easy'; // 'easy' | 'med' | 'hard'
+let partyBotTimer = null;
+let partyBotBossInterval = null;
+
+function togglePartyBot() {
+  playSfx('click');
+  isPartyBotActive = !isPartyBotActive;
+  const btn = document.getElementById('partyBotToggleBtn');
+  const cfgArea = document.getElementById('partyBotConfigArea');
+  if (btn) {
+    btn.textContent = isPartyBotActive ? 'TẮT BOT' : 'BẬT BOT';
+    btn.className = isPartyBotActive ? 'btn btn-sm btn-cyan' : 'btn btn-sm btn-ghost';
+  }
+  if (cfgArea) {
+    cfgArea.style.display = isPartyBotActive ? 'block' : 'none';
+  }
+  updatePartyBotDiffButtons();
+  showToast(isPartyBotActive ? '🤖 Đã bật chế độ Bot AI! Hãy chọn độ khó và vào phòng.' : '🤖 Đã tắt chế độ Bot.');
+}
+
+function toggleInRoomPartyBot() {
+  if (!isPartyHost && !isPartyBotMatch) {
+    showToast('⚠️ Chỉ chủ phòng mới có quyền bật/tắt Bot!');
+    return;
+  }
+  playSfx('click');
+  if (isPartyBotMatch) {
+    isPartyBotMatch = false;
+    isPartyBotActive = false;
+    clearPartyBotTimers();
+    const notice = document.getElementById('partyBotActiveNotice');
+    if (notice) notice.style.display = 'none';
+    const badge = document.getElementById('p2BotBadge');
+    if (badge) badge.style.display = 'none';
+    const btn = document.getElementById('inRoomBotToggleBtn');
+    if (btn) { btn.textContent = 'BẬT BOT'; btn.className = 'btn btn-xs btn-ghost'; }
+    const row = document.getElementById('inRoomBotDiffRow');
+    if (row) row.style.display = 'none';
+    document.getElementById('p2Name').textContent = 'Chờ bạn chơi...';
+    document.getElementById('p2Avatar').textContent = '🥷';
+    showToast('🤖 Đã tắt Bot trong phòng.');
+  } else {
+    isPartyBotMatch = true;
+    isPartyBotActive = true;
+    setupPartyWithBotUI();
+    showToast('🤖 Đã kích hoạt Sakura Bot trong phòng!');
+  }
+}
+
+function setPartyBotDifficulty(diff) {
+  playSfx('click');
+  if (!['easy', 'med', 'hard'].includes(diff)) diff = 'easy';
+  partyBotDifficulty = diff;
+  updatePartyBotDiffButtons();
+  const diffLabels = { easy: 'Dễ', med: 'Vừa', hard: 'Khó' };
+  if (isPartyBotMatch) {
+    const p2N = document.getElementById('p2Name');
+    if (p2N) p2N.textContent = `🤖 Sakura Bot (${diffLabels[diff]})`;
+  }
+  showToast(`🎯 Độ khó Bot: ${diffLabels[diff]}`);
+}
+
+function updatePartyBotDiffButtons() {
+  ['easy', 'med', 'hard'].forEach(d => {
+    const el = document.getElementById(d === 'easy' ? 'pBotDiffEasy' : (d === 'med' ? 'pBotDiffMed' : 'pBotDiffHard'));
+    if (el) {
+      el.className = 'btn btn-sm party-bot-diff-btn ' + (partyBotDifficulty === d ? 'btn-cyan' : 'btn-ghost');
+    }
+    const inEl = document.getElementById(d === 'easy' ? 'inRoomDiffEasy' : (d === 'med' ? 'inRoomDiffMed' : 'inRoomDiffHard'));
+    if (inEl) {
+      inEl.className = 'btn btn-xs inroom-diff-btn ' + (partyBotDifficulty === d ? 'btn-cyan' : 'btn-ghost');
+    }
+  });
+}
+
+function setupPartyWithBotUI() {
+  const diffLabels = { easy: 'Dễ', med: 'Vừa', hard: 'Khó' };
+  const notice = document.getElementById('partyBotActiveNotice');
+  if (notice) notice.style.display = 'block';
+  const badge = document.getElementById('p2BotBadge');
+  if (badge) badge.style.display = 'inline-block';
+  const btn = document.getElementById('inRoomBotToggleBtn');
+  if (btn) { btn.textContent = 'TẮT BOT'; btn.className = 'btn btn-xs btn-cyan'; }
+  const row = document.getElementById('inRoomBotDiffRow');
+  if (row) row.style.display = 'flex';
+
+  document.getElementById('p1Name').textContent = userData.name || 'Bạn';
+  document.getElementById('p1Avatar').textContent = userData.avatar || '🦊';
+  document.getElementById('p2Name').textContent = `🤖 Sakura Bot (${diffLabels[partyBotDifficulty] || 'Dễ'})`;
+  document.getElementById('p2Avatar').textContent = '🤖';
+  updatePartyBotDiffButtons();
+}
+
+function startPartyWithBot() {
+  playSfx('click');
+  isPartyHost = true;
+  isPartyBotActive = true;
+  isPartyBotMatch = true;
+  shiriIsSoloVsAi = true;
+
+  document.getElementById('roomLobby').style.display = 'none';
+  document.getElementById('activePartyRoom').style.display = 'block';
+  const statusTxt = document.getElementById('partyRoomStatusText');
+  if (statusTxt) statusTxt.textContent = 'Phòng Đấu Cùng Bot AI (Offline)';
+
+  setupPartyWithBotUI();
+
+  partyP1Score = 0;
+  partyP2Score = 0;
+  syncPartyScores();
+
+  const prefMode = getSelectedPartyMode();
+  activePartyGameType = prefMode;
+  updatePartyModeUI();
+  showToast('🎮 Đã tạo phòng đấu cùng Bot! Hãy chọn chế độ bạn muốn chơi.');
+}
+
+function leavePartyRoom() {
+  playSfx('click');
+  clearPartyBotTimers();
+  if (peer) {
+    try { peer.destroy(); } catch(e) {}
+    peer = null;
+  }
+  partyConn = null;
+  isPartyBotMatch = false;
+  isPartyBotActive = false;
+  resetPartyUI();
+  showToast('🚪 Đã rời phòng trở về Sảnh Chờ.');
+}
+
+function clearPartyBotTimers() {
+  if (partyBotTimer) {
+    clearTimeout(partyBotTimer);
+    partyBotTimer = null;
+  }
+  if (partyBotBossInterval) {
+    clearInterval(partyBotBossInterval);
+    partyBotBossInterval = null;
+  }
+}
 
 const PARTY_MODE_NAMES = {
   shiritori: '1. Shiritori Showdown',
@@ -11643,6 +14146,18 @@ function updatePartyModeUI() {
 
 function createPartyRoom() {
   playSfx('click');
+  isPartyBotMatch = false;
+  isPartyBotActive = false;
+  clearPartyBotTimers();
+  const notice = document.getElementById('partyBotActiveNotice');
+  if (notice) notice.style.display = 'none';
+  const badge = document.getElementById('p2BotBadge');
+  if (badge) badge.style.display = 'none';
+  const row = document.getElementById('inRoomBotDiffRow');
+  if (row) row.style.display = 'none';
+  const inBtn = document.getElementById('inRoomBotToggleBtn');
+  if (inBtn) { inBtn.textContent = 'BẬT BOT'; inBtn.className = 'btn btn-xs btn-ghost'; }
+
   const code = Array.from({ length: 6 }, () => 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[Math.floor(Math.random() * 32)]).join('');
   myRoomCode = code;
   isPartyHost = true;
@@ -11678,6 +14193,18 @@ function createPartyRoom() {
 
 function joinPartyRoom() {
   playSfx('click');
+  isPartyBotMatch = false;
+  isPartyBotActive = false;
+  clearPartyBotTimers();
+  const notice = document.getElementById('partyBotActiveNotice');
+  if (notice) notice.style.display = 'none';
+  const badge = document.getElementById('p2BotBadge');
+  if (badge) badge.style.display = 'none';
+  const row = document.getElementById('inRoomBotDiffRow');
+  if (row) row.style.display = 'none';
+  const inBtn = document.getElementById('inRoomBotToggleBtn');
+  if (inBtn) { inBtn.textContent = 'BẬT BOT'; inBtn.className = 'btn btn-xs btn-ghost'; }
+
   const code = document.getElementById('joinRoomCodeInput').value.trim().toUpperCase();
   if(code.length !== 6) {
     showToast('⚠️ Vui lòng nhập đúng mã 6 ký tự!');
@@ -12175,12 +14702,31 @@ function submitPartyWord() {
     });
   }
 
+  if (typeof updateDailyQuestProgress === 'function') {
+    updateDailyQuestProgress('shiritori', 1);
+  }
+
   // Nếu chơi với Sakura Bot AI (Khai thác toàn bộ kho vocab.js theo cấp & chủ đề)
-  if(shiriIsSoloVsAi) {
+  if(shiriIsSoloVsAi || isPartyBotMatch) {
     isBotThinking = true;
     document.getElementById('battleStatusText').textContent = '🌸 Sakura Bot đang suy nghĩ... 🤔';
-    setTimeout(() => {
+    
+    let botDelay = 1500;
+    if (partyBotDifficulty === 'easy') botDelay = 2500 + Math.random() * 1000;
+    else if (partyBotDifficulty === 'med') botDelay = 1500 + Math.random() * 700;
+    else botDelay = 800 + Math.random() * 500;
+
+    if (partyBotTimer) clearTimeout(partyBotTimer);
+    partyBotTimer = setTimeout(() => {
       isBotThinking = false;
+      partyBotTimer = null;
+
+      // Bot dễ có 25% cơ hội đầu hàng
+      if (partyBotDifficulty === 'easy' && Math.random() < 0.25) {
+        handleBotShiritoriVictory('Sakura Bot (Dễ) không tìm kịp từ hợp lệ!');
+        return;
+      }
+
       const botWord = pool.getBotShiritoriReply ? pool.getBotShiritoriReply(shiriLastKana, shiriUsedWords, shiriLevelFilter, shiriCategoryFilter) : null;
       if(botWord) {
         const bKey = botWord.kanji || botWord.hiragana || botWord.w;
@@ -12196,21 +14742,28 @@ function submitPartyWord() {
         showToast(`🤖 Sakura Bot [${botWord.level || 'JLPT'}]: ${bKey} (${botWord.meaning || botWord.m})`);
         startBattleTimer(30);
       } else {
-        playSfx('win');
-        clearInterval(partyTurnTimer);
-        const lvlText = shiriLevelFilter !== 'ALL' ? `cấp ${shiriLevelFilter}` : 'N5-N3';
-        const catText = shiriCategoryFilter !== 'ALL' ? `chủ đề "${shiriCategoryFilter}"` : 'toàn bộ kho từ vựng';
-        showModal('👑 CHIẾN THẮNG HIỂN VINH!', 
-          `Sakura Bot không thể tìm thêm từ vựng ${lvlText} (${catText}) bắt đầu bằng [ ${shiriLastKana} ]!`, 
-          'Xuất sắc! Bạn đã chứng minh kho từ vựng tiếng Nhật vượt trội và hạ gục AI Bot! Nhận thưởng +50 XP.');
-        partyP1Score += 30;
-        syncPartyScores();
-        addXP(30, 'shiri_win_bot', true);
-        userData.partyWins = (userData.partyWins || 0) + 1;
-        saveUserData();
-        updateUserUI();
+        handleBotShiritoriVictory('Sakura Bot không thể tìm thêm từ vựng!');
       }
-    }, 1200);
+    }, botDelay);
+  }
+}
+
+function handleBotShiritoriVictory(reasonText) {
+  playSfx('win');
+  clearInterval(partyTurnTimer);
+  const lvlText = shiriLevelFilter !== 'ALL' ? `cấp ${shiriLevelFilter}` : 'N5-N3';
+  const catText = shiriCategoryFilter !== 'ALL' ? `chủ đề "${shiriCategoryFilter}"` : 'toàn bộ kho từ vựng';
+  showModal('👑 CHIẾN THẮNG HIỂN VINH!', 
+    `${reasonText} (${lvlText} - ${catText}) bắt đầu bằng [ ${shiriLastKana} ]!`, 
+    'Xuất sắc! Bạn đã chứng minh kho từ vựng tiếng Nhật vượt trội và hạ gục AI Bot! Nhận thưởng +30 XP.');
+  partyP1Score += 30;
+  syncPartyScores();
+  addXP(30, 'shiri_win_bot', true);
+  // Tuyệt đối không cộng partyWins nếu là đấu Bot
+  if (!isPartyBotMatch) {
+    userData.partyWins = (userData.partyWins || 0) + 1;
+    saveUserData();
+    updateUserUI();
   }
 }
 
@@ -12945,6 +15498,45 @@ function renderPartyAnimeQuestion(q, roundIdx, totalRounds) {
   }
 
   startPartyAnimeTimer(15);
+
+  if (isPartyBotMatch && !partyAnimeLocked) {
+    if (partyBotTimer) clearTimeout(partyBotTimer);
+    let delay = 5000;
+    let accuracy = 0.8;
+    if (partyBotDifficulty === 'easy') { delay = 7000 + Math.random() * 3000; accuracy = 0.55; }
+    else if (partyBotDifficulty === 'med') { delay = 4000 + Math.random() * 2000; accuracy = 0.8; }
+    else { delay = 1800 + Math.random() * 1400; accuracy = 0.96; }
+
+    partyBotTimer = setTimeout(() => {
+      partyBotTimer = null;
+      if (partyAnimeLocked || !partyAnimeActive) return;
+      const isCorrect = Math.random() < accuracy;
+      if (isCorrect) {
+        partyAnimeLocked = true;
+        clearInterval(partyAnimeTimer);
+        const pts = 10 + Math.max(0, Math.floor(partyAnimeTimeLeft / 2));
+        partyP2Score += pts;
+        syncPartyScores();
+        playSfx('wrong');
+        Array.from(document.querySelectorAll('#partyAnimeOpts button')).forEach(b => {
+          if (b.textContent.trim() === q.answer.trim()) b.classList.add('correct');
+          b.disabled = true;
+        });
+        showToast(`🤖 Sakura Bot đã đoán đúng trước! (+${pts}đ)`);
+        setTimeout(() => { advancePartyAnimeRound(); }, 1800);
+      } else {
+        const wrongOpts = q.options.filter(o => o !== q.answer);
+        const picked = wrongOpts[Math.floor(Math.random() * wrongOpts.length)];
+        Array.from(document.querySelectorAll('#partyAnimeOpts button')).forEach(b => {
+          if (b.textContent.trim() === picked) {
+            b.classList.add('wrong');
+            b.disabled = true;
+          }
+        });
+        showToast(`🤖 Sakura Bot đoán sai! Bạn vẫn còn cơ hội!`);
+      }
+    }, delay);
+  }
 }
 
 function startPartyAnimeTimer(sec) {
@@ -12980,6 +15572,10 @@ function startPartyAnimeTimer(sec) {
 
 function handlePartyAnimeAnswer(selectedOpt, btn, q) {
   if (partyAnimeLocked) return;
+  if (partyBotTimer) {
+    clearTimeout(partyBotTimer);
+    partyBotTimer = null;
+  }
 
   if (selectedOpt === q.answer) {
     partyAnimeLocked = true;
@@ -13168,6 +15764,7 @@ function renderPartyAnimeEnd(data) {
 
 // Party Kanji Blitz
 function renderPartyKanjiBlitz() {
+  if (partyBotTimer) { clearTimeout(partyBotTimer); partyBotTimer = null; }
   if(!N5_VOCAB || N5_VOCAB.length === 0) return;
   const item = N5_VOCAB[Math.floor(Math.random() * N5_VOCAB.length)];
   const itemKanji = item.kanji || item.w;
@@ -13188,16 +15785,20 @@ function renderPartyKanjiBlitz() {
   `;
   startBattleTimer(10);
 
+  let kanjiAnswered = false;
   const cont = document.getElementById('partyKanjiOpts');
   opts.forEach(opt => {
     const btn = document.createElement('button');
     btn.className = 'choice-arcade-btn';
     btn.textContent = opt;
     btn.onclick = () => {
+      if (kanjiAnswered) return;
+      kanjiAnswered = true;
+      if (partyBotTimer) { clearTimeout(partyBotTimer); partyBotTimer = null; }
       if(opt === rightMeaning) {
         playSfx('correct');
         btn.classList.add('correct');
-        if(isPartyHost || shiriIsSoloVsAi) partyP1Score += 10; else partyP2Score += 10;
+        if(isPartyHost || shiriIsSoloVsAi || isPartyBotMatch) partyP1Score += 10; else partyP2Score += 10;
         syncPartyScores();
         showToast('⚡ Phản xạ siêu tốc! +10đ');
       } else {
@@ -13208,6 +15809,34 @@ function renderPartyKanjiBlitz() {
     };
     cont.appendChild(btn);
   });
+
+  if (isPartyBotMatch) {
+    let delay = 3500;
+    let accuracy = 0.8;
+    if (partyBotDifficulty === 'easy') { delay = 5000 + Math.random() * 2500; accuracy = 0.6; }
+    else if (partyBotDifficulty === 'med') { delay = 2800 + Math.random() * 1400; accuracy = 0.82; }
+    else { delay = 1200 + Math.random() * 800; accuracy = 0.98; }
+
+    partyBotTimer = setTimeout(() => {
+      partyBotTimer = null;
+      if (kanjiAnswered) return;
+      kanjiAnswered = true;
+      const isCorrect = Math.random() < accuracy;
+      if (isCorrect) {
+        partyP2Score += 10;
+        syncPartyScores();
+        playSfx('wrong');
+        showToast('🤖 Sakura Bot vừa giành điểm phản xạ trước! +10đ');
+        Array.from(document.querySelectorAll('#partyKanjiOpts button')).forEach(b => {
+          if (b.textContent.trim() === rightMeaning.trim()) b.classList.add('correct');
+          b.disabled = true;
+        });
+        setTimeout(renderPartyKanjiBlitz, 1200);
+      } else {
+        showToast('🤖 Sakura Bot đoán sai! Bạn hãy nhanh tay chọn đáp án đúng!');
+      }
+    }, delay);
+  }
 }
 
 function resetPartyUI() {
@@ -14068,6 +16697,9 @@ function handleDictationResult(isCorrect) {
   if (isCorrect) {
     playSfx('correct');
     addXP(8, `dict_${dictationCurrentWord.kanji || dictationCurrentWord.w}`, true);
+    if (typeof updateDailyQuestProgress === 'function') {
+      updateDailyQuestProgress('dictation', 1);
+    }
     if (feedback) feedback.innerHTML = `<span style="color:var(--neon-lime)">✓ CHÍNH XÁC! ${rightWord} (+8 EXP)</span>`;
     showToast(`✓ Chính xác! +8 EXP`);
   } else {
@@ -14848,6 +17480,7 @@ function renderSpeedQuestion(q) {
   speedRaceCurrentQ = q;
   speedRaceAnswered = false;
   clearInterval(speedRaceTimer);
+  if (partyBotTimer) { clearTimeout(partyBotTimer); partyBotTimer = null; }
 
   document.getElementById('battleStatusText').textContent = `🏁 VÒNG ${q.round}/${speedRaceMaxRounds} • AI NHANH NHẤT GIÀNH ĐIỂM!`;
   
@@ -14867,11 +17500,40 @@ function renderSpeedQuestion(q) {
   `;
 
   startBattleTimer(10);
+
+  if (isPartyBotMatch) {
+    let delay = 3500;
+    let accuracy = 0.85;
+    if (partyBotDifficulty === 'easy') { delay = 5500 + Math.random() * 2500; accuracy = 0.65; }
+    else if (partyBotDifficulty === 'med') { delay = 3200 + Math.random() * 1400; accuracy = 0.85; }
+    else { delay = 1400 + Math.random() * 900; accuracy = 0.98; }
+
+    partyBotTimer = setTimeout(() => {
+      partyBotTimer = null;
+      if (speedRaceAnswered || !speedRaceCurrentQ) return;
+      const isCorrect = Math.random() < accuracy;
+      if (isCorrect) {
+        speedRaceAnswered = true;
+        const pointsGained = 20 + Math.max(0, timeLeft);
+        partyP2Score += pointsGained;
+        syncPartyScores();
+        playSfx('wrong');
+        const buttons = document.querySelectorAll('#speedOptsGrid button');
+        buttons.forEach(b => {
+          b.disabled = true;
+          if (b.textContent.trim() === speedRaceCurrentQ.rightMeaning) b.classList.add('correct');
+        });
+        showToast(`🤖 Sakura Bot trả lời đúng siêu tốc (+${pointsGained}đ)!`);
+        setTimeout(sendNextSpeedRaceQuestion, 2000);
+      }
+    }, delay);
+  }
 }
 
 function submitSpeedRaceAnswer(btn, chosenEnc) {
   if (speedRaceAnswered || !speedRaceCurrentQ) return;
   speedRaceAnswered = true;
+  if (partyBotTimer) { clearTimeout(partyBotTimer); partyBotTimer = null; }
   const chosen = decodeURIComponent(chosenEnc);
   const isCorrect = chosen === speedRaceCurrentQ.rightMeaning;
 
@@ -14915,11 +17577,24 @@ function submitSpeedRaceAnswer(btn, chosenEnc) {
 function renderSpeedRaceEnd(winner) {
   clearInterval(speedRaceTimer);
   clearInterval(partyTurnTimer);
+  if (partyBotTimer) { clearTimeout(partyBotTimer); partyBotTimer = null; }
   playSfx('win');
-  if (typeof submitScoreToLeaderboard === 'function') submitScoreToLeaderboard();
+
+  if (typeof updateDailyQuestProgress === 'function') {
+    updateDailyQuestProgress('speed', 1);
+  }
 
   const p1N = escapeHTML(document.getElementById('p1Name').textContent);
   const p2N = escapeHTML(document.getElementById('p2Name').textContent);
+
+  if (!isPartyBotMatch) {
+    if (typeof submitScoreToLeaderboard === 'function') submitScoreToLeaderboard();
+    if (winner === p1N) {
+      userData.partyWins = (userData.partyWins || 0) + 1;
+      saveUserData();
+      updateUserUI();
+    }
+  }
 
   document.getElementById('battleStatusText').textContent = '🏁 KẾT THÚC TRẬN ĐUA TỐC ĐỘ!';
   document.getElementById('battleContentArea').innerHTML = `
@@ -14994,6 +17669,33 @@ function startPartyCoopBoss() {
     }
 
     sendNextCoopBossQuestion();
+
+    if (isPartyBotMatch) {
+      if (partyBotBossInterval) clearInterval(partyBotBossInterval);
+      const intervalMs = partyBotDifficulty === 'easy' ? 5500 : (partyBotDifficulty === 'med' ? 3800 : 2400);
+      const baseDmg = partyBotDifficulty === 'easy' ? 16 : (partyBotDifficulty === 'med' ? 24 : 32);
+
+      partyBotBossInterval = setInterval(() => {
+        if (!coopBossActive || coopBossCurrentHP <= 0) {
+          clearInterval(partyBotBossInterval);
+          partyBotBossInterval = null;
+          return;
+        }
+        const dmg = baseDmg + Math.floor(Math.random() * 6);
+        coopBossCurrentHP = Math.max(0, coopBossCurrentHP - dmg);
+        const bName = document.getElementById('p2Name')?.textContent || '🤖 Sakura Bot';
+        coopDamageContrib[bName] = (coopDamageContrib[bName] || 0) + dmg;
+        syncCoopBossState();
+        playSfx('correct');
+        showToast(`⚡ ${bName} vừa tung chiêu chém Boss -${dmg} HP!`);
+
+        if (coopBossCurrentHP <= 0) {
+          clearInterval(partyBotBossInterval);
+          partyBotBossInterval = null;
+          setTimeout(() => finishCoopBossMatch(true), 400);
+        }
+      }, intervalMs);
+    }
 
     coopBossTimer = setInterval(() => {
       coopBossTimeLeft--;
@@ -15208,6 +17910,14 @@ function finishCoopBossMatch(won, isDisconnect = false) {
   coopBossActive = false;
   if (coopBossTimer) clearInterval(coopBossTimer);
   coopBossTimer = null;
+  if (partyBotBossInterval) {
+    clearInterval(partyBotBossInterval);
+    partyBotBossInterval = null;
+  }
+
+  if (won && typeof updateDailyQuestProgress === 'function') {
+    updateDailyQuestProgress('boss', 1);
+  }
 
   if (isPartyHost && partyConn && !isDisconnect) {
     partyConn.send({
@@ -15223,7 +17933,7 @@ function finishCoopBossMatch(won, isDisconnect = false) {
 
 function renderCoopBossEnd(won, isDisconnect = false) {
   if (won) {
-    playSfx('win');
+    playSfx('boss_win');
     addXP(50, 'coop_boss_win', true);
   } else {
     playSfx('wrong');
@@ -15577,8 +18287,18 @@ function handleSurvivalFailedRule(reason) {
 
 function runSurvivalBotTurn() {
   const pool = window.ALL_VOCAB || window.N5_VOCAB;
+  let botDelay = 1200;
+  let failRate = 0.05;
+  if (partyBotDifficulty === 'easy') { botDelay = 2500 + Math.random() * 1000; failRate = 0.25; }
+  else if (partyBotDifficulty === 'med') { botDelay = 1500 + Math.random() * 700; failRate = 0.08; }
+  else { botDelay = 800 + Math.random() * 500; failRate = 0.01; }
+
   setTimeout(() => {
     if (!survivalActive || survivalCurrentTurn !== 'p2') return;
+    if (Math.random() < failRate) {
+      handleSurvivalTimeout();
+      return;
+    }
     const botWord = pool && pool.getBotShiritoriReply ? pool.getBotShiritoriReply(survivalLastKana, survivalUsedWords, 'ALL', 'ALL') : null;
     if (botWord) {
       const bKey = botWord.kanji || botWord.hiragana || botWord.w;
@@ -15594,7 +18314,7 @@ function runSurvivalBotTurn() {
     } else {
       handleSurvivalTimeout();
     }
-  }, 1200);
+  }, botDelay);
 }
 
 function handleRemoteSurvivalMove(data) {
@@ -15738,8 +18458,16 @@ function finishSurvivalMatch(won, isDisconnect = false, reason = '') {
   const p2N = escapeHTML(rawP2);
 
   if (won) {
-    playSfx('win');
+    playSfx('boss_win');
     addXP(40, 'survival_win', true);
+    if (typeof updateDailyQuestProgress === 'function') {
+      updateDailyQuestProgress('shiritori', 1);
+    }
+    if (!isPartyBotMatch) {
+      userData.partyWins = (userData.partyWins || 0) + 1;
+      saveUserData();
+      updateUserUI();
+    }
   } else {
     playSfx('wrong');
   }
@@ -15801,10 +18529,22 @@ window.addEventListener('DOMContentLoaded', () => {
   if (typeof initAuth === "function") initAuth();
   renderFC();
   initShiritoriFilters();
+  if (typeof initDojoTopicSelect === 'function') initDojoTopicSelect();
+  if (typeof renderDojoRecommendation === 'function') renderDojoRecommendation();
+  if (typeof ensureDailyQuests === 'function') ensureDailyQuests();
+  if (typeof renderDailyQuests === 'function') renderDailyQuests();
+  if (typeof updateAnalyticsQuickStats === 'function') updateAnalyticsQuickStats();
+  if (typeof renderLearningAnalyticsCanvas === 'function') renderLearningAnalyticsCanvas();
   if (typeof updateWordOfTheDayUI === 'function') updateWordOfTheDayUI();
   if (typeof renderKanaUI === 'function') renderKanaUI();
   if (typeof checkAndAwardBadges === 'function') checkAndAwardBadges();
   if (typeof updatePartyModeUI === 'function') updatePartyModeUI();
+
+  window.addEventListener('resize', () => {
+    if (typeof renderLearningAnalyticsCanvas === 'function' && document.getElementById('learningAnalyticsCanvas')) {
+      renderLearningAnalyticsCanvas();
+    }
+  });
 
   if ('speechSynthesis' in window) {
     loadSpeechVoices();
