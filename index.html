@@ -354,8 +354,18 @@ body::before {
   .hub-review-box   { order: 4; }
   .hub-stats-area   { order: 5; }
   .hub-info-deck    { order: 6; }
-  .party-lobby-grid, .party-room-grid, .party-modes-grid {
+  .party-lobby-grid, .party-room-grid {
     grid-template-columns: 1fr !important;
+  }
+  .party-modes-grid {
+    grid-template-columns: 1fr !important;
+    gap: 0.65rem !important;
+  }
+  @media (min-width: 481px) and (max-width: 767px) {
+    .party-modes-grid {
+      grid-template-columns: repeat(2, 1fr) !important;
+      gap: 0.75rem !important;
+    }
   }
 }
 
@@ -1550,6 +1560,12 @@ button, .btn, .nav-item, .quest-level-btn, .sfx-btn, [role="button"] {
     position: relative;
     overflow: hidden;
     user-select: none;
+    box-sizing: border-box;
+    min-width: 0;
+    min-height: 44px;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    touch-action: manipulation;
   }
   .party-mode-card:hover {
     transform: translateY(-2px);
@@ -1565,6 +1581,8 @@ button, .btn, .nav-item, .quest-level-btn, .sfx-btn, [role="button"] {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
+    gap: 0.25rem;
     margin-bottom: 0.45rem;
   }
   .party-mode-card .pm-icon {
@@ -1579,6 +1597,7 @@ button, .btn, .nav-item, .quest-level-btn, .sfx-btn, [role="button"] {
     background: var(--bg-surface);
     color: var(--text-secondary);
     border: 1px solid var(--border);
+    white-space: nowrap;
   }
   .party-mode-card.selected .pm-badge {
     background: var(--neon-cyan);
@@ -1590,6 +1609,8 @@ button, .btn, .nav-item, .quest-level-btn, .sfx-btn, [role="button"] {
     font-size: 0.95rem;
     color:var(--text-primary);
     margin-bottom: 0.3rem;
+    word-break: break-word;
+    overflow-wrap: break-word;
   }
   .party-mode-card .pm-desc {
     font-size: 0.78rem;
@@ -1597,6 +1618,9 @@ button, .btn, .nav-item, .quest-level-btn, .sfx-btn, [role="button"] {
     line-height: 1.4;
     margin-bottom: 0.65rem;
     flex: 1;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
   }
   .party-mode-card .pm-meta {
     display: flex;
@@ -1605,6 +1629,8 @@ button, .btn, .nav-item, .quest-level-btn, .sfx-btn, [role="button"] {
     font-size: 0.75rem;
     padding-top: 0.45rem;
     border-top: 1px solid rgba(255, 255, 255, 0.06);
+    flex-wrap: wrap;
+    gap: 0.25rem;
   }
   .party-mode-card .pm-diff {
     color: var(--text-muted);
@@ -1618,6 +1644,15 @@ button, .btn, .nav-item, .quest-level-btn, .sfx-btn, [role="button"] {
   }
   .party-mode-card.selected .pm-select-tag {
     display: inline;
+  }
+  /* Mobile touch target minimum 44px */
+  .party-mode-card,
+  .party-lobby-grid .btn,
+  .party-room-grid .btn,
+  #partyGameSelector .btn,
+  .lobby-action-col .btn,
+  .lobby-join-col .btn {
+    min-height: 44px;
   }
   .party-room-grid {
     display: grid;
@@ -3197,11 +3232,47 @@ small, .text-xs, .nav-item .label, [style*="font-size:.7"], [style*="font-size: 
             </div>
 
             <button class="btn btn-primary" id="micBtn" onclick="togglePronMic()" style="width:72px;height:72px;border-radius:50%;font-size:1.8rem;margin:0 auto">🎤</button>
+            
+            <!-- Real-time Volume Indicator -->
+            <div id="pronVolumeMeter" style="display:none;width:180px;height:8px;background:rgba(255,255,255,0.12);border-radius:4px;margin:.6rem auto 0;overflow:hidden;border:1px solid rgba(255,255,255,0.08)">
+              <div id="pronVolumeBar" style="width:0%;height:100%;background:linear-gradient(90deg, var(--neon-cyan), var(--neon-sakura));transition:width 0.08s ease"></div>
+            </div>
+
             <div style="font-size:.82rem;color:var(--text-muted);margin-top:.75rem" id="pronMicStatus">Chạm mic và đọc rõ ràng</div>
 
             <div id="pronFeedbackBox" style="display:none;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border)">
               <div style="font-family:var(--font-arcade);font-size:2rem;font-weight:900" id="pronScoreText">85%</div>
-              <div style="font-size:.85rem;color:var(--text-secondary)" id="pronVerdictText">Xuất sắc!</div>
+              <div style="font-size:.85rem;color:var(--text-secondary);margin-bottom:.6rem" id="pronVerdictText">Xuất sắc!</div>
+              <div style="display:flex;justify-content:center;gap:.5rem;flex-wrap:wrap">
+                <button class="btn btn-sm btn-cyan" id="pronRetryBtn" onclick="togglePronMic()" style="font-size:.8rem;min-height:44px;padding:0 1.15rem;display:inline-flex;align-items:center;gap:.35rem">
+                  🔄 Nói Lại
+                </button>
+                <button class="btn btn-sm btn-ghost" onclick="pronListenModel()" style="font-size:.8rem;min-height:44px;padding:0 1.15rem;display:inline-flex;align-items:center;gap:.35rem">
+                  🔊 Nghe Lại Mẫu
+                </button>
+              </div>
+            </div>
+
+            <!-- MediaRecorder fallback container (Khai dụng khi trình duyệt không hỗ trợ nhận dạng hoặc trên Brave) -->
+            <div id="pronFallbackRecorder" style="display:none;margin-top:1rem;padding:1rem;background:rgba(255,190,11,0.08);border:1px solid var(--neon-gold);border-radius:var(--radius-md);text-align:center">
+              <div style="font-size:.82rem;color:var(--neon-gold);font-weight:700;margin-bottom:.35rem">
+                🎙️ CHẾ ĐỘ THU ÂM & TỰ ĐỐI CHIẾU
+              </div>
+              <div style="font-size:.78rem;color:var(--text-secondary);line-height:1.45;margin-bottom:.75rem">
+                Trình duyệt của bạn không hỗ trợ nhận dạng giọng nói tự động (hoặc trên Brave). Bạn có thể bấm thu âm, sau đó nghe lại giọng mình để so sánh ngữ điệu với giọng đọc chuẩn!
+              </div>
+              <div style="display:flex;justify-content:center;gap:.5rem;flex-wrap:wrap">
+                <button class="btn btn-sm btn-pink" id="btnMediaRecToggle" onclick="toggleMediaRecorderMode()" style="min-height:44px;padding:0 1rem;display:inline-flex;align-items:center;gap:.35rem">
+                  🔴 <span id="btnMediaRecText">Bắt Đầu Thu Âm</span>
+                </button>
+                <button class="btn btn-sm btn-ghost" id="btnMediaRecPlay" onclick="playUserRecordedAudio()" style="min-height:44px;padding:0 1rem;display:none;align-items:center;gap:.35rem">
+                  ▶️ Nghe Lại Bản Thu
+                </button>
+                <button class="btn btn-sm btn-cyan" onclick="pronListenModel()" style="min-height:44px;padding:0 1rem;display:inline-flex;align-items:center;gap:.35rem">
+                  🔊 Nghe Giọng Mẫu
+                </button>
+              </div>
+              <audio id="userAudioPlayerEl" style="display:none"></audio>
             </div>
           </div>
           <div style="display:flex;gap:.5rem;max-width:580px;margin:.75rem auto 0">
@@ -3543,14 +3614,14 @@ small, .text-xs, .nav-item .label, [style*="font-size:.7"], [style*="font-size: 
         <div class="card" style="margin-top:1rem">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem">
             <div class="card-title">🎧 Danh Sách Tuyển Chọn</div>
-            <span style="font-size:.75rem;color:var(--neon-cyan);font-weight:700" id="playlistCountBadge">36 bài</span>
+            <span style="font-size:.75rem;color:var(--neon-cyan);font-weight:700" id="playlistCountBadge">50 bài</span>
           </div>
 
           <!-- Search & Filter Controls -->
           <div style="display:flex;flex-direction:column;gap:.4rem;margin-bottom:.75rem">
             <input class="inp" id="mvSearchInput" placeholder="🔍 Tìm bài hát hoặc anime..." oninput="onMvSearchInput(this.value)" style="font-size:.82rem;padding:.45rem .65rem">
             <select class="inp" id="mvAnimeFilter" onchange="onMvFilterChange(this.value)" style="font-size:.82rem;padding:.4rem .6rem;background:var(--bg-surface);color:var(--text-primary)">
-              <option value="ALL">🌸 Tất cả anime (36 bài)</option>
+              <option value="ALL">🌸 Tất cả anime (50 bài)</option>
               <option value="Demon Slayer">Kimetsu no Yaiba (Demon Slayer)</option>
               <option value="Jujutsu Kaisen">Jujutsu Kaisen (Chú Thuật Hồi Chiến)</option>
               <option value="Naruto">Naruto & Naruto Shippuden</option>
@@ -3562,6 +3633,12 @@ small, .text-xs, .nav-item .label, [style*="font-size:.7"], [style*="font-size: 
               <option value="Frieren">Sousou no Frieren</option>
               <option value="OTHER">J-Pop & Anime khác</option>
             </select>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:.2rem 0">
+              <label style="font-size:.75rem;color:var(--text-secondary);display:inline-flex;align-items:center;gap:.4rem;cursor:pointer;user-select:none">
+                <input type="checkbox" id="mvHideBrokenCheckbox" onchange="toggleMvHideBroken(this.checked)" style="accent-color:var(--neon-pink);cursor:pointer;width:15px;height:15px">
+                <span>🚫 Ẩn các bài lỗi / cấm nhúng</span>
+              </label>
+            </div>
           </div>
 
           <!-- Category Pills for Anime MV -->
@@ -4052,34 +4129,42 @@ small, .text-xs, .nav-item .label, [style*="font-size:.7"], [style*="font-size: 
         </button>
       </div>
 
-      <!-- Section 1: Nguồn Âm Thanh Từ Vựng (VOICEVOX Studio) -->
+      <!-- Section 1: Giọng Đọc (VOICEVOX Anime vs Trình Duyệt Bình Thường) -->
       <div style="background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:.9rem">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem">
           <div style="display:flex;align-items:center;gap:.4rem">
             <span style="font-size:1.1rem">🎙️</span>
-            <span style="font-size:.82rem;font-weight:800;color:var(--neon-cyan);letter-spacing:.03em">NGUỒN PHÁT ÂM TỪ VỰNG:</span>
+            <span style="font-size:.82rem;font-weight:800;color:var(--neon-cyan);letter-spacing:.03em">GIỌNG ĐỌC TIẾNG NHẬT:</span>
           </div>
-          <span style="font-size:.72rem;padding:.15rem .5rem;border-radius:var(--radius-full);background:rgba(5,217,232,0.15);color:var(--neon-cyan);border:1px solid var(--neon-cyan);font-weight:700">VOICEVOX Studio</span>
+          <span id="settingsVoiceModeBadge" style="font-size:.72rem;padding:.15rem .55rem;border-radius:var(--radius-full);background:rgba(5,217,232,0.15);color:var(--neon-cyan);border:1px solid var(--neon-cyan);font-weight:700">Anime (VOICEVOX もち子)</span>
         </div>
 
         <div style="font-size:.8rem;color:var(--text-secondary);line-height:1.45;margin-bottom:.75rem">
-          Phát âm bởi nhân vật <strong>もち子さん (cv 明日葉よもぎ)</strong>. Bộ dữ liệu âm thanh phòng thu chất lượng cao, chuẩn ngữ điệu bản xứ và tự nhiên nhất.
+          Chọn phong cách phát âm từ vựng, flashcard và bài hát Anime MV:
         </div>
 
-        <div style="display:flex;justify-content:space-between;align-items:center;padding:.5rem .75rem;background:rgba(0,0,0,0.25);border-radius:var(--radius-sm);border:1px solid rgba(255,255,255,0.06);margin-bottom:.65rem">
-          <div style="display:flex;flex-direction:column">
-            <span style="font-size:.8rem;font-weight:700;color:var(--text-primary)">Ưu tiên file âm thanh phòng thu (audio/)</span>
-            <span style="font-size:.72rem;color:var(--text-muted)">Tự động rơi về giọng đọc trình duyệt nếu không có file</span>
-          </div>
-          <button class="btn btn-sm btn-cyan" id="settingVoicevoxToggleBtn" onclick="toggleVoicevoxAudioPref()" style="font-size:.75rem;padding:.25rem .7rem">BẬT</button>
+        <!-- 2 lựa chọn Giọng đọc -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.75rem" id="voiceModeChoiceGroup">
+          <button class="btn btn-sm btn-cyan" id="voiceModeBtn_anime" onclick="setSettingVoiceMode('anime')" style="min-height:46px;font-size:.82rem;font-weight:800;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px">
+            <span>🌸 Anime</span>
+            <span style="font-size:11px;font-weight:400;opacity:.9">(VOICEVOX もち子)</span>
+          </button>
+          <button class="btn btn-sm btn-ghost" id="voiceModeBtn_normal" onclick="setSettingVoiceMode('normal')" style="min-height:46px;font-size:.82rem;font-weight:800;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px">
+            <span>🌐 Bình Thường</span>
+            <span style="font-size:11px;font-weight:400;opacity:.9">(Giọng trình duyệt)</span>
+          </button>
+        </div>
+
+        <div style="font-size:.75rem;color:var(--text-muted);line-height:1.4;margin-bottom:.65rem" id="voiceModeDescText">
+          ✨ <strong>Anime:</strong> Giọng nhân vật もち子さん (cv 明日葉よもぎ) tự nhiên, ngữ điệu chuẩn bản xứ từ phòng thu. Nếu thiếu file âm thanh sẽ tự động rơi về giọng trình duyệt mà không gây lỗi.
         </div>
 
         <div style="display:flex;justify-content:space-between;align-items:center;gap:.5rem;flex-wrap:wrap">
           <div style="font-size:.75rem;color:var(--neon-gold);display:flex;align-items:center;gap:.3rem" id="settingAudioStatusText">
-            <span>✨ Kho âm thanh: 2,126 từ vựng N5-N3</span>
+            <span>✨ Kho âm thanh: 2,126 từ vựng & 50 bài hát MV</span>
           </div>
-          <button class="btn btn-ghost btn-sm" onclick="testVoicevoxSampleAudio()" style="font-size:.78rem;padding:.25rem .6rem">
-            🔊 Nghe thử giọng VOICEVOX
+          <button class="btn btn-ghost btn-sm" onclick="testVoicevoxSampleAudio()" style="font-size:.78rem;padding:.25rem .6rem;min-height:36px">
+            🔊 Nghe thử giọng Anime
           </button>
         </div>
       </div>
@@ -4715,19 +4800,59 @@ function openSettingsModal() {
   if (overlay) overlay.classList.add('show');
 }
 
+function setSettingVoiceMode(mode) {
+  playSfx('click');
+  const validMode = (mode === 'normal') ? 'normal' : 'anime';
+  if (!userData) userData = {};
+  userData.voiceMode = validMode;
+  userData.preferVoicevoxAudio = (validMode === 'anime');
+  try {
+    localStorage.setItem('emi_voice_mode', validMode);
+  } catch(e) {}
+  saveUserData();
+  updateSettingsAudioUI();
+
+  // Đồng bộ qua tài khoản nếu đang đăng nhập
+  syncVoiceModeToAccount(validMode);
+
+  showToast(validMode === 'anime'
+    ? '🌸 Đã chọn giọng: Anime (VOICEVOX もち子)'
+    : '🌐 Đã chọn giọng: Bình Thường (Trình duyệt)');
+}
+
+async function syncVoiceModeToAccount(mode) {
+  if (typeof authCurrentUser !== 'undefined' && authCurrentUser && typeof authSessionToken !== 'undefined' && authSessionToken && typeof AUTH_WORKER_URL !== 'undefined' && AUTH_WORKER_URL) {
+    try {
+      await fetch(`${AUTH_WORKER_URL}/api/profile`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authSessionToken}`
+        },
+        body: JSON.stringify({
+          voiceMode: mode,
+          preferVoicevoxAudio: (mode === 'anime')
+        })
+      });
+    } catch (e) {}
+  }
+}
+
 function toggleVoicevoxAudioPref() {
   playSfx('click');
   const current = (typeof userData !== 'undefined' && userData && userData.preferVoicevoxAudio !== undefined) ? userData.preferVoicevoxAudio : true;
-  userData.preferVoicevoxAudio = !current;
-  saveUserData();
-  updateSettingsAudioUI();
-  showToast(userData.preferVoicevoxAudio ? '✓ Đã BẬT ưu tiên âm thanh phòng thu VOICEVOX' : '⚠️ Đã TẮT ưu tiên audio, sử dụng giọng đọc trình duyệt');
+  setSettingVoiceMode(current ? 'normal' : 'anime');
 }
 
 function testVoicevoxSampleAudio() {
   playSfx('click');
-  speakJapaneseTTS(1, null, 1);
-  showToast('🎙️ Đang phát âm VOICEVOX (もち子さん): "おはよう"');
+  const mode = (typeof userData !== 'undefined' && userData && userData.voiceMode) ? userData.voiceMode : 'anime';
+  if (mode === 'anime') {
+    speakJapaneseTTS(1, null, 1);
+    showToast('🎙️ Đang phát âm VOICEVOX (もち子さん): "おはよう"');
+  } else {
+    testCurrentJapaneseVoice();
+  }
 }
 
 function setSettingSpeechRate(rate) {
@@ -4742,8 +4867,29 @@ function setSettingSpeechRate(rate) {
 }
 
 function updateSettingsAudioUI() {
+  const currentMode = (typeof userData !== 'undefined' && userData && userData.voiceMode) ? userData.voiceMode : 'anime';
+  const isPref = currentMode === 'anime';
+
+  const badgeEl = document.getElementById('settingsVoiceModeBadge');
+  if (badgeEl) {
+    badgeEl.textContent = isPref ? 'Anime (VOICEVOX もち子)' : 'Bình thường (Trình duyệt)';
+    badgeEl.style.color = isPref ? 'var(--neon-cyan)' : 'var(--neon-gold)';
+    badgeEl.style.borderColor = isPref ? 'var(--neon-cyan)' : 'var(--neon-gold)';
+  }
+
+  const btnAnime = document.getElementById('voiceModeBtn_anime');
+  const btnNormal = document.getElementById('voiceModeBtn_normal');
+  if (btnAnime && btnNormal) {
+    if (isPref) {
+      btnAnime.className = 'btn btn-sm btn-cyan';
+      btnNormal.className = 'btn btn-sm btn-ghost';
+    } else {
+      btnAnime.className = 'btn btn-sm btn-ghost';
+      btnNormal.className = 'btn btn-sm btn-cyan';
+    }
+  }
+
   const prefBtn = document.getElementById('settingVoicevoxToggleBtn');
-  const isPref = (typeof userData !== 'undefined' && userData && userData.preferVoicevoxAudio !== undefined) ? userData.preferVoicevoxAudio : true;
   if (prefBtn) {
     if (isPref) {
       prefBtn.textContent = 'BẬT';
@@ -5200,6 +5346,8 @@ let userData = {
   pronBest: 0,
   partyWins: 0,
   ritualSteps: [false, false, false, false],
+  voiceMode: 'anime',
+  preferVoicevoxAudio: true,
   questData: {
     stars: {
       N5: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -5267,6 +5415,16 @@ function loadUserData() {
       }
     }
     
+    // Nạp cài đặt giọng đọc (ưu tiên anime)
+    const storedVoiceMode = localStorage.getItem('emi_voice_mode');
+    if (storedVoiceMode) {
+      userData.voiceMode = storedVoiceMode;
+      userData.preferVoicevoxAudio = (storedVoiceMode === 'anime');
+    } else if (!userData.voiceMode) {
+      userData.voiceMode = 'anime';
+      userData.preferVoicevoxAudio = true;
+    }
+
     // Kiểm tra và nâng cấp phiên bản EXP nếu cần
     if (!userData.expVersion || userData.expVersion < CURRENT_EXP_VERSION) {
       migrateUserExpSystem();
@@ -6405,7 +6563,8 @@ async function saveProfileSettings() {
           displayName,
           avatar: selectedProfileAvatar,
           bio,
-          jlptTarget
+          jlptTarget,
+          voiceMode: userData.voiceMode || 'anime'
         })
       });
 
@@ -7466,7 +7625,7 @@ const ANIME_LIST = [
     "clue": "Cuộc chiến Chén Thánh tại thành phố Fuyuki, Shirou cùng Servant Saber chiến đấu. Từ khóa: 聖杯戦争 (cuộc chiến Chén Thánh)"
   },
   {
-    "ytId": "bMXeS_G4XnQ",
+    "ytId": "Yd8kUoB72xU",
     "title": "Bocchi the Rock! (ぼっち・ざ・ろっく!)",
     "song": "Seishun Complex (青春コンプレックス) · 結束バンド",
     "lyric": "暗闇を照らす光はないけれど 息を吸い込んで歌い続ける",
@@ -7498,7 +7657,7 @@ const ANIME_LIST = [
     ]
   },
   {
-    "ytId": "60YQ2gVj5c4",
+    "ytId": "r105CzDvoo0",
     "title": "Frieren: Beyond Journey's End (葬送のフリーレン)",
     "song": "Anytime Anywhere · milet",
     "lyric": "涙も言葉も溢れ出してしまうから 私はここで歌う",
@@ -7530,7 +7689,7 @@ const ANIME_LIST = [
     ]
   },
   {
-    "ytId": "CgkZ7MvWUAA",
+    "ytId": "MpYy6wwqxoo",
     "title": "Demon Slayer: Kimetsu no Yaiba (鬼滅の刃)",
     "song": "Gurenge (紅蓮華) · LiSA",
     "lyric": "強くなれる理由を知った 僕を連れて進め",
@@ -7562,7 +7721,7 @@ const ANIME_LIST = [
     ]
   },
   {
-    "ytId": "_mA_t_6fV5E",
+    "ytId": "tRwHpyOq4P4",
     "title": "Dan Da Dan (ダンダダン)",
     "song": "Otonoke (オトノケ) · Creepy Nuts",
     "lyric": "怪奇現象 跳ね回る鼓動が止まらない",
@@ -7690,7 +7849,7 @@ const ANIME_LIST = [
     ]
   },
   {
-    "ytId": "p9fyw73c8z0",
+    "ytId": "GeM48p7DMWw",
     "title": "Kaiju No. 8 (怪獣8号)",
     "song": "Abyss · YUNGBLUD",
     "lyric": "深淵の中で叫ぶ声 決して諦めはしない",
@@ -7722,7 +7881,7 @@ const ANIME_LIST = [
     ]
   },
   {
-    "ytId": "yq7E1uRkQvo",
+    "ytId": "W_fHWaoQwkw",
     "title": "Spy x Family S2 (SPY×FAMILY)",
     "song": "Kura Kura (クラクラ) · Ado",
     "lyric": "秘密だらけの日常 クラクラするほど愛おしい",
@@ -7754,7 +7913,7 @@ const ANIME_LIST = [
     ]
   },
   {
-    "ytId": "a-eXpBq4b2Q",
+    "ytId": "9KBl_UurkEc",
     "title": "Solo Leveling (俺だけレベルアップな件)",
     "song": "LEveL · SawanoHiroyuki[nZk]:TXT",
     "lyric": "限界を超えて目指す場所へ 覚醒の瞬間が今始まる",
@@ -7786,7 +7945,7 @@ const ANIME_LIST = [
     ]
   },
   {
-    "ytId": "p9L3ZgN5VHQ",
+    "ytId": "8tQiWHXSGN0",
     "title": "【推しの子】 S2 (Oshi no Ko)",
     "song": "Fatal (ファタール) · GEMN",
     "lyric": "運命の鎖に縛られて 狂おしい愛を演じきる",
@@ -7818,7 +7977,7 @@ const ANIME_LIST = [
     ]
   },
   {
-    "ytId": "a2GujJZfXpg",
+    "ytId": "4pDfxi_4SyU",
     "title": "Your Name (君の名は。)",
     "song": "Nandemonaiya (なんでもないや) · RADWIMPS",
     "lyric": "もう少しだけでいい あと少しだけでいい もう少しだけくっついていようか",
@@ -7850,7 +8009,7 @@ const ANIME_LIST = [
     ]
   },
   {
-    "ytId": "7cPrnZ5-kE0",
+    "ytId": "32JTFI0alPk",
     "title": "Digimon Adventure (デジモン)",
     "song": "Butter-Fly · 和田光司 (Kouji Wada)",
     "lyric": "無限大な夢のあとの 何もない世の中じゃ",
@@ -7882,7 +8041,7 @@ const ANIME_LIST = [
     ]
   },
   {
-    "ytId": "a_9-Hk_Cg1k",
+    "ytId": "-lec--FlSJ4",
     "title": "Chainsaw Man (チェンソーマン ED4)",
     "song": "Chu, Tayousei. (ちゅ、多様性。) · あの (ano)",
     "lyric": "Get on Chu! ゲロチュー 多様性 恋する乙女は無敵",
@@ -7914,6 +8073,10 @@ const ANIME_LIST = [
     ]
   }
 ];
+
+// Ánh xạ tương thích ngược và định danh chuẩn cho cơ sở dữ liệu Anime Music
+const MUSIC_DB = ANIME_LIST;
+window.MUSIC_DB = ANIME_LIST;
 
 // ══════════════════════════════════════════════════
 //  5. SCREEN ROUTER & NAVIGATION
@@ -10061,12 +10224,22 @@ function closeKaraokeModal() {
 let activeAnimeDjAudio = null;
 function playAnimeDjVoice(phraseId, customJp = '', customVi = '') {
   try {
+    if ('speechSynthesis' in window) {
+      try { window.speechSynthesis.cancel(); } catch (_) {}
+    }
     if (activeAnimeDjAudio) {
-      activeAnimeDjAudio.pause();
+      try { activeAnimeDjAudio.pause(); activeAnimeDjAudio.currentTime = 0; } catch (_) {}
       activeAnimeDjAudio = null;
+    }
+    if (typeof activeMochikoAudio !== 'undefined' && activeMochikoAudio) {
+      try { activeMochikoAudio.pause(); activeMochikoAudio.currentTime = 0; } catch (_) {}
+      activeMochikoAudio = null;
     }
     const audio = new Audio(`audio1/${phraseId}.mp3`);
     activeAnimeDjAudio = audio;
+    audio.onended = () => {
+      if (activeAnimeDjAudio === audio) activeAnimeDjAudio = null;
+    };
     audio.play().catch(e => {
       if (customJp && typeof speakMochikoVoice === 'function') {
         speakMochikoVoice(customJp, customVi || '', 'happy', phraseId);
@@ -10075,18 +10248,78 @@ function playAnimeDjVoice(phraseId, customJp = '', customVi = '') {
   } catch (e) {}
 }
 
-function playAnimeVocabAudio(songNum, fallbackText) {
+function playAnimeVocabAudio(songNum, fallbackText, vIdx = 0) {
   playSfx('click');
+
+  // Luôn hủy speech synthesis ngay từ đầu để tránh xung đột âm thanh Google
+  if ('speechSynthesis' in window) {
+    try { window.speechSynthesis.cancel(); } catch (_) {}
+  }
+
+  // Tạm dừng bất kỳ âm thanh DJ / Lyric / Linh vật đang phát để không bị chồng âm
+  if (activeAnimeDjAudio) {
+    try { activeAnimeDjAudio.pause(); activeAnimeDjAudio.currentTime = 0; } catch (_) {}
+    activeAnimeDjAudio = null;
+  }
+  if (typeof activeMochikoAudio !== 'undefined' && activeMochikoAudio) {
+    try { activeMochikoAudio.pause(); activeMochikoAudio.currentTime = 0; } catch (_) {}
+    activeMochikoAudio = null;
+  }
+
+  const preferAnime = (typeof userData !== 'undefined' && userData && userData.voiceMode === 'normal') ? false : true;
+
+  if (!preferAnime) {
+    if (typeof speakJapaneseTTS === 'function') speakJapaneseTTS(fallbackText, 0.95);
+    return;
+  }
+
   try {
-    if (activeAnimeDjAudio) {
-      activeAnimeDjAudio.pause();
-      activeAnimeDjAudio = null;
-    }
-    const audio = new Audio(`audio1/mv_song_${songNum}.mp3`);
+    let fallbackFired = false;
+    const doFallback = () => {
+      if (fallbackFired) return;
+      fallbackFired = true;
+      if (activeAnimeDjAudio === audio) activeAnimeDjAudio = null;
+      if (typeof speakJapaneseTTS === 'function') {
+        speakJapaneseTTS(fallbackText, 0.95);
+      }
+    };
+
+    const audio = new Audio();
     activeAnimeDjAudio = audio;
-    audio.play().catch(e => {
-      if (typeof speakJapaneseTTS === 'function') speakJapaneseTTS(fallbackText, 0.95);
-    });
+
+    audio.onerror = () => {
+      // Nếu file mv_song_${songNum}_${vIdx}.mp3 không tìm thấy, thử fallback sang file cũ mv_song_${songNum}.mp3
+      if (!audio.src.endsWith(`mv_song_${songNum}.mp3`)) {
+        audio.src = `audio1/mv_song_${songNum}.mp3`;
+        const p2 = audio.play();
+        if (p2 !== undefined) {
+          p2.catch(() => doFallback());
+        }
+      } else {
+        doFallback();
+      }
+    };
+
+    audio.onended = () => {
+      if (activeAnimeDjAudio === audio) activeAnimeDjAudio = null;
+    };
+
+    // Đường dẫn chính xác theo bài hát và chỉ số từ vựng trong bài
+    audio.src = `audio1/mv_song_${songNum}_${vIdx}.mp3`;
+    const playPromise = audio.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(() => {
+        if (!audio.src.endsWith(`mv_song_${songNum}.mp3`)) {
+          audio.src = `audio1/mv_song_${songNum}.mp3`;
+          const p2 = audio.play();
+          if (p2 !== undefined) {
+            p2.catch(() => doFallback());
+          }
+        } else {
+          doFallback();
+        }
+      });
+    }
   } catch (e) {
     if (typeof speakJapaneseTTS === 'function') speakJapaneseTTS(fallbackText, 0.95);
   }
@@ -10101,14 +10334,14 @@ function renderSongKeyVocab(item) {
     { kanji: item.blank.a, kana: item.blank.hint.split('=')[0].trim(), mean: item.blank.hint.split('=')[1] ? item.blank.hint.split('=')[1].trim() : 'Từ khóa chính' }
   ];
 
-  container.innerHTML = vocabs.map(v => `
+  container.innerHTML = vocabs.map((v, vIdx) => `
     <div style="display:flex;justify-content:space-between;align-items:center;background:var(--bg-surface);padding:.4rem .65rem;border-radius:var(--radius-sm);border:1px solid var(--border)">
       <div style="display:flex;align-items:baseline;gap:.5rem">
         <strong style="font-family:var(--font-kanji);color:var(--neon-gold);font-size:.95rem">${escapeHTML(v.kanji)}</strong>
         <span style="font-size:.78rem;color:var(--neon-cyan)">(${escapeHTML(v.kana)})</span>
         <span style="font-size:.78rem;color:var(--text-secondary)">: ${escapeHTML(v.mean)}</span>
       </div>
-      <button class="btn btn-ghost btn-sm" onclick="playAnimeVocabAudio(${songNum}, '${escapeHTML(v.kana || v.kanji)}')" style="font-size:.75rem;padding:.15rem .45rem" title="Phát âm từ vựng bài hát bằng giọng VOICEVOX:もち子">
+      <button class="btn btn-ghost btn-sm" onclick="playAnimeVocabAudio(${songNum}, '${escapeHTML(v.kana || v.kanji)}', ${vIdx})" style="font-size:.75rem;padding:.2rem .55rem;min-height:36px;min-width:36px;display:inline-flex;align-items:center;justify-content:center" title="Phát âm từ vựng bài hát bằng giọng VOICEVOX:もち子">
         🔊
       </button>
     </div>
@@ -10375,76 +10608,348 @@ function pronListenModel() {
 
 let isPronRecording = false;
 let pronRecog = null;
+let pronAudioCtx = null;
+let pronAnalyser = null;
+let pronMicStream = null;
+let pronVolumeAnimId = null;
 
-function togglePronMic() {
-  if(!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
-    showToast('⚠️ Vui lòng dùng Chrome để luyện phát âm');
-    return;
-  }
-  if(isPronRecording) {
-    stopPronMic();
-    return;
-  }
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  pronRecog = new SR();
-  pronRecog.lang = 'ja-JP';
-  pronRecog.interimResults = false;
-  pronRecog.maxAlternatives = 1;
+// MediaRecorder chế độ dự phòng khi không có SpeechRecognition hoặc trên Brave
+let mediaRecorderInstance = null;
+let recordedAudioChunks = [];
+let userRecordedAudioBlobUrl = null;
+let isUserMediaRecording = false;
 
-  pronRecog.onstart = () => {
-    isPronRecording = true;
-    document.getElementById('micBtn').style.background = 'var(--neon-crimson)';
-    document.getElementById('pronMicStatus').textContent = 'Đang nghe... Nói ngay đi bạn!';
+async function startVolumeMeter() {
+  try {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return;
+    pronMicStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    pronAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const source = pronAudioCtx.createMediaStreamSource(pronMicStream);
+    pronAnalyser = pronAudioCtx.createAnalyser();
+    pronAnalyser.fftSize = 256;
+    source.connect(pronAnalyser);
+
+    const dataArray = new Uint8Array(pronAnalyser.frequencyBinCount);
+    const meterEl = document.getElementById('pronVolumeMeter');
+    const barEl = document.getElementById('pronVolumeBar');
+    if (meterEl) meterEl.style.display = 'block';
+
+    function tick() {
+      if (!isPronRecording && !isUserMediaRecording) return;
+      if (pronAnalyser) {
+        pronAnalyser.getByteFrequencyData(dataArray);
+        let sum = 0;
+        for (let i = 0; i < dataArray.length; i++) sum += dataArray[i];
+        const avg = sum / dataArray.length;
+        const pct = Math.min(100, Math.round((avg / 64) * 100));
+        if (barEl) barEl.style.width = `${pct}%`;
+      }
+      pronVolumeAnimId = requestAnimationFrame(tick);
+    }
+    tick();
+  } catch (e) {}
+}
+
+function stopVolumeMeter() {
+  if (pronVolumeAnimId) {
+    cancelAnimationFrame(pronVolumeAnimId);
+    pronVolumeAnimId = null;
+  }
+  if (pronMicStream) {
+    try { pronMicStream.getTracks().forEach(t => t.stop()); } catch (e) {}
+    pronMicStream = null;
+  }
+  if (pronAudioCtx) {
+    try { pronAudioCtx.close(); } catch (e) {}
+    pronAudioCtx = null;
+  }
+  const meterEl = document.getElementById('pronVolumeMeter');
+  const barEl = document.getElementById('pronVolumeBar');
+  if (meterEl) meterEl.style.display = 'none';
+  if (barEl) barEl.style.width = '0%';
+}
+
+async function toggleMediaRecorderMode() {
+  if (isUserMediaRecording) {
+    stopMediaRecorderMode();
+  } else {
+    startMediaRecorderMode();
+  }
+}
+
+async function startMediaRecorderMode() {
+  try {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      showToast('⚠️ Thiết bị không hỗ trợ ghi âm trực tiếp');
+      return;
+    }
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    recordedAudioChunks = [];
+    mediaRecorderInstance = new MediaRecorder(stream);
+
+    mediaRecorderInstance.ondataavailable = (e) => {
+      if (e.data && e.data.size > 0) recordedAudioChunks.push(e.data);
+    };
+
+    mediaRecorderInstance.onstop = () => {
+      stream.getTracks().forEach(t => t.stop());
+      stopVolumeMeter();
+      const blob = new Blob(recordedAudioChunks, { type: 'audio/webm' });
+      if (userRecordedAudioBlobUrl) {
+        URL.revokeObjectURL(userRecordedAudioBlobUrl);
+      }
+      userRecordedAudioBlobUrl = URL.createObjectURL(blob);
+      const playBtn = document.getElementById('btnMediaRecPlay');
+      if (playBtn) playBtn.style.display = 'inline-flex';
+      showToast('✓ Đã thu âm xong! Bấm "Nghe Lại Bản Thu" để so sánh với từ mẫu.');
+    };
+
+    mediaRecorderInstance.start();
+    isUserMediaRecording = true;
+    startVolumeMeter();
+
+    const textEl = document.getElementById('btnMediaRecText');
+    if (textEl) textEl.textContent = 'Dừng Thu Âm (Đang Thu...)';
     playSfx('click');
-  };
+  } catch (err) {
+    showToast('⚠️ Không thể truy cập micro: ' + err.message);
+  }
+}
 
-  pronRecog.onresult = e => {
-    const heard = e.results[0][0].transcript;
-    judgePron(heard);
-  };
+function stopMediaRecorderMode() {
+  if (mediaRecorderInstance && mediaRecorderInstance.state !== 'inactive') {
+    mediaRecorderInstance.stop();
+  }
+  isUserMediaRecording = false;
+  const textEl = document.getElementById('btnMediaRecText');
+  if (textEl) textEl.textContent = 'Thu Âm Lại';
+}
 
-  pronRecog.onerror = () => {
-    document.getElementById('pronMicStatus').textContent = 'Không nghe rõ, thử lại nhé!';
+function playUserRecordedAudio() {
+  if (!userRecordedAudioBlobUrl) {
+    showToast('⚠️ Chưa có bản thu âm nào');
+    return;
+  }
+  const audio = document.getElementById('userAudioPlayerEl') || new Audio();
+  audio.src = userRecordedAudioBlobUrl;
+  audio.play();
+  showToast('🎧 Đang phát lại giọng của bạn...');
+}
+
+function katakanaToHiragana(str) {
+  if (!str) return '';
+  let res = '';
+  for (let i = 0; i < str.length; i++) {
+    const c = str.charCodeAt(i);
+    if (c >= 0x30A1 && c <= 0x30F6) {
+      res += String.fromCharCode(c - 0x60);
+    } else {
+      res += str[i];
+    }
+  }
+  return res;
+}
+
+function normalizeKana(str) {
+  if (!str) return '';
+  return katakanaToHiragana(String(str))
+    .toLowerCase()
+    .replace(/[\s\.,\/#!$%\^&\*;:{}=\-_`~()（）・？！]/g, '')
+    .trim();
+}
+
+async function togglePronMic() {
+  const isBrave = await (async () => {
+    if (navigator.brave && typeof navigator.brave.isBrave === 'function') {
+      try { return await navigator.brave.isBrave(); } catch (e) {}
+    }
+    return false;
+  })();
+
+  const hasSR = ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window);
+
+  if (!hasSR || isBrave) {
+    const fallbackBox = document.getElementById('pronFallbackRecorder');
+    if (fallbackBox) fallbackBox.style.display = 'block';
+    const statusEl = document.getElementById('pronMicStatus');
+    if (statusEl) {
+      statusEl.innerHTML = isBrave
+        ? '⚠️ <strong>Trình duyệt Brave</strong> chặn nhận dạng giọng nói Google theo mặc định. Khuyên dùng <strong>Microsoft Edge</strong> hoặc <strong>Google Chrome</strong>, hoặc dùng chế độ Thu Âm Tự Đối Chiếu bên dưới!'
+        : '⚠️ Trình duyệt hiện tại không hỗ trợ Web Speech API. Khuyên dùng <strong>Microsoft Edge</strong> hoặc <strong>Google Chrome</strong>, hoặc dùng chế độ Thu Âm Tự Đối Chiếu bên dưới!';
+    }
+    showToast(isBrave ? '💡 Brave chặn dịch vụ giọng nói. Hãy dùng Edge/Chrome hoặc chế độ Thu Âm bên dưới' : '💡 Hãy dùng Edge/Chrome hoặc chế độ Thu Âm bên dưới');
+    if (!hasSR) return;
+  }
+
+  if (isPronRecording) {
     stopPronMic();
-  };
+    return;
+  }
 
-  pronRecog.onend = () => {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  try {
+    pronRecog = new SR();
+    pronRecog.lang = 'ja-JP';
+    pronRecog.interimResults = false;
+    pronRecog.maxAlternatives = 5;
+
+    pronRecog.onstart = () => {
+      isPronRecording = true;
+      const btn = document.getElementById('micBtn');
+      if (btn) btn.style.background = 'var(--neon-crimson)';
+      const status = document.getElementById('pronMicStatus');
+      if (status) status.innerHTML = '🔴 <strong>Đang lắng nghe...</strong> Hãy đọc từ vựng ngay bây giờ!';
+      startVolumeMeter();
+      playSfx('click');
+    };
+
+    pronRecog.onresult = e => {
+      stopVolumeMeter();
+      const alternatives = [];
+      if (e.results && e.results[0]) {
+        for (let i = 0; i < e.results[0].length; i++) {
+          alternatives.push(e.results[0][i].transcript);
+        }
+      }
+      judgePron(alternatives.length > 0 ? alternatives : [e.results[0][0].transcript]);
+    };
+
+    pronRecog.onerror = (event) => {
+      stopVolumeMeter();
+      stopPronMic();
+      const err = event.error;
+      let guide = '';
+
+      if (err === 'not-allowed') {
+        guide = '🚫 <strong>Quyền micro bị từ chối:</strong> Bấm biểu tượng 🔒 (hoặc micro) trên thanh địa chỉ trình duyệt, chọn "Cho phép" (Allow) rồi bấm Nói Lại.';
+      } else if (err === 'service-not-allowed') {
+        guide = '⚠️ <strong>Dịch vụ nhận dạng bị chặn:</strong> Brave/trình duyệt đã chặn máy chủ giọng nói. Hãy đổi sang <strong>Microsoft Edge</strong> hoặc <strong>Google Chrome</strong>, hoặc dùng chế độ Thu Âm bên dưới!';
+        const fbRec = document.getElementById('pronFallbackRecorder');
+        if (fbRec) fbRec.style.display = 'block';
+      } else if (err === 'no-speech') {
+        guide = '🔇 <strong>Chưa phát hiện giọng nói:</strong> Hãy nói to và gần micro hơn nhé!';
+      } else if (err === 'network') {
+        guide = '🌐 <strong>Lỗi kết nối mạng:</strong> Không thể kết nối tới máy chủ nhận dạng. Thử lại trên Microsoft Edge hoặc Chrome!';
+      } else if (err === 'audio-capture') {
+        guide = '🎤 <strong>Lỗi micro:</strong> Không tìm thấy thiết bị micro hoặc micro đang bị ứng dụng khác chiếm dụng.';
+      } else {
+        guide = `⚠️ <strong>Lỗi thu âm (${err}):</strong> Vui lòng bấm Nói Lại để thử lại.`;
+      }
+
+      const statusEl = document.getElementById('pronMicStatus');
+      if (statusEl) {
+        statusEl.innerHTML = `<span style="color:var(--neon-pink);line-height:1.45">${guide}</span>`;
+      }
+    };
+
+    pronRecog.onend = () => {
+      stopVolumeMeter();
+      stopPronMic();
+    };
+
+    pronRecog.start();
+  } catch (err) {
+    stopVolumeMeter();
     stopPronMic();
-  };
-
-  pronRecog.start();
+    const statusEl = document.getElementById('pronMicStatus');
+    if (statusEl) {
+      statusEl.innerHTML = `⚠️ <strong>Lỗi micro:</strong> ${err.message}. Khuyên dùng Microsoft Edge hoặc Google Chrome!`;
+    }
+  }
 }
 
 function stopPronMic() {
   isPronRecording = false;
-  document.getElementById('micBtn').style.background = 'var(--neon-sakura)';
-  if(pronRecog) {
+  const btn = document.getElementById('micBtn');
+  if (btn) btn.style.background = 'var(--neon-sakura)';
+  stopVolumeMeter();
+  if (pronRecog) {
     try { pronRecog.stop(); } catch(e) {}
   }
 }
 
-function judgePron(heard) {
-  const target = N5_VOCAB[pronIdx % N5_VOCAB.length];
-  const targetClean = (target.r || target.w).toLowerCase().replace(/\s/g, '');
-  const heardClean = heard.toLowerCase().replace(/\s/g, '');
-  
-  let matches = 0;
-  for(let i = 0; i < Math.min(targetClean.length, heardClean.length); i++) {
-    if(targetClean[i] === heardClean[i]) matches++;
+function judgePron(transcripts) {
+  const list = getDojoVocabList();
+  if (!list || list.length === 0) return;
+  const target = list[pronIdx % list.length];
+  if (!target) return;
+
+  const targetKana = normalizeKana(target.hiragana || target.kana || target.r || target.w);
+  const targetRomaji = (target.romaji || target.r || '').toLowerCase().replace(/\s/g, '');
+  const targetKanji = (target.kanji || target.w || '').toLowerCase().replace(/\s/g, '');
+
+  let bestScore = 0;
+  let bestTranscript = transcripts[0] || '';
+
+  for (const rawHeard of transcripts) {
+    const heardClean = rawHeard.trim();
+    const heardKana = normalizeKana(heardClean);
+    const heardRaw = heardClean.toLowerCase().replace(/\s/g, '');
+
+    // 1. Kiểm tra khớp tuyệt đối với Kana hoặc Kanji
+    if (heardKana === targetKana || (targetKanji && heardRaw === targetKanji)) {
+      bestScore = 100;
+      bestTranscript = rawHeard;
+      break;
+    }
+
+    // 2. So khớp theo Kana
+    const len = Math.max(targetKana.length, heardKana.length);
+    if (len > 0) {
+      let matches = 0;
+      for (let i = 0; i < Math.min(targetKana.length, heardKana.length); i++) {
+        if (targetKana[i] === heardKana[i]) matches++;
+        else if (targetKana.includes(heardKana[i])) matches += 0.5;
+      }
+      const score = Math.round((matches / len) * 100);
+      if (score > bestScore) {
+        bestScore = score;
+        bestTranscript = rawHeard;
+      }
+    }
+
+    // 3. So khớp Romaji dự phòng nếu nghe ra chữ cái Latinh
+    if (targetRomaji && heardRaw) {
+      const romLen = Math.max(targetRomaji.length, heardRaw.length);
+      let rMatches = 0;
+      for (let i = 0; i < Math.min(targetRomaji.length, heardRaw.length); i++) {
+        if (targetRomaji[i] === heardRaw[i]) rMatches++;
+      }
+      const rScore = Math.round((rMatches / romLen) * 100);
+      if (rScore > bestScore) {
+        bestScore = rScore;
+        bestTranscript = rawHeard;
+      }
+    }
   }
-  let score = Math.round((matches / Math.max(targetClean.length, heardClean.length)) * 100);
-  score = Math.min(100, Math.max(score, 60 + Math.floor(Math.random() * 38)));
+
+  // Điều chỉnh điểm số hợp lý cho trải nghiệm học tập
+  if (bestScore >= 90) bestScore = 100;
+  else if (bestScore >= 70) bestScore = Math.min(95, bestScore + 10);
+  else if (bestScore >= 40) bestScore = Math.min(78, bestScore + 15);
+  else bestScore = Math.max(bestScore, 35);
 
   const box = document.getElementById('pronFeedbackBox');
-  box.style.display = 'block';
-  document.getElementById('pronScoreText').textContent = score + '%';
-  document.getElementById('pronScoreText').style.color = score >= 80 ? 'var(--neon-lime)' : 'var(--neon-gold)';
-  document.getElementById('pronVerdictText').textContent = `Nghe được: "${heard}" · ${score >= 80 ? 'Phát âm rất chuẩn! 🌟' : 'Khá tốt, hãy luyện thêm nhé! 😊'}`;
-  
-  userData.pronDone++;
-  userData.pronBest = Math.max(userData.pronBest || 0, score);
-  if (score >= 70) {
-    const targetWord = target ? (target.kanji || target.w) : heard;
+  if (box) box.style.display = 'block';
+  const scoreText = document.getElementById('pronScoreText');
+  if (scoreText) {
+    scoreText.textContent = bestScore + '%';
+    scoreText.style.color = bestScore >= 80 ? 'var(--neon-lime)' : (bestScore >= 60 ? 'var(--neon-gold)' : 'var(--neon-pink)');
+  }
+
+  const verdictText = document.getElementById('pronVerdictText');
+  if (verdictText) {
+    let compliment = 'Rất tốt, hãy luyện thêm một chút nữa nhé!';
+    if (bestScore >= 90) compliment = 'Phát âm tuyệt vời, chuẩn bản xứ! 🌟';
+    else if (bestScore >= 75) compliment = 'Rất chuẩn, ngữ điệu rõ ràng! 👏';
+    else if (bestScore < 60) compliment = 'Chưa khớp lắm, hãy nghe lại từ mẫu và thử lại nhé! 💪';
+    verdictText.textContent = `Nghe được: "${bestTranscript}" · ${compliment}`;
+  }
+
+  userData.pronDone = (userData.pronDone || 0) + 1;
+  userData.pronBest = Math.max(userData.pronBest || 0, bestScore);
+  if (bestScore >= 70) {
+    const targetWord = target ? (target.kanji || target.w) : bestTranscript;
     addXP(10, `pron_${targetWord}`, true);
   }
   saveUserData();
@@ -10517,6 +11022,12 @@ function getFilteredAnimeList() {
     const q = mvSearchQuery.trim().toLowerCase();
     list = list.filter(item => (item.song + ' ' + item.title + ' ' + (item.romaji || '')).toLowerCase().includes(q));
   }
+
+  // Bộ lọc ẩn các bài bị lỗi / cấm nhúng
+  if (mvHideBroken && typeof brokenTrackMap !== 'undefined') {
+    list = list.filter(item => !brokenTrackMap.has(item.originalIndex));
+  }
+
   return list;
 }
 
@@ -10565,26 +11076,142 @@ function updateMvPlayModeUI() {
   }
 }
 
+let mvHideBroken = false;
+const brokenTrackMap = new Map(); // originalIndex -> { code, msg, time }
+let isYtApiReady = false;
+let mainYtPlayer = null;
+let ytAutoSkipTimer = null;
+
+// Tải YouTube IFrame API script
+(function ensureYouTubeIframeApi() {
+  if (!window.YT) {
+    const tag = document.createElement('script');
+    tag.src = 'https://www.youtube.com/iframe_api';
+    const firstScript = document.getElementsByTagName('script')[0];
+    if (firstScript && firstScript.parentNode) {
+      firstScript.parentNode.insertBefore(tag, firstScript);
+    } else {
+      document.head.appendChild(tag);
+    }
+  }
+})();
+
+window.onYouTubeIframeAPIReady = function() {
+  isYtApiReady = true;
+};
+
+function toggleMvHideBroken(checked) {
+  mvHideBroken = !!checked;
+  renderPlaylistDeck();
+  showToast(mvHideBroken ? '🚫 Đã ẩn các bài lỗi/cấm nhúng khỏi danh sách' : '👁️ Đang hiện toàn bộ bài hát');
+}
+
+function cancelYtAutoSkip() {
+  if (ytAutoSkipTimer) {
+    clearInterval(ytAutoSkipTimer);
+    ytAutoSkipTimer = null;
+  }
+  const el = document.getElementById('ytAutoSkipCountdownText');
+  if (el) {
+    el.textContent = '⏹ Đã dừng tự chuyển bài.';
+    el.style.color = 'var(--text-muted)';
+  }
+}
+
+function handleYouTubePlayerError(errorCode, customItem = null) {
+  const item = customItem || ANIME_LIST[currentTrackIdx];
+  if (!item) return;
+
+  const code = Number(errorCode) || 0;
+  let errorDesc = 'Video hiện không thể phát trên trang web.';
+  if (code === 101 || code === 150) {
+    errorDesc = 'Chủ sở hữu video không cho phép phát nhúng trên trang web khác (Bản quyền YouTube cấm nhúng).';
+  } else if (code === 100) {
+    errorDesc = 'Video không tồn tại hoặc đã bị xóa / đặt ở chế độ riêng tư.';
+  } else if (code === 2) {
+    errorDesc = 'Tham số video ID không hợp lệ hoặc chứa ký tự đặc biệt.';
+  } else if (code === 5) {
+    errorDesc = 'Lỗi phát trình duyệt HTML5 của YouTube.';
+  }
+
+  // Đánh dấu bài lỗi vào brokenTrackMap
+  brokenTrackMap.set(currentTrackIdx, {
+    code: code,
+    msg: errorDesc,
+    time: Date.now()
+  });
+
+  renderPlaylistDeck();
+
+  // Hiển thị Overlay thông báo lỗi rõ ràng trực tiếp trên khung Player
+  const holder = document.getElementById('youtubePlayerPlaceholder');
+  if (holder) {
+    let secondsLeft = 3;
+    holder.innerHTML = `
+      <div id="ytErrorNoticeCard" style="position:absolute;inset:0;background:rgba(12,15,28,0.96);backdrop-filter:blur(6px);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.25rem;text-align:center;z-index:20;color:var(--text-primary);border:1px solid var(--neon-pink);border-radius:var(--radius-md)">
+        <div style="font-size:2.4rem;margin-bottom:.35rem">🚫</div>
+        <div style="font-size:1.05rem;font-weight:800;color:var(--neon-pink);margin-bottom:.35rem">
+          Video Này Không Cho Phép Nhúng (Mã lỗi ${code})
+        </div>
+        <div style="font-size:.85rem;color:var(--text-secondary);max-width:440px;line-height:1.45;margin-bottom:.85rem">
+          ${escapeHTML(errorDesc)}<br>
+          <span style="font-size:.78rem;color:var(--text-muted)">Bài: <strong>${escapeHTML(item.song)}</strong> (${escapeHTML(item.title)})</span>
+        </div>
+        
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center;margin-bottom:.85rem">
+          <a class="btn btn-sm btn-cyan" href="https://www.youtube.com/watch?v=${item.ytId}" target="_blank" rel="noopener noreferrer" onclick="cancelYtAutoSkip()" style="text-decoration:none;display:inline-flex;align-items:center;gap:.35rem;font-size:.8rem;padding:.45rem .85rem;min-height:44px">
+            🌐 Mở Trên YouTube
+          </a>
+          <a class="btn btn-sm btn-ghost" href="https://www.youtube.com/results?search_query=${encodeURIComponent(item.song + ' ' + item.title)}" target="_blank" rel="noopener noreferrer" onclick="cancelYtAutoSkip()" style="text-decoration:none;display:inline-flex;align-items:center;gap:.35rem;font-size:.8rem;padding:.45rem .85rem;min-height:44px">
+            🔍 Tìm Trên YouTube
+          </a>
+          <button class="btn btn-sm btn-ghost" onclick="cancelYtAutoSkip()" id="btnCancelAutoSkip" style="font-size:.8rem;padding:.45rem .85rem;min-height:44px">
+            ⏹ Hủy Tự Chuyển
+          </button>
+        </div>
+
+        <div id="ytAutoSkipCountdownText" style="font-size:.82rem;color:var(--neon-gold);font-weight:700">
+          ⏳ Tự động chuyển bài tiếp theo sau ${secondsLeft}s...
+        </div>
+      </div>
+    `;
+
+    if (ytAutoSkipTimer) clearInterval(ytAutoSkipTimer);
+    ytAutoSkipTimer = setInterval(() => {
+      secondsLeft--;
+      const el = document.getElementById('ytAutoSkipCountdownText');
+      if (el) {
+        el.textContent = `⏳ Tự động chuyển bài tiếp theo sau ${secondsLeft}s...`;
+      }
+      if (secondsLeft <= 0) {
+        clearInterval(ytAutoSkipTimer);
+        ytAutoSkipTimer = null;
+        navMusicTrack(1);
+      }
+    }, 1000);
+  }
+}
+
 function skipBrokenTrack() {
   playSfx('click');
+  cancelYtAutoSkip();
   const failedSong = ANIME_LIST[currentTrackIdx] ? ANIME_LIST[currentTrackIdx].song : 'Bài hát';
   showToast(`⏭️ Đang bỏ qua video "${failedSong}" để chuyển bài mới...`);
   navMusicTrack(1);
 }
 
+function isValidYtId(id) {
+  if (!id) return false;
+  const s = String(id).trim();
+  if (s === '' || s === '(Trống)' || s === 'null' || s === 'undefined') return false;
+  return /^[a-zA-Z0-9_-]{11}$/.test(s);
+}
+
 function initYouTubePlayer() {
+  cancelYtAutoSkip();
   const item = ANIME_LIST[currentTrackIdx];
   const holder = document.getElementById('youtubePlayerPlaceholder');
   if(!holder || !item) return;
-
-  // Sử dụng YouTube Embed Player với enablejsapi=1 và origin để lắng nghe lỗi
-  holder.innerHTML = `
-    <iframe id="mainYtPlayerFrame" 
-      src="https://www.youtube-nocookie.com/embed/${item.ytId}?autoplay=0&rel=0&modestbranding=1&enablejsapi=1&origin=${encodeURIComponent(window.location.origin)}" 
-      frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-      allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%">
-    </iframe>
-  `;
 
   const titleEl = document.getElementById('nowPlayingTitle');
   const animeEl = document.getElementById('nowPlayingAnime');
@@ -10600,12 +11227,78 @@ function initYouTubePlayer() {
   if (lyricEl) lyricEl.textContent = item.lyric;
   if (romajiEl) romajiEl.textContent = item.romaji;
   if (vietEl) vietEl.textContent = item.viet;
-  if (blankPromptEl) blankPromptEl.textContent = `Điền từ khuyết: "${item.blank.q}" (Gợi ý: ${item.blank.hint})`;
+  if (blankPromptEl) blankPromptEl.textContent = item.blank ? `Điền từ khuyết: "${item.blank.q}" (Gợi ý: ${item.blank.hint})` : '';
   if (blankInpEl) blankInpEl.value = '';
   if (blankFeedbackEl) blankFeedbackEl.textContent = '';
   
   updateMvPlayModeUI();
   if (typeof renderSongKeyVocab === 'function') renderSongKeyVocab(item);
+
+  // Nếu bài hát không có mã hợp lệ: vẫn giữ trong danh sách nhưng hiện nút Tìm trên YouTube thay vì khung phát
+  if (!isValidYtId(item.ytId)) {
+    holder.innerHTML = `
+      <div style="position:absolute;inset:0;background:var(--bg-surface);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.5rem;text-align:center;border-radius:var(--radius-md);border:1.5px dashed var(--border);color:var(--text-primary)">
+        <div style="font-size:2.8rem;margin-bottom:.5rem">🔍</div>
+        <div style="font-size:1.1rem;font-weight:800;color:var(--text-primary);margin-bottom:.35rem">
+          Bài hát chưa có mã phát hợp lệ
+        </div>
+        <div style="font-size:.85rem;color:var(--text-muted);max-width:440px;line-height:1.45;margin-bottom:1.1rem">
+          Bài hát <strong>${escapeHTML(item.song)}</strong> (${escapeHTML(item.title)}) chưa có mã YouTube nhúng. Bạn vẫn có thể xem lời, làm bài tập điền từ và mở nghe trực tiếp trên YouTube!
+        </div>
+        <a class="btn btn-primary" href="https://www.youtube.com/results?search_query=${encodeURIComponent(item.song + ' ' + item.title)}" target="_blank" rel="noopener noreferrer" style="text-decoration:none;display:inline-flex;align-items:center;gap:.45rem;font-size:.9rem;font-weight:700;padding:.65rem 1.4rem;min-height:44px">
+          🔍 Tìm trên YouTube
+        </a>
+      </div>
+    `;
+    renderPlaylistDeck();
+    return;
+  }
+
+  // Khởi tạo player với YouTube IFrame API và bắt onError các mã 2, 5, 100, 101, 150
+  holder.innerHTML = `<div id="mainYtPlayerContainer" style="width:100%;height:100%"></div>`;
+
+  let playerInitSuccess = false;
+  if (window.YT && window.YT.Player) {
+    try {
+      if (mainYtPlayer && typeof mainYtPlayer.destroy === 'function') {
+        try { mainYtPlayer.destroy(); } catch (_) {}
+      }
+      mainYtPlayer = new YT.Player('mainYtPlayerContainer', {
+        videoId: item.ytId,
+        playerVars: {
+          autoplay: 0,
+          rel: 0,
+          modestbranding: 1,
+          enablejsapi: 1,
+          origin: window.location.origin
+        },
+        events: {
+          onError: (event) => {
+            handleYouTubePlayerError(event.data, item);
+          },
+          onStateChange: (event) => {
+            if (event.data === 0) { // ENDED
+              navMusicTrack(1);
+            }
+          }
+        }
+      });
+      playerInitSuccess = true;
+    } catch (e) {
+      playerInitSuccess = false;
+    }
+  }
+
+  if (!playerInitSuccess) {
+    holder.innerHTML = `
+      <iframe id="mainYtPlayerFrame" 
+        src="https://www.youtube-nocookie.com/embed/${item.ytId}?autoplay=0&rel=0&modestbranding=1&enablejsapi=1&origin=${encodeURIComponent(window.location.origin)}" 
+        frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+        allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%">
+      </iframe>
+    `;
+  }
+
   renderPlaylistDeck();
 }
 
@@ -10628,17 +11321,29 @@ function renderPlaylistDeck() {
 
   deck.innerHTML = filtered.map((item, listIdx) => {
     const isPlaying = (item.originalIndex === currentTrackIdx && !customTrackActive);
+    const isBroken = brokenTrackMap.has(item.originalIndex);
+    const hasValidCode = isValidYtId(item.ytId);
+    
+    let statusBadge = '';
+    if (!hasValidCode) {
+      statusBadge = `<span style="font-size:0.68rem;padding:2px 5px;border-radius:4px;background:rgba(5,217,232,0.15);color:var(--neon-cyan);border:1px solid var(--neon-cyan);font-weight:700;margin-left:.4rem">🔍 Tìm trên YT</span>`;
+    } else if (isBroken) {
+      statusBadge = `<span style="font-size:0.68rem;padding:2px 5px;border-radius:4px;background:rgba(255,42,109,0.2);color:var(--neon-pink);border:1px solid var(--neon-pink);font-weight:700;margin-left:.4rem">⚠️ Cấm nhúng</span>`;
+    }
+
+    const icon = isPlaying ? '▶️' : (!hasValidCode ? '🔍' : (isBroken ? '⚠️' : '🎵'));
+
     return `
-      <div class="playlist-item ${isPlaying ? 'active' : ''}" onclick="selectTrack(${item.originalIndex})" style="cursor:pointer;padding:.6rem .75rem;border-radius:var(--radius-sm);margin-bottom:.4rem;display:flex;align-items:center;justify-content:space-between;background:${isPlaying ? 'rgba(5,217,232,0.12)' : 'var(--bg-surface)'};border:1px solid ${isPlaying ? 'var(--neon-cyan)' : 'var(--border)'}">
+      <div class="playlist-item ${isPlaying ? 'active' : ''} ${isBroken ? 'broken-item' : ''}" onclick="selectTrack(${item.originalIndex})" style="cursor:pointer;padding:.6rem .75rem;border-radius:var(--radius-sm);margin-bottom:.4rem;display:flex;align-items:center;justify-content:space-between;background:${isPlaying ? 'rgba(5,217,232,0.12)' : (isBroken ? 'rgba(255,42,109,0.06)' : 'var(--bg-surface)')};border:1px solid ${isPlaying ? 'var(--neon-cyan)' : (isBroken ? 'rgba(255,42,109,0.3)' : 'var(--border)')}">
         <div style="flex:1;min-width:0;padding-right:.5rem">
           <div class="playlist-item-title" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:${isPlaying ? '800' : '600'};color:${isPlaying ? 'var(--neon-cyan)' : 'var(--text-primary)'};font-size:.85rem">
-            ${item.originalIndex + 1}. ${escapeHTML(item.song)}
+            ${item.originalIndex + 1}. ${escapeHTML(item.song)} ${statusBadge}
           </div>
           <div class="playlist-item-anime" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:.72rem;color:var(--text-muted)">
             ${escapeHTML(item.title)}
           </div>
         </div>
-        <span style="font-size:1rem;flex-shrink:0">${isPlaying ? '▶️' : '🎵'}</span>
+        <span style="font-size:1rem;flex-shrink:0">${icon}</span>
       </div>
     `;
   }).join('');
@@ -10699,10 +11404,12 @@ function navMusicTrack(dir) {
 
 function openCurrentTrackOnYouTube() {
   playSfx('click');
+  cancelYtAutoSkip();
   const item = ANIME_LIST[currentTrackIdx];
   if(!item) return;
-  // Mở trực tiếp video ID trên YouTube, hoặc trang tìm kiếm nếu muốn
-  const url = `https://www.youtube.com/watch?v=${item.ytId}`;
+  const url = (item.ytId && item.ytId.trim() !== '')
+    ? `https://www.youtube.com/watch?v=${item.ytId}`
+    : `https://www.youtube.com/results?search_query=${encodeURIComponent(item.song + ' ' + item.title)}`;
   window.open(url, '_blank', 'noopener,noreferrer');
 }
 
@@ -10759,32 +11466,88 @@ function playCustomYouTubeUrl() {
   renderPlaylistDeck();
 }
 
-// Lắng nghe thông điệp postMessage từ YouTube Iframe API để tự động chuyển bài khi gặp lỗi (100, 101, 150)
+// Lắng nghe thông điệp postMessage từ YouTube Iframe API để tự động bắt onError các mã 2, 5, 100, 101, 150
 window.addEventListener('message', (e) => {
   try {
     const data = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
-    if (data && (data.event === 'onError' || (data.info && data.info.error))) {
-      if(isSkippingOnError || customTrackActive) return;
-      isSkippingOnError = true;
-      const failedSong = ANIME_LIST[currentTrackIdx] ? ANIME_LIST[currentTrackIdx].song : 'Bài hát';
-      showToast(`⚠️ Video "${failedSong}" bị giới hạn bản quyền/lỗi, đang tự động chuyển bài tiếp theo...`);
-      setTimeout(() => {
-        isSkippingOnError = false;
-        navMusicTrack(1);
-      }, 1500);
+    if (data && !customTrackActive) {
+      if (data.event === 'onError' && data.info != null) {
+        handleYouTubePlayerError(data.info);
+      } else if (data.info && data.info.error != null) {
+        handleYouTubePlayerError(data.info.error);
+      }
     }
   } catch(err) {}
 });
 
 function speakCurrentLyricTTS() {
-  const item = ANIME_LIST[currentTrackIdx];
-  if(!item) return;
-  if('speechSynthesis' in window) {
-    window.speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(item.lyric);
-    u.lang = 'ja-JP';
-    u.rate = 0.85;
-    window.speechSynthesis.speak(u);
+  playSfx('click');
+  const songNum = (typeof currentTrackIdx !== 'undefined' ? currentTrackIdx + 1 : 1);
+  const item = (typeof ANIME_LIST !== 'undefined' && ANIME_LIST) ? ANIME_LIST[currentTrackIdx] : null;
+  if (!item) return;
+
+  // Luôn hủy speech synthesis ngay từ đầu để tránh xung đột âm thanh Google
+  if ('speechSynthesis' in window) {
+    try { window.speechSynthesis.cancel(); } catch (_) {}
+  }
+
+  // Tạm dừng bất kỳ âm thanh DJ / Lyric / Linh vật đang phát để không bị chồng âm
+  if (activeAnimeDjAudio) {
+    try { activeAnimeDjAudio.pause(); activeAnimeDjAudio.currentTime = 0; } catch (_) {}
+    activeAnimeDjAudio = null;
+  }
+  if (typeof activeMochikoAudio !== 'undefined' && activeMochikoAudio) {
+    try { activeMochikoAudio.pause(); activeMochikoAudio.currentTime = 0; } catch (_) {}
+    activeMochikoAudio = null;
+  }
+
+  try {
+    const audio = new Audio(`audio1/mv_lyric_${songNum}.mp3`);
+    activeAnimeDjAudio = audio;
+
+    audio.onended = () => {
+      if (activeAnimeDjAudio === audio) activeAnimeDjAudio = null;
+    };
+
+    audio.onerror = () => {
+      if (activeAnimeDjAudio === audio) activeAnimeDjAudio = null;
+      // Chỉ khi file âm thanh VOICEVOX không tải được mới dùng fallback Web Speech
+      if ('speechSynthesis' in window) {
+        try {
+          window.speechSynthesis.cancel();
+          const u = new SpeechSynthesisUtterance(item.lyric);
+          u.lang = 'ja-JP';
+          u.rate = 0.85;
+          window.speechSynthesis.speak(u);
+        } catch (_) {}
+      }
+    };
+
+    const p = audio.play();
+    if (p !== undefined) {
+      p.catch(() => {
+        if (activeAnimeDjAudio === audio) activeAnimeDjAudio = null;
+        if ('speechSynthesis' in window) {
+          try {
+            window.speechSynthesis.cancel();
+            const u = new SpeechSynthesisUtterance(item.lyric);
+            u.lang = 'ja-JP';
+            u.rate = 0.85;
+            window.speechSynthesis.speak(u);
+          } catch (_) {}
+        }
+      });
+    }
+  } catch (e) {
+    if ('speechSynthesis' in window) {
+      try {
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(item.lyric);
+        u.lang = 'ja-JP';
+        u.rate = 0.85;
+        window.speechSynthesis.speak(u);
+      } catch (_) {}
+    }
   }
 }
 
@@ -12783,32 +13546,17 @@ function downloadDailyShareCard() {
 
 // ══════════════════════════════════════════════════
 //  BẢNG XẾP HẠNG TUẦN (WEEKLY LEADERBOARD)
-//  Hỗ trợ song song: Cloudflare Worker API & Local Community Fallback 100%
+//  Chỉ lưu & hiển thị người chơi thật, không dùng bot/dữ liệu mồi
 // ══════════════════════════════════════════════════
 let lastLeaderboardSubmitTime = 0;
 
-const BASE_COMMUNITY_LEADERBOARD = [
-  { rank: 1, username: 'sakura_master', displayName: 'Sakura Master 🌸', avatar: '🌸', xp: 5200 },
-  { rank: 2, username: 'zenitsu_speed', displayName: 'Zenitsu Sấm Sét ⚡', avatar: '⚡', xp: 4650 },
-  { rank: 3, username: 'frieren_mage', displayName: 'Frieren Pháp Sư ✨', avatar: '🪄', xp: 4120 },
-  { rank: 4, username: 'kenji_kanji', displayName: 'Kenji Vũ Thần 🗡️', avatar: '🦊', xp: 3580 },
-  { rank: 5, username: 'hana_chan', displayName: 'Hana-chan Mèo Con 🐾', avatar: '🐱', xp: 3100 },
-  { rank: 6, username: 'tokyo_drifter', displayName: 'Tokyo Cyber Drifter 🏎️', avatar: '🤖', xp: 2750 },
-  { rank: 7, username: 'ren_goku', displayName: 'Viêm Trụ Rengoku 🔥', avatar: '🔥', xp: 2420 },
-  { rank: 8, username: 'aoi_sora', displayName: 'Aoi Bầu Trời Xanh ☁️', avatar: '⛩️', xp: 2150 },
-  { rank: 9, username: 'bocchi_guitar', displayName: 'Bocchi Rocker 🎸', avatar: '🍙', xp: 1920 },
-  { rank: 10, username: 'tanjiro_water', displayName: 'Thủy Điệu Tanjiro 🌊', avatar: '👺', xp: 1680 },
-  { rank: 11, username: 'mimi_fan', displayName: 'Mimi Neko Fan 🐱', avatar: '🌸', xp: 1450 },
-  { rank: 12, username: 'ninja_hattori', displayName: 'Hattori Ninja 🥷', avatar: '🥷', xp: 1280 },
-  { rank: 13, username: 'luffy_pirate', displayName: 'Vua Hải Tặc Luffy 🍖', avatar: '🏴‍☠️', xp: 1120 },
-  { rank: 14, username: 'gojo_sensei', displayName: 'Vô Hạ Hạn Gojo 👁️', avatar: '🕶️', xp: 980 },
-  { rank: 15, username: 'mikasa_ack', displayName: 'Khăn Quàng Mikasa 🧣', avatar: '⚔️', xp: 840 },
-  { rank: 16, username: 'chopper_doc', displayName: 'Bác Sĩ Chopper 🦌', avatar: '🌸', xp: 720 },
-  { rank: 17, username: 'zoro_swords', displayName: 'Tam Kiếm Zoro ⚔️', avatar: '🗡️', xp: 610 },
-  { rank: 18, username: 'naruto_hokage', displayName: 'Hokage Naruto 🍥', avatar: '🍥', xp: 520 },
-  { rank: 19, username: 'anya_peanut', displayName: 'Anya Thích Đậu Phộng 🥜', avatar: '⭐', xp: 430 },
-  { rank: 20, username: 'deku_hero', displayName: 'Deku Anh Hùng 🥦', avatar: '💥', xp: 350 }
-];
+// Danh sách định danh các tài khoản mẫu cũ để lọc sạch triệt để khỏi localStorage
+const LEGACY_MOCK_USERNAMES = new Set([
+  'sakura_master', 'zenitsu_speed', 'frieren_mage', 'kenji_kanji', 'hana_chan',
+  'tokyo_drifter', 'ren_goku', 'aoi_sora', 'bocchi_guitar', 'tanjiro_water',
+  'mimi_fan', 'ninja_hattori', 'luffy_pirate', 'gojo_sensei', 'mikasa_ack',
+  'chopper_doc', 'zoro_swords', 'naruto_hokage', 'anya_peanut', 'deku_hero'
+]);
 
 function getLocalCommunityLeaderboard() {
   let list = [];
@@ -12817,27 +13565,38 @@ function getLocalCommunityLeaderboard() {
     if (raw) list = JSON.parse(raw);
   } catch (e) {}
 
-  if (!Array.isArray(list) || list.length === 0) {
-    list = JSON.parse(JSON.stringify(BASE_COMMUNITY_LEADERBOARD));
-  }
+  if (!Array.isArray(list)) list = [];
 
-  // Cập nhật điểm của người chơi hiện tại
-  const myName = (authCurrentUser && (authCurrentUser.displayName || authCurrentUser.username)) || (userData && userData.name) || 'Chiến Binh Bạn';
+  // Lọc sạch toàn bộ bot và dữ liệu mồi cũ
+  list = list.filter(item => {
+    if (!item) return false;
+    const u = String(item.username || '').toLowerCase();
+    const d = String(item.displayName || '').toLowerCase();
+    if (LEGACY_MOCK_USERNAMES.has(u)) return false;
+    if (u.includes('bot') || d.includes('bot') || d.includes('sakura bot')) return false;
+    return true;
+  });
+
+  // Chỉ thêm người chơi thật hiện tại nếu có EXP > 0 hoặc đã đăng nhập
+  const myName = (authCurrentUser && (authCurrentUser.displayName || authCurrentUser.username)) || (userData && userData.name);
   const myAvatar = (userData && userData.avatar) || '🦊';
   const myXp = (userData && userData.xp) || 0;
   const myUsername = (authCurrentUser && authCurrentUser.username) || 'local_player_me';
 
-  // Lọc bỏ mục cũ của bản thân để tránh trùng
+  // Lọc bỏ bản ghi cũ của chính mình
   list = list.filter(item => item.username !== myUsername && item.username !== 'local_player_me');
 
-  // Thêm mục người chơi với EXP thực tế
-  list.push({
-    username: myUsername,
-    displayName: myName,
-    avatar: myAvatar,
-    xp: myXp,
-    isMe: true
-  });
+  // Chỉ thêm nếu là người chơi thật có EXP > 0 hoặc đã đăng nhập
+  const isBotUser = /bot/i.test(myName || '') || /sakura\s*bot/i.test(myName || '');
+  if (!isBotUser && (myXp > 0 || (authCurrentUser && authCurrentUser.username))) {
+    list.push({
+      username: myUsername,
+      displayName: myName || 'Bạn',
+      avatar: myAvatar,
+      xp: myXp,
+      isMe: true
+    });
+  }
 
   // Sắp xếp giảm dần theo EXP
   list.sort((a, b) => (b.xp || 0) - (a.xp || 0));
@@ -12885,9 +13644,9 @@ async function fetchAndRenderLeaderboard(isManualRefresh = false) {
 
   let list = null;
   let isCloud = false;
-  let weekLabel = 'Top Chiến Binh Tuần Này • Đồng Bộ Thiết Bị & Cộng Đồng';
+  let weekLabel = 'Bảng Xếp Hạng Người Chơi Thật';
 
-  // 1. Thử gọi Cloudflare Worker API (có timeout 2 giây để tránh treo máy)
+  // 1. Thử gọi Cloudflare Worker API
   try {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 2000);
@@ -12895,25 +13654,28 @@ async function fetchAndRenderLeaderboard(isManualRefresh = false) {
     clearTimeout(timeoutId);
     if (res.ok) {
       const data = await res.json();
-      if (data && data.success && Array.isArray(data.leaderboard) && data.leaderboard.length > 0) {
-        list = data.leaderboard;
+      if (data && data.success && Array.isArray(data.leaderboard)) {
+        // Lọc sạch mọi bot khỏi kết quả server nếu có
+        list = data.leaderboard.filter(item => {
+          const u = String(item.username || '').toLowerCase();
+          const d = String(item.displayName || '').toLowerCase();
+          return !u.includes('bot') && !d.includes('bot') && !LEGACY_MOCK_USERNAMES.has(u);
+        });
         isCloud = true;
         if (data.weekKey) {
           weekLabel = `Tuần ${data.weekKey} • Máy Chủ Toàn Cầu Cloudflare`;
         }
       }
     }
-  } catch (err) {
-    // API lỗi hoặc mạng offline -> Dùng cơ chế local fallback
-  }
+  } catch (err) {}
 
-  // 2. Nếu API không khả dụng hoặc trả về rỗng -> Dùng Local Community Leaderboard
+  // 2. Nếu API không khả dụng hoặc trả về rỗng -> Dùng Local Leaderboard
   if (!list || list.length === 0) {
     list = getLocalCommunityLeaderboard();
   }
 
   if (weekTagEl) {
-    weekTagEl.innerHTML = `${escapeHTML(weekLabel)} <span style="font-size:.72rem;background:${isCloud ? 'rgba(0,245,155,0.15)' : 'rgba(5,217,232,0.15)'};color:${isCloud ? 'var(--neon-lime)' : 'var(--neon-cyan)'};padding:1px 6px;border-radius:999px;margin-left:.35rem;border:1px solid ${isCloud ? 'var(--neon-lime)' : 'var(--neon-cyan)'}">${isCloud ? '● Trực Tuyến Cloud' : '● Đồng Bộ Sẵn Sàng 100%'}</span>`;
+    weekTagEl.innerHTML = `${escapeHTML(weekLabel)} <span style="font-size:.72rem;background:${isCloud ? 'rgba(0,245,155,0.15)' : 'rgba(5,217,232,0.15)'};color:${isCloud ? 'var(--neon-lime)' : 'var(--neon-cyan)'};padding:1px 6px;border-radius:999px;margin-left:.35rem;border:1px solid ${isCloud ? 'var(--neon-lime)' : 'var(--neon-cyan)'}">${isCloud ? '● Trực Tuyến Cloud' : '● Người Chơi Thật'}</span>`;
   }
 
   const currentUsername = authCurrentUser ? authCurrentUser.username : 'local_player_me';
@@ -12922,10 +13684,24 @@ async function fetchAndRenderLeaderboard(isManualRefresh = false) {
   if (found) myRank = found.rank;
 
   if (userRankEl) {
-    userRankEl.textContent = myRank ? `#${myRank}` : 'Chưa xếp hạng';
+    userRankEl.textContent = (myRank && curXp > 0) ? `#${myRank}` : 'Chưa xếp hạng';
   }
 
   if (!container) return;
+
+  // Trạng thái trống khi chưa có người chơi nào
+  if (!list || list.length === 0) {
+    container.innerHTML = `
+      <div style="text-align:center;padding:2.5rem 1rem;background:var(--bg-surface);border-radius:var(--radius-md);border:1px dashed var(--border)">
+        <div style="font-size:2.8rem;margin-bottom:.5rem">🏆</div>
+        <div style="font-weight:800;font-size:1.05rem;color:var(--text-primary);margin-bottom:.35rem">Chưa có người chơi nào trên bảng xếp hạng</div>
+        <div style="font-size:.82rem;color:var(--text-muted);max-width:360px;margin:0 auto">
+          Hãy hoàn thành các bài học từ vựng, vượt ải và luyện phát âm qua mic để trở thành người đầu tiên ghi danh lên bảng vàng!
+        </div>
+      </div>
+    `;
+    return;
+  }
 
   container.innerHTML = list.map((item, idx) => {
     const isMe = item.isMe || (currentUsername && item.username === currentUsername);
@@ -12951,7 +13727,13 @@ async function submitScoreToLeaderboard() {
   if (now - lastLeaderboardSubmitTime < 5000) return;
   lastLeaderboardSubmitTime = now;
 
-  // Luôn cập nhật điểm người chơi vào bảng xếp hạng thiết bị/cộng đồng
+  // Bot trong phòng chơi không bao giờ được tính vào bảng xếp hạng
+  const currentName = (authCurrentUser && (authCurrentUser.displayName || authCurrentUser.username)) || (userData && userData.name) || '';
+  if (/bot/i.test(currentName) || /sakura\s*bot/i.test(currentName)) {
+    return;
+  }
+
+  // Luôn cập nhật điểm người chơi thật vào bảng xếp hạng thiết bị/cộng đồng
   getLocalCommunityLeaderboard();
 
   // Nếu người dùng đã đăng nhập, gửi điểm lên Cloudflare Worker
